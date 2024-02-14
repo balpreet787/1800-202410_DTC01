@@ -2,7 +2,8 @@
 <html lang="en">
 
 <head>
-    <title>My BCIT Project</title>
+    <title>CompetiFit Login</title>
+    <link rel="icon" type="image/x-icon" href="./images/logo.svg">
     <meta name="comp1800 template" content="My 1800 App">
 
     <!-- Required meta tags -->
@@ -13,7 +14,9 @@
     <!-- Boostrap Library JS CDN  go here -->
 
     <!-- Other libraries go here -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Jquery library -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.tailwindcss.com%22%3E/</script>
     <!-- Link to styles of your own -->
     <!-- <link rel="stylesheet" href="./styles/style.css"> -->
 
@@ -26,15 +29,23 @@
     <div class="flex flex-row justify-between font-bold p-3 bg-orange-400">
         <img src="./images/logo.svg" class="w-8 h-8" alt="logo">
         <div class="">
-            <a href=""><img src="./images/info_icon.png" class="w-8 h-8" alt=""></a>
+            <img src="./images/info_icon.png" class="w-8 h-8" id="info" alt="">
         </div>
     </div>
+
     <!------------------------------>
     <!-- Stuff for body goes here -->
-    <div class="flex flex-col place-content-center my-32">
+    <div class="text-center hidden  p-2 bg-orange-400 text-white" id="info-box">
+        CompetiFit is an application that helps fitness enthusiasts maintain a consistent exercise schedule by providing
+        a sense of competition between users! Through CompetiFit, users can log their daily exercise, track their
+        consistency through a leaderboard, and keep up to date with their friends on their activity feed.
+    </div>
+    <div class="flex flex-col place-content-center my-12">
+
         <h1 class="text-6xl font-bold text-center">Competi<span class="text-blue-800">Fit</span></h1>
         <div class="text-center">For the competive</div>
-        <div class="flex flex-row justify-center my-6 gap-5">
+        <img class="mt-12" src="./images/landing_page_1.webp" alt="">
+        <div class="flex flex-row justify-center gap-5 mt-5">
             <button class="bg-orange-400 text-white font-bold py-2 px-4 rounded-full">
                 Sign Up
             </button>
@@ -49,7 +60,7 @@
     <!---------------------------------------------->
 
     <!-- Link to scripts of your own -->
-    <!-- <script src="./scripts/script.js"></script> -->
+    <script src="./scripts/script.js"></script>
 
 </body>
 
