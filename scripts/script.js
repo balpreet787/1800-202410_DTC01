@@ -1,4 +1,10 @@
-function sayHello() {
-    
+function info_handler() {
+
+    jQuery('#info-box').slideToggle()
 }
-//sayHello();
+
+function setup() {
+    jQuery('#info').click(info_handler);
+}
+
+jQuery(document).ready(setup);
