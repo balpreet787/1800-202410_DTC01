@@ -43,62 +43,148 @@
         consistency through a leaderboard, and keep up to date with their friends on their activity feed.
     </div>
 
-    <!-- Start of Homepage -->
+    <div id="homepage">
+        <!-- Start of Homepage -->
     <div class="grid grid-cols-2 m-8 text-xl md:">
+            <div>
+                <h1>Hi, User!</h1>
+                <div class="text-sm">Let's get going</div>
+            </div>
+            <img class="w-14 h-14 ml-auto" src="./images/profile_pic.svg" alt="">
+        </div>
         <div>
-            <h1>Hi, User!</h1>
-            <div class="text-sm">Let's get going</div>
-        </div>
-        <img class="w-14 h-14 ml-auto" src="./images/profile_pic.svg" alt="">
-    </div>
-
-
-    <div>
-        <div class="rounded-xl bg-gray-300 p-3 mx-4 my-2.5">
-            <div>
-                <img class="inline h-6 pr-1" src="images/celebrate.svg" alt="">
-                <h1 class="inline font-bold">Keep up the good work!</h1>
+            <div class="rounded-xl bg-gray-300 p-3 mx-4 my-2.5">
+                <div>
+                    <img class="inline h-6 pr-1" src="images/celebrate.svg" alt="">
+                    <h1 class="inline font-bold">Keep up the good work!</h1>
+                </div>
+                <p class="py-1 text-xs">You exercised 19 more minutes than this time last week!</p>
             </div>
-            <p class="py-1 text-xs">You exercised 19 more minutes than this time last week!</p>
-        </div>
-
-        <div class="grid grid-cols-2">
-            <div class="rounded-xl bg-gray-300 px-3.5 py-3 ml-4 mr-1">
-                <img class="inline h-6 pr-1" src="images/timer.svg" alt="">
-                <h1 class="inline font-bold text-sm">Time</h1>
-                <p class=" text-xs"><span class="font-bold text-2xl pr-2">123</span>Minutes</p>
-            </div>
-            <div class="rounded-xl bg-gray-300 px-3.5 py-3 ml-1 mr-4">
-                <img class="inline h-6 pr-1" src="images/dumbbell1.svg" alt="">
-                <h1 class="inline font-bold text-sm">Finished</h1>
-                <p class="text-xs"><span class="font-bold text-2xl pr-2">4</span> Completed Workouts</p>
+            <div class="grid grid-cols-2">
+                <div class="rounded-xl bg-gray-300 px-3.5 py-3 ml-4 mr-1">
+                    <img class="inline h-6 pr-1" src="images/timer.svg" alt="">
+                    <h1 class="inline font-bold text-sm">Time</h1>
+                    <p class=" text-xs"><span class="font-bold text-2xl pr-2">123</span>Minutes</p>
+                </div>
+                <div class="rounded-xl bg-gray-300 px-3.5 py-3 ml-1 mr-4">
+                    <img class="inline h-6 pr-1" src="images/dumbbell1.svg" alt="">
+                    <h1 class="inline font-bold text-sm">Finished</h1>
+                    <p class="text-xs"><span class="font-bold text-2xl pr-2">4</span> Completed Workouts</p>
+                </div>
             </div>
         </div>
-    </div>
-
-    <div>
-        <div class="rounded-xl bg-gray-300 p-3 mx-4 mt-3 mb-3">
-            <img class="inline h-6 pr-1" src="images/today.svg" alt="">
-            <h1 class="inline font-bold">Today's Workout</h1>
-            <div>
-                <p class="text-xs p-2"><span class="font-bold text-2xl pr-2">4</span>Minutes</p>
-                <p class="text-xs p-2"><span class="font-bold text-2xl pr-2">4</span>Calories Burned</p>
-                <p class="text-xs p-2"><span class="font-bold text-2xl pr-2">4</span>Completed Workouts</p>
+        <div>
+            <div class="rounded-xl bg-gray-300 p-3 mx-4 mt-3 mb-3">
+                <img class="inline h-6 pr-1" src="images/today.svg" alt="">
+                <h1 class="inline font-bold">Today's Workout</h1>
+                <div>
+                    <p class="text-xs p-2"><span class="font-bold text-2xl pr-2">4</span>Minutes</p>
+                    <p class="text-xs p-2"><span class="font-bold text-2xl pr-2">4</span>Calories Burned</p>
+                    <p class="text-xs p-2"><span class="font-bold text-2xl pr-2">4</span>Completed Workouts</p>
+                </div>
             </div>
         </div>
-    </div>
-
-    <div>
-        <div class="rounded-xl bg-gray-300 p-3 mx-4 mb-3">
-            <img class="inline h-6 pr-1" src="images/yesterday.svg" alt="">
-            <h1 class="inline font-bold">Yesterday's Workout</h1>
-            <div>
-                <p class="text-xs p-2"><span class="font-bold text-2xl pr-2">123</span>Minutes</p>
-                <p class="text-xs p-2"><span class="font-bold text-2xl pr-2">456</span>Calories Burned</p>
-                <p class="text-xs p-2"><span class="font-bold text-2xl pr-2">4</span>Completed Workouts</p>
+        <div>
+            <div class="rounded-xl bg-gray-300 p-3 mx-4 mb-3">
+                <img class="inline h-6 pr-1" src="images/yesterday.svg" alt="">
+                <h1 class="inline font-bold">Yesterday's Workout</h1>
+                <div>
+                    <p class="text-xs p-2"><span class="font-bold text-2xl pr-2">123</span>Minutes</p>
+                    <p class="text-xs p-2"><span class="font-bold text-2xl pr-2">456</span>Calories Burned</p>
+                    <p class="text-xs p-2"><span class="font-bold text-2xl pr-2">4</span>Completed Workouts</p>
+                </div>
             </div>
         </div>
     </div>
+    <!-- Leaderboard page starts here -->
+    <div id="leaderboard">
+        <div class="text-right m-4">
+            <input type="week" id="week" name="week">
+        </div>
+        <div class="grid grid-cols-4 text-center m-4 p-3 font-extrabold">
+            <span>Rank</span>
+            <span>Name</span>
+            <span>Badges</span>
+            <span>Points</span>
+        </div>
+        <div class="grid grid-cols-4 text-center place-items-center bg-gray-300 m-4 rounded-lg p-3">
+            <span class="grid grid-cols-2 text-center place-items-center"> <span>1.</span><img class="w-8 h-8"
+                    src="./images/profile_pic.svg" alt=""></span>
+            <span>John</span>
+            <span class="grid grid-cols-2 gap-2"><img class="w-6 h-6" src="./images/dumbbell1.svg" alt=""> <img
+                    class="w-6 h-6" src="./images/dumbbell1.svg" alt=""></span>
+            <span>1000</span>
+        </div>
+        <div class="grid grid-cols-4 text-center place-items-center bg-gray-300 m-4 rounded-lg p-3">
+            <span class="grid grid-cols-2 text-center place-items-center"> <span>2.</span><img class="w-8 h-8"
+                    src="./images/profile_pic.svg" alt=""></span>
+            <span>John</span>
+            <span class="grid grid-cols-2 gap-2"><img class="w-6 h-6" src="./images/dumbbell1.svg" alt=""> <img
+                    class="w-6 h-6" src="./images/dumbbell1.svg" alt=""></span>
+            <span>1000</span>
+        </div>
+        <div class="grid grid-cols-4 text-center place-items-center bg-gray-300 m-4 rounded-lg p-3">
+            <span class="grid grid-cols-2 text-center place-items-center"> <span>3.</span><img class="w-8 h-8"
+                    src="./images/profile_pic.svg" alt=""></span>
+            <span>John</span>
+            <span class="grid grid-cols-2 gap-2"><img class="w-6 h-6" src="./images/dumbbell1.svg" alt=""> <img
+                    class="w-6 h-6" src="./images/dumbbell1.svg" alt=""></span>
+            <span>1000</span>
+        </div>
+        <div class="grid grid-cols-4 text-center place-items-center bg-gray-300 m-4 rounded-lg p-3">
+            <span class="grid grid-cols-2 text-center place-items-center"> <span>4.</span><img class="w-8 h-8"
+                    src="./images/profile_pic.svg" alt=""></span>
+            <span>John</span>
+            <span class="grid grid-cols-2 gap-2"><img class="w-6 h-6" src="./images/dumbbell1.svg" alt=""> <img
+                    class="w-6 h-6" src="./images/dumbbell1.svg" alt=""></span>
+            <span>1000</span>
+        </div>
+        <div class="grid grid-cols-4 text-center place-items-center bg-gray-300 m-4 rounded-lg p-3">
+            <span class="grid grid-cols-2 text-center place-items-center"> <span>5.</span><img class="w-8 h-8"
+                    src="./images/profile_pic.svg" alt=""></span>
+            <span>John</span>
+            <span class="grid grid-cols-2 gap-2"><img class="w-6 h-6" src="./images/dumbbell1.svg" alt=""> <img
+                    class="w-6 h-6" src="./images/dumbbell1.svg" alt=""></span>
+            <span>1000</span>
+        </div>
+        <div class="grid grid-cols-4 text-center place-items-center bg-gray-300 m-4 rounded-lg p-3">
+            <span class="grid grid-cols-2 text-center place-items-center"> <span>6.</span><img class="w-8 h-8"
+                    src="./images/profile_pic.svg" alt=""></span>
+            <span>John</span>
+            <span class="grid grid-cols-2 gap-2"><img class="w-6 h-6" src="./images/dumbbell1.svg" alt=""> <img
+                    class="w-6 h-6" src="./images/dumbbell1.svg" alt=""></span>
+            <span>1000</span>
+        </div>
+        <div class="grid grid-cols-4 text-center place-items-center bg-gray-300 m-4 rounded-lg p-3">
+            <span class="grid grid-cols-2 text-center place-items-center"> <span>7.</span><img class="w-8 h-8"
+                    src="./images/profile_pic.svg" alt=""></span>
+            <span>John</span>
+            <span class="grid grid-cols-2 gap-2"><img class="w-6 h-6" src="./images/dumbbell1.svg" alt=""> <img
+                    class="w-6 h-6" src="./images/dumbbell1.svg" alt=""></span>
+            <span>1000</span>
+        </div>
+        <div class="grid grid-cols-4 text-center place-items-center bg-gray-300 m-4 rounded-lg p-3">
+            <span class="grid grid-cols-2 text-center place-items-center"> <span>8.</span><img class="w-8 h-8"
+                    src="./images/profile_pic.svg" alt=""></span>
+            <span>John</span>
+            <span class="grid grid-cols-2 gap-2"><img class="w-6 h-6" src="./images/dumbbell1.svg" alt=""> <img
+                    class="w-6 h-6" src="./images/dumbbell1.svg" alt=""></span>
+            <span>1000</span>
+        </div>
+        <div class="grid grid-cols-4 text-center place-items-center bg-gray-300 m-4 rounded-lg p-3">
+            <span class="grid grid-cols-2 text-center place-items-center"> <span>9.</span><img class="w-8 h-8"
+                    src="./images/profile_pic.svg" alt=""></span>
+            <span>John</span>
+            <span class="grid grid-cols-2 gap-2"><img class="w-6 h-6" src="./images/dumbbell1.svg" alt=""> <img
+                    class="w-6 h-6" src="./images/dumbbell1.svg" alt=""></span>
+            <span>1000</span>
+        </div>
+
+    </div>
+    <!-- Leaderboard page ends here -->
+
+
+
     <!-- End of Homepage -->
 
     <!-- Start of Activity Feed -->
