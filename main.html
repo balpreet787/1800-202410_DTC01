@@ -14,6 +14,13 @@
     <!-- Boostrap Library JS CDN  go here -->
 
     <!-- Other libraries go here -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/ui/4.8.1/firebase-ui-auth.js"></script>
+    <link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/4.8.1/firebase-ui-auth.css" />
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
     <!-- Jquery library -->
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
@@ -45,7 +52,7 @@
 
     <!-- Start of Homepage -->
     <div id="homepage">
-            <div class="grid grid-cols-2 m-8 text-xl md:">
+        <div class="grid grid-cols-2 m-8 text-xl md:">
             <div>
                 <h1>Hi, User!</h1>
                 <div class="text-sm">Let's get going</div>
@@ -286,7 +293,7 @@
         <input type="radio" name="filter-activity-feed" id="accomplishments-button">
         <label for="accomplishments-filter">Accomplishments</label>
         <br>
-        <input type="radio"  name="filter-activity-feed" id="activity-filter">
+        <input type="radio" name="filter-activity-feed" id="activity-filter">
         <label for="activity-filter">Activity</label>
         <br>
         <div class="flex justify-center">
@@ -316,6 +323,7 @@
     <!-- End of navigation footer -->
 
     <!-- Link to scripts of your own -->
+    <script src="./scripts/firebaseAPI_DTC01.js"></script>
     <script src="./scripts/script.js"></script>
 
 </body>
