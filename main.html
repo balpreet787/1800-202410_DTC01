@@ -43,9 +43,9 @@
         consistency through a leaderboard, and keep up to date with their friends on their activity feed.
     </div>
 
+    <!-- Start of Homepage -->
     <div id="homepage">
-        <!-- Start of Homepage -->
-        <div class="grid grid-cols-2 m-8 text-xl md:">
+            <div class="grid grid-cols-2 m-8 text-xl md:">
             <div>
                 <h1>Hi, User!</h1>
                 <div class="text-sm">Let's get going</div>
@@ -96,6 +96,7 @@
             </div>
         </div>
     </div>
+
     <!-- Leaderboard page starts here -->
     <div id="leaderboard">
         <div class="text-right m-4">
@@ -182,9 +183,6 @@
 
     </div>
     <!-- Leaderboard page ends here -->
-
-
-
     <!-- End of Homepage -->
 
     <!-- Start of Activity Feed -->
@@ -281,6 +279,24 @@
     </div>
     <!-- Form to add new exercises ends here -->
 
+    <!-- Start of Filter Activity Feed Page -->
+    <div class="m-4">
+        <button class="float-right font-semibold">Cancel</button>
+        <h1 class="font-semibold">Filter by:</h1>
+        <input type="radio" name="filter-activity-feed" id="accomplishments-button">
+        <label for="accomplishments-filter">Accomplishments</label>
+        <br>
+        <input type="radio"  name="filter-activity-feed" id="activity-filter">
+        <label for="activity-filter">Activity</label>
+        <br>
+        <div class="flex justify-center">
+            <button class="bg-gray-200 w-1/3 self-center rounded-lg py-2 my-4">
+                View Feed
+            </button>
+        </div>
+    </div>
+
+    <!-- Start of navigation footer -->
     <footer class="sticky bottom-0 p-3 bg-orange-400">
         <div class="grid grid-cols-5">
             <a href="" class="flex justify-center"> <img src="./images/nav-icons/home.svg" class="w-8 h-8" alt=""></a>
@@ -293,6 +309,8 @@
             <a href="" class="flex justify-center"><img src="./images/nav-icons/setting.svg" class="w-8 h-8" alt=""></a>
         </div>
     </footer>
+    <!-- End of navigation footer -->
+
     <!-- Link to scripts of your own -->
     <script src="./scripts/script.js"></script>
 
