@@ -45,7 +45,7 @@
 
     <!-- Start of Homepage -->
     <div id="homepage">
-        <div class="grid grid-cols-2 m-8 text-xl md:">
+            <div class="grid grid-cols-2 m-8 text-xl md:">
             <div>
                 <h1>Hi, User!</h1>
                 <div class="text-sm">Let's get going</div>
@@ -248,6 +248,36 @@
         </div>
     </div>
     <!-- End of Activity Feed -->
+    <!-- Form to add new exercises starts here -->
+    <div id="addExercies">
+        <form action="/action_page.php">
+            <div class="ml-6 mt-5 text-center">
+                <label for="exercises">Choose the workout:</label>
+                <select id="exercises" name="Exercise">
+                    <option value="Weightlifting">Weight lifting</option>
+                    <option value="cycling">Cycling</option>
+                    <option value="running">Running</option>
+                    <option value="walking">Walking</option>
+                    <option value="yoga">Yoga</option>
+                </select>
+            </div>
+            <div class="">
+                <div class="flex gap-4 justify-between p-4 text-center">
+                    <label class="  p-2 w-1/2" for="startDate">Start time:</label>
+                    <input class=" p-1" type="datetime-local" id="startDate" name="startDate">
+                </div>
+                <div class="flex gap-4 justify-between p-4 text-center">
+                    <label class="  p-2 w-1/2" for="endDate">End time:</label>
+                    <input class=" p-1" type="datetime-local" id="endDate" name="endDate">
+                </div>
+            </div>
+            <div class="grid grid-cols-2 place-items-center">
+                <input class="w-1/2 bg-gray-300 rounded-lg  p-1" type="button" value="Save">
+                <input class="w-1/2 bg-gray-300 rounded-lg  p-1" type="button" value="Cancel">
+            </div>
+        </form>
+    </div>
+    <!-- Form to add new exercises ends here -->
 
     <!-- Start of Filter Activity Feed Page -->
     <div class="m-4">
