@@ -29,7 +29,7 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/ui/4.8.1/firebase-ui-auth.js"></script>
-    <link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/4.8.1/firebase-ui-auth.css"/>
+    <link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/4.8.1/firebase-ui-auth.css" />
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
 
     <!-------------------------------------------->
@@ -42,16 +42,16 @@
 
 <body>
     <!-- Nav bar -->
-    <div class="flex flex-row justify-between font-bold p-3 bg-orange-400">
+    <div class="flex flex-row justify-between font-bold p-3 bg-gradient-to-r from-orange-700 to-orange-500">
         <img src="./images/logo.svg" class="w-8 h-8" alt="logo">
         <div class="">
             <img src="./images/info_icon.png" class="w-8 h-8" id="info" alt="">
         </div>
     </div>
-    <div class="container">
-        <h1>Let's Login!</h1>
+
+    <div class="h-screen flex items-center justify-center">
+        <div class="self-center" id="firebaseui-auth-container"></div>
     </div>
-    <div id="firebaseui-auth-container"></div>
     <div id="loader">Loading...</div>
 
     <script src="./scripts/firebaseAPI_DTC01.js"></script>
