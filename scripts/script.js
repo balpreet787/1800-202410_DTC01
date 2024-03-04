@@ -6,6 +6,7 @@ function info_handler() {
 
 function setup() {
     jQuery('#info').click(info_handler);
+    $("#datepicker").datepicker();
 }
 
 jQuery(document).ready(setup);
