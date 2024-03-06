@@ -57,6 +57,11 @@ function settings_handler() {
 }
 function setup() {
     jQuery('#info').click(info_handler);
+    jQuery('#homepage_button').click(homepage_handler);
+    jQuery('#leaderboard_button').click(leaderboard_handler);
+    jQuery('#activity_button').click(activity_handler);
+    jQuery('#calendar_button').click(calendar_handler);
+    jQuery('#settings_button').click(settings_handler);
     $('#login').click(redirect_to_login);
     $('#signup').click(redirect_to_login);
 
