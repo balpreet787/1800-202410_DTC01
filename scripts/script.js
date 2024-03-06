@@ -30,8 +30,22 @@ function info_handler() {
 
     jQuery('#info-box').slideToggle()
 }
+
 function redirect_to_login() {
     window.location.href = 'login.html';
+}
+
+function redirect_to_signup() {
+    window.location.href = 'index.html';
+}
+
+function logout() {
+    firebase.auth().signOut().then(() => {
+        // Sign-out successful.
+        console.log("logging out user");
+      }).catch((error) => {
+        // An error happened.
+      });
 }
 
 function homepage_handler() {
@@ -41,6 +55,9 @@ function homepage_handler() {
         jQuery('#activity_feed').css("display", "none");
         jQuery('#datepicker').css("display", "none");
         jQuery('#settings').css("display", "none");
+        jQuery('#add_workout').css("display", "none");
+        jQuery('#filter_activity').css("display", "none");
+        jQuery('#profile_info').css("display", "none");
     }
 }
 
@@ -51,6 +68,9 @@ function leaderboard_handler() {
         jQuery('#activity_feed').css("display", "none");
         jQuery('#datepicker').css("display", "none");
         jQuery('#settings').css("display", "none");
+        jQuery('#add_workout').css("display", "none");
+        jQuery('#filter_activity').css("display", "none");
+        jQuery('#profile_info').css("display", "none");
     }
 }
 
@@ -61,6 +81,9 @@ function activity_handler() {
         jQuery('#leaderboard').css("display", "none");
         jQuery('#datepicker').css("display", "none");
         jQuery('#settings').css("display", "none");
+        jQuery('#add_workout').css("display", "none");
+        jQuery('#filter_activity').css("display", "none");
+        jQuery('#profile_info').css("display", "none");
     }
 }
 
@@ -71,6 +94,9 @@ function calendar_handler() {
         jQuery('#leaderboard').css("display", "none");
         jQuery('#activity_feed').css("display", "none");
         jQuery('#settings').css("display", "none");
+        jQuery('#add_workout').css("display", "none");
+        jQuery('#filter_activity').css("display", "none");
+        jQuery('#profile_info').css("display", "none");
     }
 }
 
@@ -81,8 +107,47 @@ function settings_handler() {
         jQuery('#leaderboard').css("display", "none");
         jQuery('#activity_feed').css("display", "none");
         jQuery('#datepicker').css("display", "none");
+        jQuery('#add_workout').css("display", "none");
+        jQuery('#filter_activity').css("display", "none");
+        jQuery('#profile_info').css("display", "none");
     }
 }
+
+function add_workout_handler() {
+    if (jQuery('#add_workout').css("display") == "none") {
+        jQuery('#add_workout').toggle()
+        jQuery('#homepage').css("display", "none");
+        jQuery('#leaderboard').css("display", "none");
+        jQuery('#activity_feed').css("display", "none");
+        jQuery('#settings').css("display", "none");
+        jQuery('#filter_activity').css("display", "none");
+        jQuery('#profile_info').css("display", "none");
+    }
+}
+
+function filter_handler() {
+    if (jQuery('#filter_activity').css("display") == "none") {
+        jQuery('#filter_activity').toggle()
+        jQuery('#add_workout').css("display", "none");
+        jQuery('#homepage').css("display", "none");
+        jQuery('#leaderboard').css("display", "none");
+        jQuery('#activity_feed').css("display", "none");
+        jQuery('#settings').css("display", "none");
+        jQuery('#profile_info').css("display", "none");
+    }
+}
+
+function profile_info_handler() {
+    if (jQuery('#profile_info').css("display") == "none") {
+        jQuery('#profile_info').toggle()
+        jQuery('#add_workout').css("display", "none");
+        jQuery('#homepage').css("display", "none");
+        jQuery('#leaderboard').css("display", "none");
+        jQuery('#activity_feed').css("display", "none");
+        jQuery('#settings').css("display", "none");
+    }
+}
+
 
 
 
@@ -93,6 +158,16 @@ function setup() {
     jQuery('#activity_button').click(activity_handler);
     jQuery('#calendar_button').click(calendar_handler);
     jQuery('#settings_button').click(settings_handler);
+    jQuery('#add_workout_button').click(add_workout_handler);
+    jQuery('#filter_button').click(filter_handler);
+    jQuery('#cancel_button').click(activity_handler);
+    jQuery('#profile_info_button').click(profile_info_handler);
+    jQuery('#save_profile_info_button').click(settings_handler);
+    jQuery('#cancel_profile_info_button').click(settings_handler);
+    jQuery('#save_workout_button').click(homepage_handler);
+    jQuery('#cancel_workout_button').click(homepage_handler);
+    jQuery('#logout_button').click(redirect_to_signup);
+    jQuery('#logout_button').click(logout);
     $('#login').click(redirect_to_login);
     $('#signup').click(redirect_to_login);
 
