@@ -133,6 +133,8 @@ function setup() {
     jQuery('#profile_info_button').click(profile_info_handler);
     jQuery('#save_profile_info_button').click(settings_handler);
     jQuery('#cancel_profile_info_button').click(settings_handler);
+    jQuery('#save_workout_button').click(homepage_handler);
+    jQuery('#cancel_workout_button').click(homepage_handler);
     jQuery('#logout_button').click(redirect_to_signup);
     jQuery('#logout_button').click(logout);
     $('#login').click(redirect_to_login);
