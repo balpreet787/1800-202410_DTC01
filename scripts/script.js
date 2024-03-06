@@ -59,6 +59,9 @@ function setup() {
     jQuery('#activity_button').click(activity_handler);
     jQuery('#calendar_button').click(calendar_handler);
     jQuery('#settings_button').click(settings_handler);
+    $('#login').click(redirect_to_login);
+    $('#signup').click(redirect_to_login);
+
     $("#datepicker").datepicker();
 }
 
