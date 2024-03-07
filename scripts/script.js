@@ -1,6 +1,5 @@
 
 function updateInfo() {
-    
     firebase.auth().onAuthStateChanged((user) => {
         if (user) {
             // User is signed in, you can get the user ID.
@@ -16,7 +15,7 @@ function updateInfo() {
                 .then(() => {
                     console.log("Document successfully updated!");
                     jQuery('#homepage').toggle();
-                    jQuery("#profile_info").toggle();
+                    jQuery("#profile_info").css("display", "none");
                     jQuery('#settings').toggle();
                 })
                 .catch((error) => {
