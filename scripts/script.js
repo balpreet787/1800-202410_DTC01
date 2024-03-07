@@ -1,32 +1,42 @@
 
 function updateInfo() {
-    firebase.auth().onAuthStateChanged((user) => {
-        if (user) {
-            // User is signed in, you can get the user ID.
-            var uid = user.uid;
-            console.log(uid)
-            db.collection("users").doc(uid).set({
-                nickname: jQuery("#nickname").val(),
-                gender: jQuery("#gender").val(),
-                height: jQuery("#height").val(),
-                weight: jQuery("#weight").val(),
-                leaderboardID: jQuery("#leaderboard_id").val(),
-            }, { merge: true })
-                .then(() => {
-                    console.log("Document successfully updated!");
-                    jQuery('#homepage').toggle();
-                    jQuery("#profile_info").css("display", "none");
-                    jQuery('#settings').toggle();
-                })
-                .catch((error) => {
-                    // The document probably doesn't exist.
-                    console.error("Error updating document: ", error);
-                });
-        } else {
-            // No user is signed in.
-            console.log("No user is signed in.");
-        }
-    });
+    nickname = jQuery("#nickname").val();
+    gender = jQuery("#gender").val();
+    height = jQuery("#height").val();
+    weight = jQuery("#weight").val();
+    leaderboardID = jQuery("#leaderboard_id").val();
+    dob = jQuery("#dob").val();
+
+    if (nickname != "" && height != "" && weight != "" && leaderboardID != "" && dob != "")
+
+        firebase.auth().onAuthStateChanged((user) => {
+            if (user) {
+                // User is signed in, you can get the user ID.
+                var uid = user.uid;
+                console.log(uid)
+                db.collection("users").doc(uid).set({
+                    nickname: nickname,
+                    gender: gender,
+                    height: height,
+                    weight: weight,
+                    dob: dob,
+                    leaderboardID: leaderboardID,
+                }, { merge: true })
+                    .then(() => {
+                        console.log("Document successfully updated!");
+                        jQuery('#homepage').toggle();
+                        jQuery("#profile_info").css("display", "none");
+                        jQuery('#settings').toggle();
+                    })
+                    .catch((error) => {
+                        // The document probably doesn't exist.
+                        console.error("Error updating document: ", error);
+                    });
+            } else {
+                // No user is signed in.
+                console.log("No user is signed in.");
+            }
+        });
 }
 
 function insertNameFromFirestore() {
@@ -186,7 +196,7 @@ function setup() {
     jQuery('#filter_button').click(filter_handler);
     jQuery('#cancel_button').click(activity_handler);
     jQuery('#profile_info_button').click(profile_info_handler);
-    jQuery('#save_profile_info_button').click(settings_handler);
+    // jQuery('#save_profile_info_button').click(settings_handler);
     jQuery('#cancel_profile_info_button').click(settings_handler);
     jQuery('#save_workout_button').click(homepage_handler);
     jQuery('#cancel_workout_button').click(homepage_handler);
