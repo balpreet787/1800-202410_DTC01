@@ -4,14 +4,18 @@ function updateInfo() {
         if (user) {
             // User is signed in, you can get the user ID.
             var uid = user.uid;
-
+            console.log(uid)
             db.collection("users").doc(uid).set({
+                nickname: jQuery("#nickname").val(),
                 gender: jQuery("#gender").val(),
                 height: jQuery("#height").val(),
                 weight: jQuery("#weight").val(),
             }, { merge: true })
                 .then(() => {
                     console.log("Document successfully updated!");
+                    jQuery('#homepage').toggle();
+                    jQuery("#profile_info").toggle();
+                    jQuery('#settings').toggle();
                 })
                 .catch((error) => {
                     // The document probably doesn't exist.
@@ -22,8 +26,7 @@ function updateInfo() {
             console.log("No user is signed in.");
         }
     });
-    jQuery('#homepage').css("display", "flex")
-    jQuery("#profile_info").css("display", "none")
+
 }
 
 function insertNameFromFirestore() {
@@ -197,17 +200,20 @@ function setup() {
             // User is signed in, you can get the user ID.
             currentUser = db.collection("users").doc(user.uid); // Go to the Firestore document of the user
             currentUser.get().then(userDoc => {
-                // Get the user name
-                if (currentUser.doc("nickname") === undefined) {
-                    jQuery('#homepage').css("display", "none")
-                    jQuery('#leaderboard').css("display", "none");
-                    jQuery('#activity_feed').css("display", "none");
-                    jQuery('#datepicker').css("display", "none");
-                    jQuery('#settings').css("display", "none");
-                    jQuery("#profile_info").css("display", "flex")
-                    jQuery("#save").click(updateInfo)
+                if (userDoc.exists) {
+                    // Get the document data
+                    const userData = userDoc.data();
+                    // Check if the 'nickname' field exists
+                    if (userData.nickname === undefined || userData.nickname === null) {
+                        jQuery('#homepage, #leaderboard, #activity_feed, #datepicker, #settings').css("display", "none");
+                        jQuery("#profile_info").css("display", "flex");
+                    }
+                } else {
+                    console.log("No such document!");
                 }
-            })
+            }).catch(error => {
+                console.log("Error getting document:", error);
+            });
 
         } else {
             // No user is signed in.
@@ -215,7 +221,9 @@ function setup() {
         }
     });
 
+
     $("#datepicker").datepicker();
+    jQuery("#save_profile_info_button").click(updateInfo)
 }
 
 jQuery(document).ready(setup);
