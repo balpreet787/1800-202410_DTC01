@@ -1,5 +1,6 @@
 
 function updateInfo() {
+    
     firebase.auth().onAuthStateChanged((user) => {
         if (user) {
             // User is signed in, you can get the user ID.
@@ -10,6 +11,7 @@ function updateInfo() {
                 gender: jQuery("#gender").val(),
                 height: jQuery("#height").val(),
                 weight: jQuery("#weight").val(),
+                leaderboardID: jQuery("#leaderboard_id").val(),
             }, { merge: true })
                 .then(() => {
                     console.log("Document successfully updated!");
@@ -26,7 +28,6 @@ function updateInfo() {
             console.log("No user is signed in.");
         }
     });
-
 }
 
 function insertNameFromFirestore() {
