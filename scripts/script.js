@@ -39,6 +39,42 @@ function updateInfo() {
         });
 }
 
+
+function addWorkout() {
+    exerciseType = jQuery("#exercises").val();
+    startDate = jQuery("#startDate").val();
+    endDate = jQuery("#endDate").val();
+
+    if (exerciseType != "" && startDate != "" && endDate != "")
+
+        firebase.auth().onAuthStateChanged((user) => {
+            if (user) {
+                // User is signed in, you can get the user ID.
+                var uid = user.uid;
+                console.log(uid)
+                db.collection("users").doc(uid).collection("workouts").doc("history").set({
+                    exerciseType: exerciseType,
+                    startDate: startDate,
+                    endDate: endDate,
+                }, { merge: true })
+                    .then(() => {
+                        console.log("Document successfully updated!");
+                        jQuery('#homepage').toggle();
+                        jQuery("#add_workout").css("display", "none");
+                        jQuery('#activity_feed').toggle();
+                    })
+                    .catch((error) => {
+                        // The document probably doesn't exist.
+                        console.error("Error updating document: ", error);
+                    });
+            } else {
+                // No user is signed in.
+                console.log("No user is signed in.");
+            }
+        });
+}
+
+
 function insertNameFromFirestore() {
     // Check if the user is logged in:
     firebase.auth().onAuthStateChanged(user => {
@@ -233,7 +269,8 @@ function setup() {
 
 
     $("#datepicker").datepicker();
-    jQuery("#save_profile_info_button").click(updateInfo)
+    jQuery("#save_workout_button").click(addWorkout);
+    jQuery("#save_profile_info_button").click(updateInfo);
 }
 
 jQuery(document).ready(setup);
