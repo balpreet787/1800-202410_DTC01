@@ -44,34 +44,32 @@ function addWorkout() {
     exerciseType = jQuery("#exercises").val();
     startDate = jQuery("#startDate").val();
     endDate = jQuery("#endDate").val();
-
-    if (exerciseType != "" && startDate != "" && endDate != "")
-
-        firebase.auth().onAuthStateChanged((user) => {
-            if (user) {
-                // User is signed in, you can get the user ID.
-                var uid = user.uid;
-                console.log(uid)
-                db.collection("users").doc(uid).collection("workouts").doc("history").set({
-                    exerciseType: exerciseType,
-                    startDate: startDate,
-                    endDate: endDate,
-                }, { merge: true })
-                    .then(() => {
-                        console.log("Document successfully updated!");
-                        jQuery('#homepage').toggle();
-                        jQuery("#add_workout").css("display", "none");
-                        jQuery('#activity_feed').toggle();
-                    })
-                    .catch((error) => {
-                        // The document probably doesn't exist.
-                        console.error("Error updating document: ", error);
-                    });
-            } else {
-                // No user is signed in.
-                console.log("No user is signed in.");
-            }
-        });
+    console.log(exerciseType, startDate, endDate)
+    firebase.auth().onAuthStateChanged((user) => {
+        if (user) {
+            // User is signed in, you can get the user ID.
+            var uid = user.uid;
+            console.log(uid)
+            db.collection("users").doc(uid).collection("workouts").doc("history").set({
+                exerciseType: exerciseType,
+                startDate: startDate,
+                endDate: endDate,
+            }, { merge: true })
+                .then(() => {
+                    console.log("Document successfully updated!");
+                    jQuery('#homepage').toggle();
+                    jQuery("#add_workout").css("display", "none");
+                    jQuery('#activity_feed').toggle();
+                })
+                .catch((error) => {
+                    // The document probably doesn't exist.
+                    console.error("Error updating document: ", error);
+                });
+        } else {
+            // No user is signed in.
+            console.log("No user is signed in.");
+        }
+    });
 }
 
 
@@ -234,7 +232,7 @@ function setup() {
     jQuery('#profile_info_button').click(profile_info_handler);
     // jQuery('#save_profile_info_button').click(settings_handler);
     jQuery('#cancel_profile_info_button').click(settings_handler);
-    jQuery('#save_workout_button').click(homepage_handler);
+    //jQuery('#save_workout_button').click(homepage_handler);
     jQuery('#cancel_workout_button').click(homepage_handler);
     jQuery('#logout_button').click(redirect_to_signup);
     jQuery('#logout_button').click(logout);
