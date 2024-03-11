@@ -45,56 +45,57 @@ function addWorkout() {
     startDate = jQuery("#startDate").val();
     endDate = jQuery("#endDate").val();
     console.log(exerciseType, startDate, endDate)
+    if (exerciseType == "" || startDate == "" || endDate == "") {
+        firebase.auth().onAuthStateChanged((user) => {
+            if (user) {
+                // User is signed in, you can get the user ID.
+                var uid = user.uid;
+                console.log(uid)
+                let history_doc = []; // Assuming this is initialized earlier in your code
+                let history_num;
+                // Fetch documents
+                db.collection("users").doc(uid).collection("workouts").get().then((querySnapshot) => {
+                    querySnapshot.forEach((doc) => {
+                        history_doc.push(doc.id);
+                    });
 
-    firebase.auth().onAuthStateChanged((user) => {
-        if (user) {
-            // User is signed in, you can get the user ID.
-            var uid = user.uid;
-            console.log(uid)
-            let history_doc = []; // Assuming this is initialized earlier in your code
-            let history_num;
-            // Fetch documents
-            db.collection("users").doc(uid).collection("workouts").get().then((querySnapshot) => {
-                querySnapshot.forEach((doc) => {
-                    history_doc.push(doc.id);
+                    // Now that we have the documents, we can work with them here
+                    console.log(history_doc.length);
+                    if (history_doc.length == 0) {
+                        history_num = "history1";
+                    } else {
+                        history_num = "history" + (history_doc.length + 1).toString();
+                    }
+                    console.log(history_num);
+                    db.collection("users").doc(uid).collection("workouts").doc(history_num).set({
+                        exerciseType: exerciseType,
+                        startDate: startDate,
+                        endDate: endDate,
+                    }, { merge: true })
+                        .then(() => {
+                            console.log("Document successfully updated!");
+                            jQuery('#homepage').toggle();
+                            jQuery("#add_workout").css("display", "none");
+                            jQuery('#activity_feed').toggle();
+                        })
+                        .catch((error) => {
+                            // The document probably doesn't exist.
+                            console.error("Error updating document: ", error);
+                        });
+                    // Continue your logic here, now that history_num is set
+                    // For example, use history_num to create or update a document
+
+                }).catch((error) => {
+                    console.error("Error fetching documents: ", error);
                 });
 
-                // Now that we have the documents, we can work with them here
-                console.log(history_doc.length);
-                if (history_doc.length == 0) {
-                    history_num = "history1";
-                } else {
-                    history_num = "history" + (history_doc.length + 1).toString();
-                }
-                console.log(history_num);
-                db.collection("users").doc(uid).collection("workouts").doc(history_num).set({
-                    exerciseType: exerciseType,
-                    startDate: startDate,
-                    endDate: endDate,
-                }, { merge: true })
-                    .then(() => {
-                        console.log("Document successfully updated!");
-                        jQuery('#homepage').toggle();
-                        jQuery("#add_workout").css("display", "none");
-                        jQuery('#activity_feed').toggle();
-                    })
-                    .catch((error) => {
-                        // The document probably doesn't exist.
-                        console.error("Error updating document: ", error);
-                    });
-                // Continue your logic here, now that history_num is set
-                // For example, use history_num to create or update a document
 
-            }).catch((error) => {
-                console.error("Error fetching documents: ", error);
-            });
-
-
-        } else {
-            // No user is signed in.
-            console.log("No user is signed in.");
-        }
-    });
+            } else {
+                // No user is signed in.
+                console.log("No user is signed in.");
+            }
+        });
+    }
 }
 
 
