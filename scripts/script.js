@@ -79,11 +79,8 @@ function addWorkout() {
                             jQuery('#activity_feed').toggle();
                         })
                         .catch((error) => {
-                            // The document probably doesn't exist.
                             console.error("Error updating document: ", error);
                         });
-                    // Continue your logic here, now that history_num is set
-                    // For example, use history_num to create or update a document
 
                 }).catch((error) => {
                     console.error("Error fetching documents: ", error);
