@@ -256,11 +256,11 @@
     <!-- End of Activity Feed -->
 
     <!-- Form to add new exercises starts here -->
-    <div class="hidden mx-4" id="add_workout">
+    <div class="hidden mx-8" id="add_workout">
         <div>
             <div class="mt-5 text-center">
-                <label for="exercises">Choose the workout:</label>
-                <select class="p-2 rounded-lg bg-gray-300" id="exercises" name="Exercise">
+                <label class="px-2" for="exercises">Choose the workout:</label>
+                <select class="p-2 px-4 rounded-lg bg-gray-300" id="exercises" name="Exercise">
                     <option value="Weightlifting">Weight lifting</option>
                     <option value="cycling">Cycling</option>
                     <option value="running">Running</option>
@@ -270,17 +270,36 @@
             </div>
             <div class="flex flex-col jusitfy-center">
                 <div class="flex gap-4 justify-between p-4 text-center">
-                    <label class="  p-2 w-1/2" for="startDate">Start time:</label>
-                    <input class=" p-1" type="datetime-local" id="startDate" name="startDate">
+                    <label class="p-2" for="startDate">Start time:</label>
+                    <input class="p-1" type="datetime-local" id="startDate" name="startDate">
                 </div>
                 <div class="flex gap-4 justify-between p-4 text-center">
-                    <label class="  p-2 w-1/2" for="endDate">End time:</label>
+                    <label class="p-2" for="endDate">End time:</label>
                     <input class=" p-1" type="datetime-local" id="endDate" name="endDate">
                 </div>
             </div>
-            <div class="grid grid-cols-2 place-items-center">
-                <button id="save_workout_button" class="w-1/2 bg-gray-300 rounded-lg  p-1">Save</button>
-                <button id="cancel_workout_button" class="w-1/2 bg-gray-300 rounded-lg  p-1">Cancel</button>
+            <!-- Additional information for weightlifting exercise and yoga starts here -->
+            <div class="flex gap-4 justify-between p-4 text-center">
+                <label class="p-2" for="intensity">Intensity:</label>
+                <select class="py-1 rounded-lg bg-gray-300 px-16" name="Intensity" id="intensity">
+                    <option class="py-1 rounded-lg bg-gray-300 px-16" value="Light">Light</option>
+                    <option class="py-1 rounded-lg bg-gray-300 px-16" value="Moderate">Moderate</option>
+                    <option class="py-1 rounded-lg bg-gray-300 px-16" value="Hard">Hard</option>
+                    <option class="py-1 rounded-lg bg-gray-300 px-16" value="Very-hard">Very Hard</option>
+                </select>
+            </div>
+            <!-- Additional information for weightlifting exercise and yoga starts here -->
+
+            <!-- Additional information for cycling, walking, and running ends here -->
+            <div class="flex gap-4 justify-between p-4 text-center">
+                <label class="p-2" for="distance">Distance:</label>
+                <input class="outline outline-1 rounded-lg px-[17px]" type="number" id="distance" min="0" placeholder="km">
+            </div>
+            <!-- Additional information for cycling, walking, and running starts here -->
+
+            <div class="grid grid-cols-2 place-items-center my-5">
+                <button id="save_workout_button" class="w-1/2 bg-gray-300 rounded-lg  p-2">Save</button>
+                <button id="cancel_workout_button" class="w-1/2 bg-gray-300 rounded-lg  p-2">Cancel</button>
             </div>
         </div>
     </div>
