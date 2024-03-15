@@ -13,7 +13,6 @@ function updateInfo() {
             if (user) {
                 // User is signed in, you can get the user ID.
                 var uid = user.uid;
-                console.log(uid)
                 db.collection("users").doc(uid).set({
                     nickname: nickname,
                     gender: gender,
@@ -40,13 +39,75 @@ function updateInfo() {
 }
 
 
-function addWorkout() {
+function get_calories_burned(exerciseType, startDate, endDate, exercise_intensity) {
+    startTime = new Date(startDate);
+    endTime = new Date(endDate);
+    difference = (endTime - startTime) / (1000 * 60);
+
+    return new Promise((resolve, reject) => {
+        firebase.auth().onAuthStateChanged((user) => {
+            if (user) {
+                // User is signed in, you can get the user ID.
+                const currentUser = db.collection("users").doc(user.uid); // Go to the Firestore document of the user
+                currentUser.get().then(userDoc => {
+                    if (userDoc.exists) {
+                        // Get the document data
+                        const userData = userDoc.data();
+                        user_height = userData.height;
+                        user_weight = userData.weight;
+                        user_intensity = userData.exercise_intensity
+
+                        if (exerciseType == "Weightlifting" || exerciseType == "yoga") {
+                            calories = exercise_intensity * user_weight * (difference / 60)
+                        }
+
+                        resolve(calories); // Resolve the promise with height and weight
+                    } else {
+                        console.log("No such document!");
+                        reject("No such document!"); // Reject the promise if the document doesn't exist
+                    }
+                }).catch(error => {
+                    console.log("Error getting document:", error);
+                    reject(error); // Reject the promise on error
+                });
+            } else {
+                // No user is signed in.
+                console.log("No user is signed in.");
+                reject("No user is signed in."); // Reject the promise if no user is signed in
+            }
+        });
+    });
+}
+
+
+async function addWorkout() {
     exerciseType = jQuery("#exercises").val();
     startDate = jQuery("#startDate").val();
     endDate = jQuery("#endDate").val();
     
-    console.log(exerciseType, startDate, endDate)
-    if (exerciseType == "" || startDate == "" || endDate == "") {
+
+    if (exerciseType == "Weightlifting" || exerciseType == "yoga") {
+        intensity = jQuery("#intensity").val();
+        if (intensity == "Light") {
+            exercise_intensity = 3
+        }
+        else if (intensity == "Moderate") {
+            exercise_intensity = 5
+        }
+        else if (intensity == "Hard") {
+            exercise_intensity = 6
+        }
+        else if (intensity == "Very-hard") {
+            exercise_intensity = 7
+        }
+    }
+    else {
+        exercise_intensity = parseFloat(jQuery("#distance").val())
+    }
+
+    calories_burned = await get_calories_burned(exerciseType, startDate, endDate, exercise_intensity);
+
+    if (exerciseType != "" && startDate != "" && endDate != "") {
         firebase.auth().onAuthStateChanged((user) => {
             if (user) {
                 // User is signed in, you can get the user ID.
@@ -55,6 +116,7 @@ function addWorkout() {
                 let history_doc = []; // Assuming this is initialized earlier in your code
                 let history_num;
                 // Fetch documents
+                console.log(user.uid.height)
                 db.collection("users").doc(uid).collection("workouts").get().then((querySnapshot) => {
                     querySnapshot.forEach((doc) => {
                         history_doc.push(doc.id);
@@ -72,6 +134,8 @@ function addWorkout() {
                         exerciseType: exerciseType,
                         startDate: startDate,
                         endDate: endDate,
+                        intensity: intensity,
+                        calories: calories_burned,
                     }, { merge: true })
                         .then(() => {
                             console.log("Document successfully updated!");
