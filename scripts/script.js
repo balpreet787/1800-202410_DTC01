@@ -58,9 +58,27 @@ function get_calories_burned(exerciseType, startDate, endDate, exercise_intensit
                         user_intensity = userData.exercise_intensity
 
                         if (exerciseType == "Weightlifting" || exerciseType == "yoga") {
-                            calories = exercise_intensity * user_weight * (difference / 60)
+                            calories = exercise_intensity * user_weight * (difference / 60);
                         }
-
+                        else if (exerciseType == "running") {
+                            calories = exercise_intensity * user_weight;
+                        }
+                        else if (exerciseType == "walking") {
+                            calories = .354 * exercise_intensity * user_weight;
+                        }
+                        else if (exerciseType == "cycling") {
+                            speed = exercise_intensity / (difference / 60);
+                            if (speed <= 16.0) {
+                                met = 4;
+                            }
+                            else if (speed <= 19.0) {
+                                met = 6;
+                            }
+                            else if (speed > 19.0) {
+                                met = 8;
+                            }
+                            calories = met * user_weight * (difference / 60);
+                        }
                         resolve(calories); // Resolve the promise with height and weight
                     } else {
                         console.log("No such document!");
@@ -84,30 +102,46 @@ async function addWorkout() {
     exerciseType = jQuery("#exercises").val();
     startDate = jQuery("#startDate").val();
     endDate = jQuery("#endDate").val();
-    
 
-    if (exerciseType == "Weightlifting" || exerciseType == "yoga") {
-        intensity = jQuery("#intensity").val();
-        if (intensity == "Light") {
-            exercise_intensity = 3
-        }
-        else if (intensity == "Moderate") {
-            exercise_intensity = 5
-        }
-        else if (intensity == "Hard") {
-            exercise_intensity = 6
-        }
-        else if (intensity == "Very-hard") {
-            exercise_intensity = 7
-        }
-    }
-    else {
-        exercise_intensity = parseFloat(jQuery("#distance").val())
-    }
 
-    calories_burned = await get_calories_burned(exerciseType, startDate, endDate, exercise_intensity);
 
-    if (exerciseType != "" && startDate != "" && endDate != "") {
+
+
+    if (exerciseType != "" && startDate != "" && endDate != "" && jQuery(".intensity").val() != "") {
+        if (exerciseType == "Weightlifting") {
+            intensity = jQuery("#intensity").val();
+            if (intensity == "Light") {
+                exercise_intensity = 3
+            }
+            else if (intensity == "Moderate") {
+                exercise_intensity = 5
+            }
+            else if (intensity == "Hard") {
+                exercise_intensity = 6
+            }
+            else if (intensity == "Very-hard") {
+                exercise_intensity = 7
+            }
+        }
+        else if (exerciseType == "yoga") {
+            intensity = jQuery("#intensity").val();
+            if (intensity == "Light") {
+                exercise_intensity = 2.5
+            }
+            else if (intensity == "Moderate") {
+                exercise_intensity = 4
+            }
+            else if (intensity == "Hard") {
+                exercise_intensity = 6
+            }
+            else if (intensity == "Very-hard") {
+                exercise_intensity = 7
+            }
+        }
+        else {
+            exercise_intensity = parseFloat(jQuery("#distance").val())
+        }
+        calories_burned = await get_calories_burned(exerciseType, startDate, endDate, exercise_intensity);
         firebase.auth().onAuthStateChanged((user) => {
             if (user) {
                 // User is signed in, you can get the user ID.
@@ -115,8 +149,6 @@ async function addWorkout() {
                 console.log(uid)
                 let history_doc = []; // Assuming this is initialized earlier in your code
                 let history_num;
-                // Fetch documents
-                console.log(user.uid.height)
                 db.collection("users").doc(uid).collection("workouts").get().then((querySnapshot) => {
                     querySnapshot.forEach((doc) => {
                         history_doc.push(doc.id);
@@ -281,13 +313,11 @@ function add_workout_handler() {
 }
 
 function additional_information_handler() {
-    if(jQuery(this).val()=="cycling" || jQuery(this).val()=="running" || jQuery(this).val()=="walking")
-    {
+    if (jQuery(this).val() == "cycling" || jQuery(this).val() == "running" || jQuery(this).val() == "walking") {
         jQuery('#distance-div').css("display", "flex");
         jQuery('#intensity-div').css("display", "none");
     }
-    else
-    {
+    else {
         jQuery('#distance-div').css("display", "none");
         jQuery('#intensity-div').css("display", "flex");
     }
