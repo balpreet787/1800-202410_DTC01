@@ -261,7 +261,7 @@
             <div class="mt-5 text-center">
                 <label class="px-2" for="exercises">Choose the workout:</label>
                 <select class="p-2 px-4 rounded-lg bg-gray-300" id="exercises" name="Exercise">
-                    <option value="Weightlifting">Weight lifting</option>
+                    <option value="weightlifting">Weight lifting</option>
                     <option value="cycling">Cycling</option>
                     <option value="running">Running</option>
                     <option value="walking">Walking</option>
@@ -281,7 +281,7 @@
             <!-- Additional information for weightlifting exercise and yoga starts here -->
             <div class="flex gap-4 justify-between p-4 text-center">
                 <label class="p-2" for="intensity">Intensity:</label>
-                <select class="py-1 rounded-lg bg-gray-300 px-16" name="Intensity" id="intensity">
+                <select class="py-1 rounded-lg bg-gray-300 px-16 intensity" name="Intensity" id="intensity">
                     <option class="py-1 rounded-lg bg-gray-300 px-16" value="Light">Light</option>
                     <option class="py-1 rounded-lg bg-gray-300 px-16" value="Moderate">Moderate</option>
                     <option class="py-1 rounded-lg bg-gray-300 px-16" value="Hard">Hard</option>
@@ -291,9 +291,10 @@
             <!-- Additional information for weightlifting exercise and yoga starts here -->
 
             <!-- Additional information for cycling, walking, and running ends here -->
-            <div class="flex gap-4 justify-between p-4 text-center">
+            <div class="gap-4 justify-between p-4 text-center hidden" id="distance-div">
                 <label class="p-2" for="distance">Distance:</label>
-                <input class="outline outline-1 rounded-lg px-[17px]" type="number" id="distance" min="0" placeholder="km">
+                <input class="outline outline-1 rounded-lg px-[18px] intensity" type="number" id="distance" min="0"
+                    placeholder="km">
             </div>
             <!-- Additional information for cycling, walking, and running starts here -->
 
