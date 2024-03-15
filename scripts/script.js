@@ -313,12 +313,10 @@ function add_workout_handler() {
 }
 
 function additional_information_handler() {
-    if(jQuery(this).val()=="cycling" || jQuery(this).val()=="running" || jQuery(this).val()=="walking")
-    {
+    if (jQuery(this).val() == "cycling" || jQuery(this).val() == "running" || jQuery(this).val() == "walking") {
         jQuery('#distance-div').css("display", "flex");
     }
-    else
-    {
+    else {
         jQuery('#distance-div').css("display", "none");
     }
 }
