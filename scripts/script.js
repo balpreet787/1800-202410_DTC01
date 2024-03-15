@@ -86,7 +86,7 @@ async function addWorkout() {
     endDate = jQuery("#endDate").val();
 
     if (exerciseType == "Weightlifting" || exerciseType == "yoga") {
-        intensity = jQuery("weightlifting-yoga").val();
+        intensity = jQuery("#intensity").val();
         if (intensity == "Light") {
             exercise_intensity = 3
         }
