@@ -280,6 +280,19 @@ function add_workout_handler() {
     }
 }
 
+function additional_information_handler() {
+    if(jQuery(this).val()=="cycling" || jQuery(this).val()=="running" || jQuery(this).val()=="walking")
+    {
+        jQuery('#distance-div').css("display", "flex");
+    }
+    else
+    {
+        jQuery('#distance-div').css("display", "none");
+    }
+}
+
+
+
 function filter_handler() {
     if (jQuery('#filter_activity').css("display") == "none") {
         jQuery('#filter_activity').toggle()
@@ -315,6 +328,7 @@ function setup() {
     jQuery('#calendar_button').click(calendar_handler);
     jQuery('#settings_button').click(settings_handler);
     jQuery('#add_workout_button').click(add_workout_handler);
+    jQuery('#exercises').click(additional_information_handler)
     jQuery('#filter_button').click(filter_handler);
     jQuery('#cancel_button').click(activity_handler);
     jQuery('#profile_info_button').click(profile_info_handler);
