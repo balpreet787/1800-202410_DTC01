@@ -40,9 +40,9 @@ function updateInfo() {
 
 
 function get_calories_burned(exerciseType, startDate, endDate, exercise_intensity) {
-    startTime = new Date(startDate);
-    endTime = new Date(endDate);
-    difference = (endTime - startTime) / (1000 * 60);
+    const startTime = new Date(startDate);
+    const endTime = new Date(endDate);
+    const difference = (endTime - startTime) / (1000 * 60); // Difference in minutes
 
     return new Promise((resolve, reject) => {
         firebase.auth().onAuthStateChanged((user) => {
@@ -53,33 +53,29 @@ function get_calories_burned(exerciseType, startDate, endDate, exercise_intensit
                     if (userDoc.exists) {
                         // Get the document data
                         const userData = userDoc.data();
-                        user_height = userData.height;
-                        user_weight = userData.weight;
-                        user_intensity = userData.exercise_intensity
+                        const user_weight = userData.weight;
+                        let calories; // Define calories here so it's accessible throughout
+                        let met = 0; // Initialize met to avoid reference errors
 
-                        if (exerciseType == "Weightlifting" || exerciseType == "yoga") {
+                        if (exerciseType === "Weightlifting" || exerciseType === "yoga") {
                             calories = exercise_intensity * user_weight * (difference / 60);
-                        }
-                        else if (exerciseType == "running") {
+                        } else if (exerciseType === "running") {
                             calories = exercise_intensity * user_weight;
-                        }
-                        else if (exerciseType == "walking") {
-                            calories = .354 * exercise_intensity * user_weight;
-                        }
-                        else if (exerciseType == "cycling") {
-                            speed = exercise_intensity / (difference / 60);
+                        } else if (exerciseType === "walking") {
+                            calories = .354 * exercise_intensity * user_weight * (difference / 60);
+                        } else {
+                            const speed = exercise_intensity / (difference / 60); // Speed in your desired unit per hour
                             if (speed <= 16.0) {
                                 met = 4;
-                            }
-                            else if (speed <= 19.0) {
+                            } else if (speed <= 19.0) {
                                 met = 6;
-                            }
-                            else if (speed > 19.0) {
+                            } else if (speed > 19.0) {
                                 met = 8;
                             }
                             calories = met * user_weight * (difference / 60);
                         }
-                        resolve(calories); // Resolve the promise with height and weight
+                        console.log(calories, met);
+                        resolve(calories); // Resolve the promise with calories
                     } else {
                         console.log("No such document!");
                         reject("No such document!"); // Reject the promise if the document doesn't exist
@@ -98,18 +94,73 @@ function get_calories_burned(exerciseType, startDate, endDate, exercise_intensit
 }
 
 
+function exercise_counter(exercise_type) {
+    firebase.auth().onAuthStateChanged((user) => {
+        if (user) {
+            var uid = user.uid;
+            // User is signed in, you can get the user ID.
+            db.collection("users").doc(uid).collection("exerciseCounter").doc("exercises").get().then((exerciseCounter) => {
+                console.log(exerciseCounter.exists)
+                if (exerciseCounter.exists) {
+                    if (exerciseCounter.data()[exercise_type] == undefined || exerciseCounter.data()[exercise_type] == null) {
+                        db.collection("users").doc(uid).collection("exerciseCounter").doc("exercises").set({
+                            [exercise_type]: 1,
+                        }, { merge: true })
+                            .then(() => {
+                                console.log("done");
+                            })
+                            .catch((error) => {
+                                console.error("Error updating document: ", error);
+                            });;
+                    }
+                    else {
+                        let exerciseCount = parseInt(exerciseCounter.data()[exercise_type]);
+                        db.collection("users").doc(uid).collection("exerciseCounter").doc("exercises").update({
+                            [exercise_type]: 1 + exerciseCount,
+                        });
+                    }
+
+                }
+                else {
+                    console.log("blahblah")
+                    db.collection("users").doc(uid).collection("exerciseCounter").doc("exercises").set({
+                        [exercise_type]: 1,
+                    }, { merge: true })
+                        .then(() => {
+                            console.log("done");
+                        })
+                        .catch((error) => {
+                            console.error("Error updating document: ", error);
+                        });;
+                }
+            }).then(() => {
+                console.log("done")
+            }).catch((error) => {
+                console.error("Error fetching documents: ", error);
+            });
+
+        } else {
+            // No user is signed in.
+            console.log("No user is signed in.");
+        }
+    });
+}
+
+
 async function addWorkout() {
-    exerciseType = jQuery("#exercises").val();
     startDate = jQuery("#startDate").val();
     endDate = jQuery("#endDate").val();
+    exercise_type = jQuery("#exercises").val();
+    exercise_counter(exercise_type);
 
 
 
 
-
-    if (exerciseType != "" && startDate != "" && endDate != "" && jQuery(".intensity").val() != "") {
-        if (exerciseType == "Weightlifting") {
+    if (exercise_type != "" && startDate != "" && endDate != "" && jQuery(".intensity").val() != "") {
+        console.log(exercise_type)
+        if (exercise_type == "weightlifting") {
             intensity = jQuery("#intensity").val();
+            console.log(intensity)
             if (intensity == "Light") {
                 exercise_intensity = 3
             }
@@ -123,8 +174,9 @@ async function addWorkout() {
                 exercise_intensity = 7
             }
         }
-        else if (exerciseType == "yoga") {
+        else if (exercise_type == "yoga") {
             intensity = jQuery("#intensity").val();
+            console.log(intensity)
             if (intensity == "Light") {
                 exercise_intensity = 2.5
             }
@@ -139,9 +191,12 @@ async function addWorkout() {
             }
         }
         else {
+            intensity = jQuery("#distance").val();
+            console.log(intensity)
             exercise_intensity = parseFloat(jQuery("#distance").val())
         }
-        calories_burned = await get_calories_burned(exerciseType, startDate, endDate, exercise_intensity);
+        let calories_burned = await get_calories_burned(exercise_type, startDate, endDate, exercise_intensity);
+        console.log(calories_burned)
         firebase.auth().onAuthStateChanged((user) => {
             if (user) {
                 // User is signed in, you can get the user ID.
@@ -163,7 +218,7 @@ async function addWorkout() {
                     }
                     console.log(history_num);
                     db.collection("users").doc(uid).collection("workouts").doc(history_num).set({
-                        exerciseType: exerciseType,
+                        exerciseType: exercise_type,
                         startDate: startDate,
                         endDate: endDate,
                         intensity: intensity,
