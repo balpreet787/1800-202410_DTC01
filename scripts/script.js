@@ -44,6 +44,7 @@ function addWorkout() {
     exerciseType = jQuery("#exercises").val();
     startDate = jQuery("#startDate").val();
     endDate = jQuery("#endDate").val();
+    
     console.log(exerciseType, startDate, endDate)
 
     firebase.auth().onAuthStateChanged((user) => {
