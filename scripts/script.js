@@ -284,10 +284,12 @@ function additional_information_handler() {
     if(jQuery(this).val()=="cycling" || jQuery(this).val()=="running" || jQuery(this).val()=="walking")
     {
         jQuery('#distance-div').css("display", "flex");
+        jQuery('#intensity-div').css("display", "none");
     }
     else
     {
         jQuery('#distance-div').css("display", "none");
+        jQuery('#intensity-div').css("display", "flex");
     }
 }
 
