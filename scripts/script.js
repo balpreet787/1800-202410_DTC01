@@ -268,6 +268,20 @@ function insertNameFromFirestore() {
 }
 
 
+function insertHomepageInfoFromFirestore() {
+    firebase.auth().onAuthStateChanged(user => {
+        if (user) {
+            // User is signed in, you can get the user ID.
+            var uid = user.uid;
+            console.log(uid);
+            db.collection("users").doc(uid).collection("workouts").orderBy('startDate', 'desc').limit(1).get().then((querySnapshot) => {
+                var lastUpdatedDoc = querySnapshot.docs[0];
+                var workout_time = (lastUpdatedDoc.data().endDate - lastUpdatedDoc.data().startDate) / 60 ;
+                jQuery("#time-goes-here").text(workout_time);
+            });
+    }});
+}
+
 function info_handler() {
 
     jQuery('#info-box').slideToggle()
@@ -408,6 +422,7 @@ function profile_info_handler() {
 
 function setup() {
     insertNameFromFirestore();
+    insertHomepageInfoFromFirestore();
     jQuery('#info').click(info_handler);
     jQuery('#homepage_button').click(homepage_handler);
     jQuery('#leaderboard_button').click(leaderboard_handler);
