@@ -122,7 +122,6 @@ function exercise_counter(exercise_type) {
 
                 }
                 else {
-                    console.log("blahblah")
                     db.collection("users").doc(uid).collection("exerciseCounter").doc("exercises").set({
                         [exercise_type]: 1,
                     }, { merge: true })
@@ -196,6 +195,11 @@ async function addWorkout() {
             exercise_intensity = parseFloat(jQuery("#distance").val())
         }
         let calories_burned = await get_calories_burned(exercise_type, startDate, endDate, exercise_intensity);
+
+        let start_Date = firebase.firestore.Timestamp.fromDate(new Date(startDate));
+        let end_Date = firebase.firestore.Timestamp.fromDate(new Date(endDate));
+
+
         console.log(calories_burned)
         firebase.auth().onAuthStateChanged((user) => {
             if (user) {
@@ -219,8 +223,8 @@ async function addWorkout() {
                     console.log(history_num);
                     db.collection("users").doc(uid).collection("workouts").doc(history_num).set({
                         exerciseType: exercise_type,
-                        startDate: startDate,
-                        endDate: endDate,
+                        startDate: start_Date,
+                        endDate: end_Date,
                         intensity: intensity,
                         calories: calories_burned,
                     }, { merge: true })
