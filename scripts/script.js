@@ -151,10 +151,6 @@ async function addWorkout() {
     endDate = jQuery("#endDate").val();
     exercise_type = jQuery("#exercises").val();
     exercise_counter(exercise_type);
-
-
-
-
     if (exercise_type != "" && startDate != "" && endDate != "" && jQuery(".intensity").val() != "") {
         console.log(exercise_type)
         if (exercise_type == "weightlifting") {
@@ -280,10 +276,11 @@ function insertHomepageInfoFromFirestore() {
             console.log(uid);
             db.collection("users").doc(uid).collection("workouts").orderBy('startDate', 'desc').limit(1).get().then((querySnapshot) => {
                 var lastUpdatedDoc = querySnapshot.docs[0];
-                var workout_time = (lastUpdatedDoc.data().endDate - lastUpdatedDoc.data().startDate) / 60 ;
+                var workout_time = (lastUpdatedDoc.data().endDate - lastUpdatedDoc.data().startDate) / 60;
                 jQuery("#time-goes-here").text(workout_time);
             });
-    }});
+        }
+    });
 }
 
 function info_handler() {
@@ -480,3 +477,4 @@ function setup() {
 }
 
 jQuery(document).ready(setup);
+
