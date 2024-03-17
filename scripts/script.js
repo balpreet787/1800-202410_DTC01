@@ -38,6 +38,10 @@ function updateInfo() {
         });
 }
 
+function give_user_badge(exerciseCount) {
+    
+}
+
 
 function get_calories_burned(exerciseType, startDate, endDate, exercise_intensity) {
     const startTime = new Date(startDate);
@@ -274,10 +278,17 @@ function insertHomepageInfoFromFirestore() {
             // User is signed in, you can get the user ID.
             var uid = user.uid;
             console.log(uid);
+            var todays_date = new Date(new Date().toDateString());
             db.collection("users").doc(uid).collection("workouts").orderBy('startDate', 'desc').limit(1).get().then((querySnapshot) => {
                 var lastUpdatedDoc = querySnapshot.docs[0];
-                var workout_time = (lastUpdatedDoc.data().endDate - lastUpdatedDoc.data().startDate) / 60;
-                jQuery("#time-goes-here").text(workout_time);
+                var lastUpdateDocNoTime = new Date(lastUpdatedDoc.data().startDate.toDate().toDateString());
+                    if (lastUpdateDocNoTime.toDateString() != todays_date.toDateString()) {
+                        jQuery("#time-goes-here").text(0);
+                    }
+                    else {
+                        var workout_time = (lastUpdatedDoc.data().endDate - lastUpdatedDoc.data().startDate) / 60;
+                        jQuery("#time-goes-here").text(workout_time);
+                    }
             });
         }
     });
