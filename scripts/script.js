@@ -401,21 +401,16 @@ async function get_leaderboard_data() {
     const daysToAdd = (weekNumber - 1) * 7 - janFirst.getDay();
     const weekStart = new Date(janFirst);
     weekStart.setDate(janFirst.getDate() + daysToAdd);
-
     const weekEnd = new Date(weekStart);
     weekEnd.setDate(weekStart.getDate() + 6);
-
-
     const firestoreStartDate = firebase.firestore.Timestamp.fromDate(weekStart);
     const firestoreEndDate = firebase.firestore.Timestamp.fromDate(weekEnd);
-    console.log(startDate)
-    console.log(endDate)
     let leaderboardID = undefined;
     let friendIDs = [];
     let leaderboardinfo = {};
     firebase.auth().onAuthStateChanged(user => {
         if (user) {
-            currentUser = db.collection("users").doc(user.uid); // Go to the Firestore document of the user
+            currentUser = db.collection("users").doc(user.uid);
             currentUser.get().then(userDoc => {
                 leaderboardID = userDoc.data().leaderboardID;
                 db.collection('users').where('leaderboardID', '==', leaderboardID)
@@ -429,7 +424,6 @@ async function get_leaderboard_data() {
                             console.log(id);
                             return db.collection("users").doc(id).get().then(userinfo => {
                                 let nickname = userinfo.data().nickname;
-                                console.log(nickname)
                                 leaderboardinfo[nickname] = {
                                     "calories": 0, "badges": ""
                                 };
@@ -445,7 +439,6 @@ async function get_leaderboard_data() {
                         });
                         Promise.all(leaderboardpromises).then(() => {
                             i = 0;
-                            console.log(leaderboardinfo);
                             let calories_in_order = (Object.keys(leaderboardinfo).map(nickname => leaderboardinfo[nickname]["calories"])).sort().reverse();
                             console.log(calories_in_order);
                             for (index = 0; index < calories_in_order.length; index++) {
@@ -468,7 +461,6 @@ async function get_leaderboard_data() {
                                 }
                             }
 
-                            // Here you might update the UI with the leaderboardinfo
                         }).catch(error => {
                             console.error("Error processing all user data: ", error);
                         });
@@ -478,7 +470,7 @@ async function get_leaderboard_data() {
                     });
             })
         } else {
-            console.log("No user is logged in."); // Log a message when no user is logged in
+            console.log("No user is logged in.");
         }
     });
 }
