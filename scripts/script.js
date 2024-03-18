@@ -37,6 +37,86 @@ function updateInfo() {
         });
 }
 
+async function give_user_badge(exerciseType) {
+    return new Promise((resolve, reject) => {
+        firebase.auth().onAuthStateChanged(async (user) => {
+            if (user) {
+                var uid = user.uid;
+                var weightlifting_count = (await db.collection("users").doc(uid).collection("exerciseCounter").doc("exercises").get()).get("weightlifting");
+                var yoga_count = (await db.collection("users").doc(uid).collection("exerciseCounter").doc("exercises").get()).get("yoga");
+                var running_count = (await db.collection("users").doc(uid).collection("exerciseCounter").doc("exercises").get()).get("running");
+                var walking_count = (await db.collection("users").doc(uid).collection("exerciseCounter").doc("exercises").get()).get("walking");
+                var cycling_count = (await db.collection("users").doc(uid).collection("exerciseCounter").doc("exercises").get()).get("cycling");
+                var badge = null;
+
+                if (exerciseType == "weightlifting") {
+                    if (weightlifting_count >= 20) {
+                        badge = "platinum weightlifting badge";
+                    } else if (weightlifting_count >= 15) {
+                        badge = "gold weightlifting badge";
+                    } else if (weightlifting_count >= 10) {
+                        badge = "silver weightlifting badge";
+                    } else if (weightlifting_count >= 5) {
+                        badge = "bronze weightlifting badge";
+                    }
+                } else if (exerciseType == "yoga") {
+                    if (yoga_count >= 20) {
+                        badge = "platinum yoga badge";
+                    } else if (yoga_count >= 15) {
+                        badge = "gold yoga badge";
+                    } else if (yoga_count >= 10) {
+                        badge = "silver yoga badge";
+                    } else if (yoga_count >= 5) {
+                        badge = "bronze yoga badge";
+                    }
+                } else if (exerciseType == "running") {
+                    if (running_count >= 20) {
+                        badge = "platinum running badge";
+                    } else if (running_count >= 15) {
+                        badge = "gold running badge";
+                    } else if (running_count >= 10) {
+                        badge = "silver running badge";
+                    } else if (running_count >= 5) {
+                        badge = "bronze running badge";
+                    }
+                } else if (exerciseType == "walking") {
+                    if (walking_count >= 20) {
+                        badge = "platinum walking badge";
+                    } else if (walking_count >= 15) {
+                        badge = "gold walking badge";
+                    } else if (walking_count >= 10) {
+                        badge = "silver walking badge";
+                    } else if (walking_count >= 5) {
+                        badge = "bronze walking badge";
+                    }
+                } else if (exerciseType == "cycling") {
+                    if (cycling_count >= 20) {
+                        badge = "platinum cycling badge";
+                    } else if (cycling_count >= 15) {
+                        badge = "gold cycling badge";
+                    } else if (cycling_count >= 10) {
+                        badge = "silver cycling badge";
+                    } else if (cycling_count >= 5) {
+                        badge = "bronze cycling badge";
+                    }
+                } else {
+                    badge = null;
+                }
+
+                resolve(badge);
+
+                try {
+                    // Code to be executed
+                } catch (error) {
+                    // Error handling
+                    reject(error);
+                }
+            }
+        });
+    });
+}
+
+
 
 function get_calories_burned(exerciseType, startDate, endDate, exercise_intensity) {
     const startTime = new Date(startDate);
@@ -190,7 +270,7 @@ async function addWorkout() {
             exercise_intensity = parseFloat(jQuery("#distance").val())
         }
         let calories_burned = await get_calories_burned(exercise_type, startDate, endDate, exercise_intensity);
-
+        let badges_earned = await give_user_badge(exercise_type);
         let start_Date = firebase.firestore.Timestamp.fromDate(new Date(startDate));
         let end_Date = firebase.firestore.Timestamp.fromDate(new Date(endDate));
 
@@ -222,6 +302,7 @@ async function addWorkout() {
                         endDate: end_Date,
                         intensity: intensity,
                         calories: calories_burned,
+                        earned: badges_earned,
                     }, { merge: true })
                         .then(() => {
                             console.log("Document successfully updated!");
@@ -272,10 +353,40 @@ function insertHomepageInfoFromFirestore() {
             // User is signed in, you can get the user ID.
             var uid = user.uid;
             console.log(uid);
+            var todays_date = new Date(new Date().toDateString());
+            var dates = [];
+            var current_date = todays_date.getDay();
+            var start_of_week = new Date(todays_date);
+            start_of_week.setDate(start_of_week.getDate() - current_date);
+            var number_of_workouts = 0;
+
+            for (i = 0; i < 7; i++) {
+                var start_date = new Date(start_of_week);
+                start_date.setDate(start_date.getDate() + i);
+                dates.push(start_date.toDateString());
+            }
+
             db.collection("users").doc(uid).collection("workouts").orderBy('startDate', 'desc').limit(1).get().then((querySnapshot) => {
                 var lastUpdatedDoc = querySnapshot.docs[0];
-                var workout_time = (lastUpdatedDoc.data().endDate - lastUpdatedDoc.data().startDate) / 60;
-                jQuery("#time-goes-here").text(workout_time);
+                var lastUpdateDocNoTime = new Date(lastUpdatedDoc.data().startDate.toDate().toDateString());
+                if (lastUpdateDocNoTime.toDateString() != todays_date.toDateString()) {
+                    jQuery("#time-goes-here").text(0);
+                }
+                else {
+                    var workout_time = (lastUpdatedDoc.data().endDate - lastUpdatedDoc.data().startDate) / 60;
+                    jQuery("#time-goes-here").text(workout_time);
+                }
+            });
+
+            db.collection("users").doc(uid).collection("workouts").where('startDate', '>=', start_of_week).get().then((querySnapshot) => {
+                querySnapshot.forEach((doc) => {
+                    var workoutDate = new Date(doc.data().startDate.toDate().toDateString());
+                    if (dates.includes(workoutDate.toDateString())) {
+                        number_of_workouts++;
+                    }
+                    document.getElementById("workout-number-goes-here").textContent = number_of_workouts;
+                });
+
             });
         }
     });
@@ -371,6 +482,8 @@ async function get_leaderboard_data() {
         }
     });
 }
+
+
 
 function info_handler() {
 
