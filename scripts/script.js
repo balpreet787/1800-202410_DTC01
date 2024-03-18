@@ -1,4 +1,3 @@
-
 function updateInfo() {
     nickname = jQuery("#nickname").val();
     gender = jQuery("#gender").val();
@@ -94,7 +93,7 @@ function get_calories_burned(exerciseType, startDate, endDate, exercise_intensit
 }
 
 
-function exercise_counter(exercise_type) {
+async function exercise_counter(exercise_type) {
     firebase.auth().onAuthStateChanged((user) => {
         if (user) {
             var uid = user.uid;
@@ -150,7 +149,7 @@ async function addWorkout() {
     startDate = jQuery("#startDate").val();
     endDate = jQuery("#endDate").val();
     exercise_type = jQuery("#exercises").val();
-    exercise_counter(exercise_type);
+    await exercise_counter(exercise_type);
     if (exercise_type != "" && startDate != "" && endDate != "" && jQuery(".intensity").val() != "") {
         console.log(exercise_type)
         if (exercise_type == "weightlifting") {
@@ -233,7 +232,6 @@ async function addWorkout() {
                         .catch((error) => {
                             console.error("Error updating document: ", error);
                         });
-
                 }).catch((error) => {
                     console.error("Error fetching documents: ", error);
                 });
@@ -264,7 +262,7 @@ function insertNameFromFirestore() {
         } else {
             console.log("No user is logged in."); // Log a message when no user is logged in
         }
-    })
+    });
 }
 
 
@@ -279,6 +277,97 @@ function insertHomepageInfoFromFirestore() {
                 var workout_time = (lastUpdatedDoc.data().endDate - lastUpdatedDoc.data().startDate) / 60;
                 jQuery("#time-goes-here").text(workout_time);
             });
+        }
+    });
+}
+
+async function get_leaderboard_data() {
+    $("#leaderboardInfo").empty();
+    let weekValue = $('#week').val();
+    console.log(weekValue);
+    const [year, weekNumber] = weekValue.split('-W').map(Number);
+    const janFirst = new Date(year, 0, 1);
+    const daysToAdd = (weekNumber - 1) * 7 - janFirst.getDay();
+    const weekStart = new Date(janFirst);
+    weekStart.setDate(janFirst.getDate() + daysToAdd);
+
+    const weekEnd = new Date(weekStart);
+    weekEnd.setDate(weekStart.getDate() + 6);
+
+
+    const firestoreStartDate = firebase.firestore.Timestamp.fromDate(weekStart);
+    const firestoreEndDate = firebase.firestore.Timestamp.fromDate(weekEnd);
+    console.log(startDate)
+    console.log(endDate)
+    let leaderboardID = undefined;
+    let friendIDs = [];
+    let leaderboardinfo = {};
+    firebase.auth().onAuthStateChanged(user => {
+        if (user) {
+            currentUser = db.collection("users").doc(user.uid); // Go to the Firestore document of the user
+            currentUser.get().then(userDoc => {
+                leaderboardID = userDoc.data().leaderboardID;
+                db.collection('users').where('leaderboardID', '==', leaderboardID)
+                    .get()
+                    .then((querySnapshot) => {
+                        querySnapshot.forEach((doc) => {
+                            friendIDs.push(doc.id)
+                        });
+
+                        let leaderboardpromises = friendIDs.map(function (id) {
+                            console.log(id);
+                            return db.collection("users").doc(id).get().then(userinfo => {
+                                let nickname = userinfo.data().nickname;
+                                console.log(nickname)
+                                leaderboardinfo[nickname] = {
+                                    "calories": 0, "badges": ""
+                                };
+                                return db.collection("users").doc(id).collection('workouts').where('startDate', '>=', firestoreStartDate).get().then(historydoc => {
+                                    historydoc.forEach(historydata => {
+                                        if (historydata.data().startDate <= firestoreEndDate) {
+                                            leaderboardinfo[nickname]["calories"] += parseInt(historydata.data().calories);
+                                            leaderboardinfo[nickname]["badges"] = historydata.data().earned + " ";
+                                        }
+                                    });
+                                });
+                            });
+                        });
+                        Promise.all(leaderboardpromises).then(() => {
+                            i = 0;
+                            console.log(leaderboardinfo);
+                            let calories_in_order = (Object.keys(leaderboardinfo).map(nickname => leaderboardinfo[nickname]["calories"])).sort().reverse();
+                            console.log(calories_in_order);
+                            for (index = 0; index < calories_in_order.length; index++) {
+                                for (let nickname in leaderboardinfo) {
+                                    if (leaderboardinfo[nickname]["calories"] === calories_in_order[index]) {
+                                        text_to_inject = `<div class="grid grid-cols-4 text-center place-items-center bg-gray-300 m-4 rounded-lg p-3">
+                                    <span class="grid grid-cols-2 text-center place-items-center"> <span>${i + 1}.</span><img class="w-8 h-8"
+                                            src="./images/profile_pic.svg" alt=""></span>
+                                    <span>${nickname}</span>
+                                    <span class="grid grid-cols-2 gap-2"><img class="w-6 h-6" src="./images/dumbbell1.svg" alt=""> <img
+                                            class="w-6 h-6" src="./images/dumbbell1.svg" alt=""></span>
+                                    <span>${leaderboardinfo[nickname]["calories"]}</span>
+                                </div>`
+                                        $('#leaderboardInfo').append(text_to_inject);
+                                        i++
+                                        delete leaderboardinfo[nickname];
+                                        break;
+                                    }
+
+                                }
+                            }
+
+                            // Here you might update the UI with the leaderboardinfo
+                        }).catch(error => {
+                            console.error("Error processing all user data: ", error);
+                        });
+                    })
+                    .catch((error) => {
+                        console.error("Error getting documents: ", error);
+                    });
+            })
+        } else {
+            console.log("No user is logged in."); // Log a message when no user is logged in
         }
     });
 }
@@ -418,10 +507,19 @@ function profile_info_handler() {
     }
 }
 
-
+function leaderboard_current_date() {
+    const currentDate = new Date();
+    const year = currentDate.getFullYear();
+    const weekNumber = Math.ceil(((currentDate - new Date(currentDate.getFullYear(), 0, 1)) / 86400000 + new Date(currentDate.getFullYear(), 0, 1).getDay() + 1) / 7);
+    const formattedWeekNumber = weekNumber.toString().padStart(2, '0');
+    $('#week').val(`${year}-W${formattedWeekNumber}`);
+}
 
 
 function setup() {
+    leaderboard_current_date();
+    $('#week').change(get_leaderboard_data)
+    get_leaderboard_data();
     insertNameFromFirestore();
     insertHomepageInfoFromFirestore();
     jQuery('#info').click(info_handler);
@@ -443,7 +541,6 @@ function setup() {
     jQuery('#logout_button').click(logout);
     $('#login').click(redirect_to_login);
     $('#signup').click(redirect_to_login);
-
     firebase.auth().onAuthStateChanged((user) => {
         if (user) {
             // User is signed in, you can get the user ID.
@@ -477,4 +574,7 @@ function setup() {
 }
 
 jQuery(document).ready(setup);
+
+
+
 
