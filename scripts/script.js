@@ -475,6 +475,50 @@ async function get_leaderboard_data() {
     });
 }
 
+function show_recorded_workouts() {
+    $("#recorded_workouts").empty();
+    input_date = $('#selectedDate').val();
+    selected_date = new Date(input_date);
+    selected_endDay = new Date(input_date);
+    selected_date.setHours(0, 0, 0, 0);
+
+    selected_endDay.setHours(23, 59, 59, 999);
+    firebase_Startdate = firebase.firestore.Timestamp.fromDate(selected_date);
+    firebase_Enddate = firebase.firestore.Timestamp.fromDate(selected_endDay);
+    console.log(firebase_Enddate);
+    console.log(firebase_Startdate);
+    firebase.auth().onAuthStateChanged(user => {
+        if (user) {
+            db.collection("users").doc(user.uid).collection('workouts').where('startDate', '>=', firebase_Startdate).where('startDate', '<=', firebase_Enddate).get().then(recordedWorkout => {
+                recordedWorkout.forEach(workouts => {
+                    if (workouts.data().exerciseType == 'weightlifting' || workouts.data().exerciseType == 'yoga') {
+                        $("#recorded_workouts").append(
+                            `<div class="flex flex-row justify-evenly">
+                            <div class="flex flex-col justify-evenly  text-[16px] p-4">
+                            <span>Workout: ${workouts.data().exerciseType}</span>
+                            <span>Intensity: ${workouts.data().intensity}</span>
+                            </div>
+                            <div class="flex flex-col justify-evenly  text-[16px] p-4">
+                            <span>Calories burned: ${workouts.data().calories}</span>
+                            <span>KM: ${(workouts.data().endDate - workouts.data().startDate) / 60} mins</span>
+                            </div>
+                        </div>`
+                        );
+                    }
+                    else {
+                        $("#recorded_workouts").append(
+                            `<div>
+                            Workout: ${workouts.data().exerciseType}
+
+                        </div>`
+                        );
+                    }
+                })
+            });
+        }
+    });
+
+}
 
 
 function info_handler() {
@@ -620,10 +664,18 @@ function leaderboard_current_date() {
     $('#week').val(`${year}-W${formattedWeekNumber}`);
 }
 
+function show_workout_page_date() {
+    const currentDate = new Date();
+    $('#selectedDate').val(currentDate.toISOString().split('T')[0]);
+}
 
 function setup() {
+
     leaderboard_current_date();
+    show_workout_page_date();
+    show_recorded_workouts();
     $('#week').change(get_leaderboard_data)
+    $('#selectedDate').change(show_recorded_workouts);
     get_leaderboard_data();
     insertNameFromFirestore();
     insertHomepageInfoFromFirestore();
@@ -673,7 +725,6 @@ function setup() {
     });
 
 
-    $("#datepicker").datepicker();
     jQuery("#save_workout_button").click(addWorkout);
     jQuery("#save_profile_info_button").click(updateInfo);
 }
