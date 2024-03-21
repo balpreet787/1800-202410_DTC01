@@ -23,7 +23,6 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
     <!-- Jquery library -->
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Link to styles of your own -->
     <link rel="stylesheet" href="./styles/style.css">
@@ -79,7 +78,12 @@
                 <div class="rounded-xl px-3.5 py-3 ml-1 mr-4 bg-[#fff6e5]">
                     <img class="inline h-6 pr-1" src="images/dumbbell1.svg" alt="">
                     <h1 class="inline font-bold text-sm">Finished</h1>
+<<<<<<< HEAD
                     <p class="text-xs"><span class="font-bold text-2xl pr-2"><span id="workout-number-goes-here">0</span></span> Completed Workouts</p>
+=======
+                    <p class="text-xs"><span class="font-bold text-2xl pr-2"><span
+                                id="workout-number-goes-here"></span></span> Completed Workouts</p>
+>>>>>>> b269e2e6fb23e9e4cb1e1f428661665329ee65c0
                 </div>
             </div>
         </div>
@@ -379,8 +383,12 @@
     <!-- End of profile information page -->
 
     <!-- Calender starts here -->
-    <div class="hidden" id="datepicker">
-        <div class="flex justify-center "></div>
+    <div id="datepicker" class="flex flex-col justify-center align-middle py-4 g-[#fff6e5]"><input type="date"
+            id="selectedDate" class="flex flex-row justify-center align-middle">
+        <div id="recorded_workouts"
+            class="flex flex-col justify-center align-middle py-4 g-[#fff6e5] text-sm p-5 gap-6">
+
+        </div>
     </div>
     <!-- Calender ends here -->
 
