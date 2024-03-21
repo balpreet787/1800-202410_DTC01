@@ -1,10 +1,60 @@
-function updateInfo() {
-    nickname = jQuery("#nickname").val();
-    gender = jQuery("#gender").val();
-    height = jQuery("#height").val();
-    weight = jQuery("#weight").val();
-    leaderboardID = jQuery("#leaderboard_id").val();
-    dob = jQuery("#dob").val();
+var ImageFile;
+
+//------------------------------------------------
+// So, a new post document has just been added
+// and it contains a bunch of fields.
+// We want to store the image associated with this post,
+// such that the image name is the postid (guaranteed unique).
+// 
+// This function is called AFTER the post has been created, 
+// and we know the post's document id.
+//------------------------------------------------
+function uploadPic(postDocID) {
+    console.log("inside uploadPic " + postDocID);
+    console.log(ImageFile)
+    var storageRef = storage.ref("images/" + postDocID + ".jpg");
+
+    storageRef.put(ImageFile)   //global variable ImageFile
+
+        // AFTER .put() is done
+        .then(function () {
+            console.log('2. Uploaded to Cloud Storage.');
+            storageRef.getDownloadURL()
+
+                // AFTER .getDownloadURL is done
+                .then(function (url) { // Get URL of the uploaded file
+                    console.log("3. Got the download URL.");
+
+                    // Now that the image is on Storage, we can go back to the
+                    // post document, and update it with an "image" field
+                    // that contains the url of where the picture is stored.
+                    db.collection("users").doc(postDocID).set({
+                        "image": url // Save the URL into users collection
+                    }, { merge: true })
+                        // AFTER .update is done
+                        .then(function () {
+                            console.log('4. Added pic URL to Firestore.');
+                            // One last thing to do:
+                            // save this postID into an array for the OWNER
+                            // so we can show "my posts" in the future
+                        })
+                })
+        })
+        .catch((error) => {
+            console.log("error uploading to cloud storage");
+        })
+}
+
+
+
+async function updateInfo() {
+
+    var nickname = jQuery("#nickname").val();
+    var gender = jQuery("#gender").val();
+    var height = jQuery("#height").val();
+    var weight = jQuery("#weight").val();
+    var leaderboardID = jQuery("#leaderboard_id").val();
+    var dob = jQuery("#dob").val();
 
     if (nickname != "" && height != "" && weight != "" && leaderboardID != "" && dob != "")
 
@@ -21,6 +71,7 @@ function updateInfo() {
                     leaderboardID: leaderboardID,
                 }, { merge: true })
                     .then(() => {
+                        uploadPic(uid);
                         console.log("Document successfully updated!");
                         jQuery('#homepage').toggle();
                         jQuery("#profile_info").css("display", "none");
@@ -327,7 +378,7 @@ async function addWorkout() {
 }
 
 
-function insertNameFromFirestore() {
+function insertNameAndPicFromFirestore() {
     // Check if the user is logged in:
     firebase.auth().onAuthStateChanged(user => {
         if (user) {
@@ -336,8 +387,16 @@ function insertNameFromFirestore() {
             currentUser.get().then(userDoc => {
                 // Get the user name
                 let userName = userDoc.data().name;
-                console.log(userName);
-                jQuery("#name-goes-here").text(userName); // jQuery
+                let profilePicUrl = userDoc.data().image;
+                console.log(profilePicUrl)
+                // Get the download URL
+                if (profilePicUrl && profilePicUrl.startsWith('https://')) {
+                    // Set the user name and profile picture
+                    jQuery("#name-goes-here").text(userName);
+                    jQuery('#homepagepic').attr('src', profilePicUrl); // Set the src with the full URL
+                } else {
+                    console.error("Invalid URL for profile picture");
+                }
             })
         } else {
             console.log("No user is logged in."); // Log a message when no user is logged in
@@ -369,7 +428,7 @@ function insertHomepageInfoFromFirestore() {
             db.collection("users").doc(uid).collection("workouts").where('startDate', '>=', start_of_week).get().then((querySnapshot) => {
                 querySnapshot.forEach((doc) => {
                     var workoutDate = new Date(doc.data().startDate.toDate().toDateString());
-                    if(dates.includes(workoutDate.toDateString())) {
+                    if (dates.includes(workoutDate.toDateString())) {
                         calories_in_a_week += doc.data().calories;
                         console.log(calories_in_a_week)
                     }
@@ -422,7 +481,7 @@ function insertTodaysWorkoutInfoFromFirestore() {
 
             db.collection("users").doc(user.uid).collection('workouts').where('startDate', '>=', firebase_Startdate).where('startDate', '<=', firebase_Enddate).get().then(recordedWorkout => {
                 recordedWorkout.forEach(workouts => {
-                    todays_workouts ++;
+                    todays_workouts++;
                     jQuery("#todays-workouts-go-here").text(todays_workouts);
                 })
             })
@@ -464,7 +523,7 @@ function insertYesterdaysWorkoutInfoFromFirestore() {
 
             db.collection("users").doc(user.uid).collection('workouts').where('startDate', '>=', firebase_Startdate).where('startDate', '<=', firebase_Enddate).get().then(recordedWorkout => {
                 recordedWorkout.forEach(workouts => {
-                    yesterdays_workouts ++;
+                    yesterdays_workouts++;
                     jQuery("#yesterdays-workouts-go-here").text(yesterdays_workouts);
                 })
             })
@@ -520,7 +579,8 @@ async function get_leaderboard_data() {
                         });
                         Promise.all(leaderboardpromises).then(() => {
                             i = 0;
-                            let calories_in_order = (Object.keys(leaderboardinfo).map(nickname => leaderboardinfo[nickname]["calories"])).sort().reverse();
+                            let calories_in_order = (Object.keys(leaderboardinfo).map(nickname => leaderboardinfo[nickname]["calories"]));
+                            calories_in_order.sort(function (a, b) { return a - b }).reverse();
                             console.log(calories_in_order);
                             for (index = 0; index < calories_in_order.length; index++) {
                                 for (let nickname in leaderboardinfo) {
@@ -631,16 +691,24 @@ function show_recorded_workouts() {
                             </div>
                             <div class="flex flex-col justify-evenly  text-[16px] p-4">
                             <span>Calories burned: ${workouts.data().calories}</span>
-                            <span>KM: ${(workouts.data().endDate - workouts.data().startDate) / 60} mins</span>
+                            <span>Time: ${(workouts.data().endDate - workouts.data().startDate) / 60} mins </span>
                             </div>
+                            <div></div>
                         </div>`
                         );
                     }
                     else {
                         $("#recorded_workouts").append(
-                            `<div>
-                            Workout: ${workouts.data().exerciseType}
-
+                            `<div class="flex flex-row justify-evenly">
+                            <div class="flex flex-col justify-evenly  text-[16px] p-4">
+                            <span>Workout: ${workouts.data().exerciseType}</span>
+                            <span>Km: ${workouts.data().intensity}</span>
+                            </div>
+                            <div class="flex flex-col justify-evenly  text-[16px] p-4">
+                            <span>Calories burned: ${workouts.data().calories}</span>
+                            <span>Time: ${(workouts.data().endDate - workouts.data().startDate) / 60} mins </span>
+                            </div>
+                            <div></div>
                         </div>`
                         );
                     }
@@ -809,7 +877,7 @@ function setup() {
     $('#week').change(get_leaderboard_data)
     $('#selectedDate').change(show_recorded_workouts);
     get_leaderboard_data();
-    insertNameFromFirestore();
+    insertNameAndPicFromFirestore();
     insertHomepageInfoFromFirestore();
     insertTodaysWorkoutInfoFromFirestore();
     insertYesterdaysWorkoutInfoFromFirestore();
@@ -832,6 +900,30 @@ function setup() {
     jQuery('#logout_button').click(logout);
     $('#login').click(redirect_to_login);
     $('#signup').click(redirect_to_login);
+    var fileInput = $('#file-input');
+
+    // Pointer #2: Select the image element
+    var image = $('#pppreview');
+
+    // When a change happens to the File Chooser Input
+    fileInput.change(function (e) {
+        // Retrieve the selected file
+        ImageFile = e.target.files[0];
+        console.log("File selected:", imageFile); // Debugging
+
+        // Check if a file was selected
+        if (imageFile) {
+            // Create a blob URL for the selected image
+            var blob = URL.createObjectURL(imageFile);
+            console.log("Blob URL:", blob); // Debugging
+
+            // Display the image by setting the src attribute
+            image.attr('src', blob);
+        } else {
+            console.log("No file selected");
+            image.attr('src', '');
+        }
+    });
     firebase.auth().onAuthStateChanged((user) => {
         if (user) {
             // User is signed in, you can get the user ID.
