@@ -337,8 +337,7 @@ function insertNameFromFirestore() {
                 // Get the user name
                 let userName = userDoc.data().name;
                 console.log(userName);
-                //$("#name-goes-here").text(userName); // jQuery
-                document.getElementById("name-goes-here").innerText = userName;
+                jQuery("#name-goes-here").text(userName); // jQuery
             })
         } else {
             console.log("No user is logged in."); // Log a message when no user is logged in
@@ -359,6 +358,7 @@ function insertHomepageInfoFromFirestore() {
             var start_of_week = new Date(todays_date);
             start_of_week.setDate(start_of_week.getDate() - current_date);
             var number_of_workouts = 0;
+            var calories_in_a_week = 0;
 
             for (i = 0; i < 7; i++) {
                 var start_date = new Date(start_of_week);
@@ -366,16 +366,15 @@ function insertHomepageInfoFromFirestore() {
                 dates.push(start_date.toDateString());
             }
 
-            db.collection("users").doc(uid).collection("workouts").orderBy('startDate', 'desc').limit(1).get().then((querySnapshot) => {
-                var lastUpdatedDoc = querySnapshot.docs[0];
-                var lastUpdateDocNoTime = new Date(lastUpdatedDoc.data().startDate.toDate().toDateString());
-                if (lastUpdateDocNoTime.toDateString() != todays_date.toDateString()) {
-                    jQuery("#time-goes-here").text(0);
-                }
-                else {
-                    var workout_time = (lastUpdatedDoc.data().endDate - lastUpdatedDoc.data().startDate) / 60;
-                    jQuery("#time-goes-here").text(workout_time);
-                }
+            db.collection("users").doc(uid).collection("workouts").where('startDate', '>=', start_of_week).get().then((querySnapshot) => {
+                querySnapshot.forEach((doc) => {
+                    var workoutDate = new Date(doc.data().startDate.toDate().toDateString());
+                    if(dates.includes(workoutDate.toDateString())) {
+                        calories_in_a_week += doc.data().calories;
+                        console.log(calories_in_a_week)
+                    }
+                    jQuery("#calories-go-here").text(calories_in_a_week);
+                });
             });
 
             db.collection("users").doc(uid).collection("workouts").where('startDate', '>=', start_of_week).get().then((querySnapshot) => {
@@ -384,12 +383,94 @@ function insertHomepageInfoFromFirestore() {
                     if (dates.includes(workoutDate.toDateString())) {
                         number_of_workouts++;
                     }
-                    document.getElementById("workout-number-goes-here").textContent = number_of_workouts;
+                    jQuery("#workout-number-goes-here").text(number_of_workouts);
                 });
 
             });
         }
     });
+}
+
+function insertTodaysWorkoutInfoFromFirestore() {
+    firebase.auth().onAuthStateChanged(user => {
+        if (user) {
+            var uid = user.uid;
+            console.log(uid);
+            var selected_date = new Date();
+            var selected_endDay = new Date();
+            selected_date.setHours(0, 0, 0, 0);
+            selected_endDay.setHours(23, 59, 59, 999);
+            var firebase_Startdate = firebase.firestore.Timestamp.fromDate(selected_date);
+            var firebase_Enddate = firebase.firestore.Timestamp.fromDate(selected_endDay);
+            var todays_time = 0;
+            var todays_calories = 0;
+            var todays_workouts = 0;
+
+            db.collection("users").doc(user.uid).collection('workouts').where('startDate', '>=', firebase_Startdate).where('startDate', '<=', firebase_Enddate).get().then(recordedWorkout => {
+                recordedWorkout.forEach(workouts => {
+                    todays_time += (workouts.data().endDate - workouts.data().startDate) / 60;
+                    jQuery("#todays-time-goes-here").text(todays_time);
+                })
+            })
+
+            db.collection("users").doc(user.uid).collection('workouts').where('startDate', '>=', firebase_Startdate).where('startDate', '<=', firebase_Enddate).get().then(recordedWorkout => {
+                recordedWorkout.forEach(workouts => {
+                    todays_calories += workouts.data().calories
+                    jQuery("#todays-calories-go-here").text(todays_calories);
+                })
+            })
+
+            db.collection("users").doc(user.uid).collection('workouts').where('startDate', '>=', firebase_Startdate).where('startDate', '<=', firebase_Enddate).get().then(recordedWorkout => {
+                recordedWorkout.forEach(workouts => {
+                    todays_workouts ++;
+                    jQuery("#todays-workouts-go-here").text(todays_workouts);
+                })
+            })
+
+        }
+    })
+}
+
+function insertYesterdaysWorkoutInfoFromFirestore() {
+    firebase.auth().onAuthStateChanged(user => {
+        if (user) {
+            var uid = user.uid;
+            console.log(uid);
+            var yesterdays_date = new Date();
+            var yesterdays_end = new Date();
+            yesterdays_date.setDate(yesterdays_date.getDate() - 1);
+            yesterdays_end.setDate(yesterdays_end.getDate() - 1)
+            yesterdays_date.setHours(0, 0, 0, 0);
+            yesterdays_end.setHours(23, 59, 59, 999);
+            var firebase_Startdate = firebase.firestore.Timestamp.fromDate(yesterdays_date);
+            var firebase_Enddate = firebase.firestore.Timestamp.fromDate(yesterdays_end);
+            var yesterdays_time = 0;
+            var yesterdays_calories = 0;
+            var yesterdays_workouts = 0;
+
+            db.collection("users").doc(user.uid).collection('workouts').where('startDate', '>=', firebase_Startdate).where('startDate', '<=', firebase_Enddate).get().then(recordedWorkout => {
+                recordedWorkout.forEach(workouts => {
+                    yesterdays_time += (workouts.data().endDate - workouts.data().startDate) / 60;
+                    jQuery("#yesterdays-time-goes-here").text(yesterdays_time);
+                })
+            })
+
+            db.collection("users").doc(user.uid).collection('workouts').where('startDate', '>=', firebase_Startdate).where('startDate', '<=', firebase_Enddate).get().then(recordedWorkout => {
+                recordedWorkout.forEach(workouts => {
+                    yesterdays_calories += workouts.data().calories
+                    jQuery("#yesterdays-calories-go-here").text(yesterdays_calories);
+                })
+            })
+
+            db.collection("users").doc(user.uid).collection('workouts').where('startDate', '>=', firebase_Startdate).where('startDate', '<=', firebase_Enddate).get().then(recordedWorkout => {
+                recordedWorkout.forEach(workouts => {
+                    yesterdays_workouts ++;
+                    jQuery("#yesterdays-workouts-go-here").text(yesterdays_workouts);
+                })
+            })
+
+        }
+    })
 }
 
 async function get_leaderboard_data() {
@@ -730,6 +811,8 @@ function setup() {
     get_leaderboard_data();
     insertNameFromFirestore();
     insertHomepageInfoFromFirestore();
+    insertTodaysWorkoutInfoFromFirestore();
+    insertYesterdaysWorkoutInfoFromFirestore();
     jQuery('#info').click(info_handler);
     jQuery('#homepage_button').click(homepage_handler);
     jQuery('#leaderboard_button').click(leaderboard_handler);
