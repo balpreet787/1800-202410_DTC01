@@ -475,6 +475,56 @@ async function get_leaderboard_data() {
     });
 }
 
+function populateUserInfo() {
+    firebase.auth().onAuthStateChanged(user => {
+        // Check if user is signed in:
+        if (user) {
+
+            //go to the correct user document by referencing to the user uid
+            currentUser = db.collection("users").doc(user.uid)
+            //get the document for current user.
+            currentUser.get()
+                .then(userDoc => {
+                    //get the data fields of the user
+                    let leaderboard_id = userDoc.data().leaderboardID;
+                    let nickname = userDoc.data().nickname;
+                    let dob = userDoc.data().dob;
+                    let email = userDoc.data().email;
+                    let height = userDoc.data().height;
+                    let weight = userDoc.data().weight;
+                    let gender = userDoc.data().gender;
+                    console.log(userDoc.data())
+                    //if the data fields are not empty, then write them in to the form.
+                    if (leaderboard_id != null) {
+                        $("#leaderboard_id").val(leaderboard_id);
+                    }
+                    if (nickname != null) {
+                        $("#nickname").val(nickname);
+                    }
+                    if (dob != null) {
+                        $("#dob").val(dob);
+                    }
+                    if (email != null) {
+                        $("#email").val(email);
+                    }
+                    if (height != null) {
+                        $("#height").val(height);
+                    }
+                    if (weight != null) {
+                        $("#weight").val(weight);
+                    }
+                    if (gender != null) {
+                        $("#gender").val(gender);
+                    }
+
+                })
+        } else {
+            // No user is signed in.
+            console.log("No user is signed in");
+        }
+    });
+}
+
 function show_recorded_workouts() {
     $("#recorded_workouts").empty();
     input_date = $('#selectedDate').val();
@@ -646,6 +696,7 @@ function filter_handler() {
 }
 
 function profile_info_handler() {
+    populateUserInfo();
     if (jQuery('#profile_info').css("display") == "none") {
         jQuery('#profile_info').toggle()
         jQuery('#add_workout').css("display", "none");
