@@ -594,19 +594,19 @@ function logout() {
 }
 
 function homepage_handler() {
-    if (jQuery('#homepage').css("display") == "none") {
-        jQuery('#homepage').toggle();
-        jQuery('#leaderboard').css("display", "none");
-        jQuery('#activity_feed').css("display", "none");
-        jQuery('#datepicker').css("display", "none");
-        jQuery('#settings').css("display", "none");
-        jQuery('#add_workout').css("display", "none");
-        jQuery('#filter_activity').css("display", "none");
-        jQuery('#profile_info').css("display", "none");
-    }
+    jQuery('#homepage').css("display", "grid");
+    jQuery('#leaderboard').css("display", "none");
+    jQuery('#activity_feed').css("display", "none");
+    jQuery('#datepicker').css("display", "none");
+    jQuery('#settings').css("display", "none");
+    jQuery('#add_workout').css("display", "none");
+    jQuery('#filter_activity').css("display", "none");
+    jQuery('#profile_info').css("display", "none");
+
 }
 
 function leaderboard_handler() {
+
     if (jQuery('#leaderboard').css("display") == "none") {
         jQuery('#leaderboard').toggle();
         jQuery('#homepage').css("display", "none");
@@ -721,7 +721,7 @@ function show_workout_page_date() {
 }
 
 function setup() {
-
+    homepage_handler();
     leaderboard_current_date();
     show_workout_page_date();
     show_recorded_workouts();
