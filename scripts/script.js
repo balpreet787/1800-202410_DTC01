@@ -565,7 +565,7 @@ async function get_leaderboard_data() {
                             return db.collection("users").doc(id).get().then(userinfo => {
                                 let nickname = userinfo.data().nickname;
                                 leaderboardinfo[nickname] = {
-                                    "calories": 0, "badges": ""
+                                    "calories": 0, "badges": "", "profilepic": userinfo.data().image
                                 };
                                 return db.collection("users").doc(id).collection('workouts').where('startDate', '>=', firestoreStartDate).get().then(historydoc => {
                                     historydoc.forEach(historydata => {
@@ -578,6 +578,11 @@ async function get_leaderboard_data() {
                             });
                         });
                         Promise.all(leaderboardpromises).then(() => {
+                            for (let nickname in leaderboardinfo) {
+                                if (leaderboardinfo[nickname]["profilepic"] == undefined) {
+                                    leaderboardinfo[nickname]["profilepic"] = "./images/profile_pic.svg";
+                                }
+                            }
                             i = 0;
                             let calories_in_order = (Object.keys(leaderboardinfo).map(nickname => leaderboardinfo[nickname]["calories"]));
                             calories_in_order.sort(function (a, b) { return a - b }).reverse();
@@ -587,7 +592,7 @@ async function get_leaderboard_data() {
                                     if (leaderboardinfo[nickname]["calories"] === calories_in_order[index]) {
                                         text_to_inject = `<div class="grid grid-cols-4 text-center place-items-center bg-[#fff6e5] m-4 rounded-lg p-3">
                                     <span class="grid grid-cols-2 text-center place-items-center"> <span>${i + 1}.</span><img class="w-8 h-8"
-                                            src="./images/profile_pic.svg" alt=""></span>
+                                            src="${leaderboardinfo[nickname]["profilepic"]}" alt=""></span>
                                     <span>${nickname}</span>
                                     <span class="grid grid-cols-2 gap-2"><img class="w-6 h-6" src="./images/dumbbell1.svg" alt=""> <img
                                             class="w-6 h-6" src="./images/dumbbell1.svg" alt=""></span>
