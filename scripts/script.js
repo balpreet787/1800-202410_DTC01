@@ -785,18 +785,18 @@ function getActivityFeedInfo() {
             //     jQuery("#activity-username").text(userName);
             // })
             currentUser.get().then(userDoc => {
-                nickname= userDoc.data().nickname;
+                nickname = userDoc.data().nickname;
                 username = userDoc.data().name;
                 db.collection('users').doc(user.uid).collection('workouts').orderBy('startDate', 'desc').get().then((querySnapshot) => {
                     querySnapshot.forEach((doc) => {
-                            badge_earned = doc.data().earned;
-                            workout_time = ( doc.data().endDate - doc.data().startDate) / 60 ;
-                            exercise_type = doc.data().exerciseType
-                            if (exercise_type == "yoga") {
-                                exercise_type = "doing yoga"
-                            }
-                            if (badge_earned == null) {
-                                badge_earned=""
+                        badge_earned = doc.data().earned;
+                        workout_time = (doc.data().endDate - doc.data().startDate) / 60;
+                        exercise_type = doc.data().exerciseType
+                        if (exercise_type == "yoga") {
+                            exercise_type = "doing yoga"
+                        }
+                        if (badge_earned == null) {
+                            badge_earned = ""
                             add_to_activity_feed = `<div class="flex flex-row bg-[#fff6e5] rounded-xl mt-2 m-4">
                             <img class="h-20 mx-5 self-center" src="images/profile_pic.svg" alt="">
                             <div class="p-2 ">
@@ -806,8 +806,8 @@ function getActivityFeedInfo() {
                                 <p class="text-xs pb-4 pr-1" id="activity-feed-phrase">You just spent ${workout_time} minutes ${exercise_type}!</p>
                             </div>
                         </div>`
-                            } else {
-                                     add_to_activity_feed =  `<div class="flex flex-row mt-2 mx-4">
+                        } else {
+                            add_to_activity_feed = `<div class="flex flex-row mt-2 mx-4">
                             </div>
                             <div class="flex flex-row bg-[#fff6e5] rounded-xl mt-2 m-4">
                                 <img class="h-20 mx-5 self-center" src="images/profile_pic.svg" alt="">
@@ -819,7 +819,7 @@ function getActivityFeedInfo() {
                                     <p class="text-xs pb-4 pr-1" id="accomplishment-phrase">You just spent ${workout_time} minutes ${exercise_type}!</p>
                                 </div>
                             </div>`
-                            }
+                        }
 
                         jQuery('#activity_feed').append(add_to_activity_feed);
 
@@ -1024,7 +1024,7 @@ function setup() {
         console.log("File selected:", imageFile); // Debugging
 
         // Check if a file was selected
-        if (imageFile) {
+        if (ImageFile) {
             // Create a blob URL for the selected image
             var blob = URL.createObjectURL(imageFile);
             console.log("Blob URL:", blob); // Debugging
