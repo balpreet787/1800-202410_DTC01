@@ -369,7 +369,7 @@ function insertHomepageInfoFromFirestore() {
             db.collection("users").doc(uid).collection("workouts").where('startDate', '>=', start_of_week).get().then((querySnapshot) => {
                 querySnapshot.forEach((doc) => {
                     var workoutDate = new Date(doc.data().startDate.toDate().toDateString());
-                    if(dates.includes(workoutDate.toDateString())) {
+                    if (dates.includes(workoutDate.toDateString())) {
                         calories_in_a_week += doc.data().calories;
                         console.log(calories_in_a_week)
                     }
@@ -422,7 +422,7 @@ function insertTodaysWorkoutInfoFromFirestore() {
 
             db.collection("users").doc(user.uid).collection('workouts').where('startDate', '>=', firebase_Startdate).where('startDate', '<=', firebase_Enddate).get().then(recordedWorkout => {
                 recordedWorkout.forEach(workouts => {
-                    todays_workouts ++;
+                    todays_workouts++;
                     jQuery("#todays-workouts-go-here").text(todays_workouts);
                 })
             })
@@ -464,7 +464,7 @@ function insertYesterdaysWorkoutInfoFromFirestore() {
 
             db.collection("users").doc(user.uid).collection('workouts').where('startDate', '>=', firebase_Startdate).where('startDate', '<=', firebase_Enddate).get().then(recordedWorkout => {
                 recordedWorkout.forEach(workouts => {
-                    yesterdays_workouts ++;
+                    yesterdays_workouts++;
                     jQuery("#yesterdays-workouts-go-here").text(yesterdays_workouts);
                 })
             })
@@ -651,6 +651,62 @@ function show_recorded_workouts() {
 
 }
 
+function getActivityFeedInfo() {
+    var badge_earned = null
+    firebase.auth().onAuthStateChanged(user => {
+        if (user) {
+            // currentUser = db.collection("users").doc(user.uid);
+            // currentUser.get().then(userDoc => {
+            //     let userName = userDoc.data().name;
+            //     console.log(userName);
+            //     jQuery("#activity-username").text(userName);
+            // })
+            currentUser.get().then(userDoc => {
+                nickname= userDoc.data().nickname;
+                username = userDoc.data().name;
+                db.collection('users').doc(user.uid).collection('workouts').orderBy('startDate', 'desc').get().then((querySnapshot) => {
+                    querySnapshot.forEach((doc) => {
+                            badge_earned = doc.data().earned;
+                            workout_time = ( doc.data().endDate - doc.data().startDate) / 60 ;
+                            exercise_type = doc.data().exerciseType
+                            if (exercise_type == "yoga") {
+                                exercise_type = "doing yoga"
+                            }
+                            if (badge_earned == null) {
+                                badge_earned=""
+                            add_to_activity_feed = `<div class="flex flex-row bg-[#fff6e5] rounded-xl mt-2 m-4">
+                            <img class="h-20 mx-5 self-center" src="images/profile_pic.svg" alt="">
+                            <div class="p-2 ">
+                                <div class="py-2">
+                                    <h1 class="font-semibold inline text-lg"><span id="activity-username">${nickname}</span></h1>
+                                </div>
+                                <p class="text-xs pb-4 pr-1" id="activity-feed-phrase">You just spent ${workout_time} minutes ${exercise_type}!</p>
+                            </div>
+                        </div>`
+                            } else {
+                                     add_to_activity_feed =  `<div class="flex flex-row mt-2 mx-4">
+                            </div>
+                            <div class="flex flex-row bg-[#fff6e5] rounded-xl mt-2 m-4">
+                                <img class="h-20 mx-5 self-center" src="images/profile_pic.svg" alt="">
+                                <div class="p-2 ">
+                                    <div class="py-2 flex flex-row justify-between">
+                                        <h1 class="font-semibold inline text-lg"><span id="activity-username">${nickname}</span></h1>
+                                        <img class="h-6 pr-3 inline ml-auto" src="images/star_icon.svg" alt="">
+                                    </div>
+                                    <p class="text-xs pb-4 pr-1" id="accomplishment-phrase">You just spent ${workout_time} minutes ${exercise_type}!</p>
+                                </div>
+                            </div>`
+                            }
+
+                        jQuery('#activity_feed').append(add_to_activity_feed);
+
+                    })
+                })
+            })
+        }
+    })
+}
+
 
 function info_handler() {
 
@@ -813,6 +869,7 @@ function setup() {
     insertHomepageInfoFromFirestore();
     insertTodaysWorkoutInfoFromFirestore();
     insertYesterdaysWorkoutInfoFromFirestore();
+    getActivityFeedInfo();
     jQuery('#info').click(info_handler);
     jQuery('#homepage_button').click(homepage_handler);
     jQuery('#leaderboard_button').click(leaderboard_handler);
