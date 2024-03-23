@@ -893,7 +893,7 @@ function setup() {
     jQuery('#calendar_button').click(calendar_handler);
     jQuery('#settings_button').click(settings_handler);
     jQuery('#add_workout_button').click(add_workout_handler);
-    jQuery('#exercises').click(additional_information_handler)
+    jQuery('#exercises').change(additional_information_handler);// fix this
     jQuery('#filter_button').click(filter_handler);
     jQuery('#cancel_button').click(activity_handler);
     jQuery('#profile_info_button').click(profile_info_handler);
