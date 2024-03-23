@@ -1,10 +1,60 @@
-function updateInfo() {
-    nickname = jQuery("#nickname").val();
-    gender = jQuery("#gender").val();
-    height = jQuery("#height").val();
-    weight = jQuery("#weight").val();
-    leaderboardID = jQuery("#leaderboard_id").val();
-    dob = jQuery("#dob").val();
+var ImageFile;
+
+//------------------------------------------------
+// So, a new post document has just been added
+// and it contains a bunch of fields.
+// We want to store the image associated with this post,
+// such that the image name is the postid (guaranteed unique).
+// 
+// This function is called AFTER the post has been created, 
+// and we know the post's document id.
+//------------------------------------------------
+function uploadPic(postDocID) {
+    console.log("inside uploadPic " + postDocID);
+    console.log(ImageFile)
+    var storageRef = storage.ref("images/" + postDocID + ".jpg");
+
+    storageRef.put(ImageFile)   //global variable ImageFile
+
+        // AFTER .put() is done
+        .then(function () {
+            console.log('2. Uploaded to Cloud Storage.');
+            storageRef.getDownloadURL()
+
+                // AFTER .getDownloadURL is done
+                .then(function (url) { // Get URL of the uploaded file
+                    console.log("3. Got the download URL.");
+
+                    // Now that the image is on Storage, we can go back to the
+                    // post document, and update it with an "image" field
+                    // that contains the url of where the picture is stored.
+                    db.collection("users").doc(postDocID).set({
+                        "image": url // Save the URL into users collection
+                    }, { merge: true })
+                        // AFTER .update is done
+                        .then(function () {
+                            console.log('4. Added pic URL to Firestore.');
+                            // One last thing to do:
+                            // save this postID into an array for the OWNER
+                            // so we can show "my posts" in the future
+                        })
+                })
+        })
+        .catch((error) => {
+            console.log("error uploading to cloud storage");
+        })
+}
+
+
+
+async function updateInfo() {
+
+    var nickname = jQuery("#nickname").val();
+    var gender = jQuery("#gender").val();
+    var height = jQuery("#height").val();
+    var weight = jQuery("#weight").val();
+    var leaderboardID = jQuery("#leaderboard_id").val();
+    var dob = jQuery("#dob").val();
 
     if (nickname != "" && height != "" && weight != "" && leaderboardID != "" && dob != "")
 
@@ -21,6 +71,7 @@ function updateInfo() {
                     leaderboardID: leaderboardID,
                 }, { merge: true })
                     .then(() => {
+                        uploadPic(uid);
                         console.log("Document successfully updated!");
                         jQuery('#homepage').toggle();
                         jQuery("#profile_info").css("display", "none");
@@ -51,53 +102,53 @@ async function give_user_badge(exerciseType) {
 
                 if (exerciseType == "weightlifting") {
                     if (weightlifting_count >= 20) {
-                        badge = "platinum weightlifting badge";
+                        badge = "./images/weightliftingplatinum.svg";
                     } else if (weightlifting_count >= 15) {
-                        badge = "gold weightlifting badge";
+                        badge = "./images/weightliftinggold.svg";
                     } else if (weightlifting_count >= 10) {
-                        badge = "silver weightlifting badge";
+                        badge = "./images/weightliftingsilver.svg";
                     } else if (weightlifting_count >= 5) {
-                        badge = "bronze weightlifting badge";
+                        badge = "./images/weightliftingbronze.svg";
                     }
                 } else if (exerciseType == "yoga") {
                     if (yoga_count >= 20) {
-                        badge = "platinum yoga badge";
+                        badge = "./images/yogaplatinum.svg";
                     } else if (yoga_count >= 15) {
-                        badge = "gold yoga badge";
+                        badge = "./images/yogagold.svg";
                     } else if (yoga_count >= 10) {
-                        badge = "silver yoga badge";
+                        badge = "./images/yogasilver.svg";
                     } else if (yoga_count >= 5) {
-                        badge = "bronze yoga badge";
+                        badge = "./images/yogabronze.svg";
                     }
                 } else if (exerciseType == "running") {
                     if (running_count >= 20) {
-                        badge = "platinum running badge";
+                        badge = "./images/runningplatinum.svg";
                     } else if (running_count >= 15) {
-                        badge = "gold running badge";
+                        badge = "./images/runninggold.svg";
                     } else if (running_count >= 10) {
-                        badge = "silver running badge";
+                        badge = "./images/runningsilver.svg";
                     } else if (running_count >= 5) {
-                        badge = "bronze running badge";
+                        badge = "./images/runningbronze.svg";
                     }
                 } else if (exerciseType == "walking") {
                     if (walking_count >= 20) {
-                        badge = "platinum walking badge";
+                        badge = "./images/walkingplatinum.svg";
                     } else if (walking_count >= 15) {
-                        badge = "gold walking badge";
+                        badge = "./images/walkinggold.svg";
                     } else if (walking_count >= 10) {
-                        badge = "silver walking badge";
+                        badge = "./images/walkingsilver.svg";
                     } else if (walking_count >= 5) {
-                        badge = "bronze walking badge";
+                        badge = "./images/walkingbronze.svg";
                     }
                 } else if (exerciseType == "cycling") {
                     if (cycling_count >= 20) {
-                        badge = "platinum cycling badge";
+                        badge = "./images/cyclingplatinum.svg";
                     } else if (cycling_count >= 15) {
-                        badge = "gold cycling badge";
+                        badge = "./images/cyclinggold.svg";
                     } else if (cycling_count >= 10) {
-                        badge = "silver cycling badge";
+                        badge = "./images/cyclingsilver.svg";
                     } else if (cycling_count >= 5) {
-                        badge = "bronze cycling badge";
+                        badge = "./images/cyclingbronze.svg";
                     }
                 } else {
                     badge = null;
@@ -172,6 +223,52 @@ function get_calories_burned(exerciseType, startDate, endDate, exercise_intensit
     });
 }
 
+function getActivityFeedInfo() {
+    var badge_earned = null
+    var todays_date = new Date();
+    var firebaseDate = firebase.firestore.Timestamp.fromDate(todays_date)
+    firebase.auth().onAuthStateChanged(user => {
+        if (user) {
+            currentUser = db.collection("users").doc(user.uid);
+            currentUser.get().then(userDoc => {
+                db.collection('users').doc(user.uid).collection('workouts').orderBy('startDate', 'desc').get().then((querySnapshot) => {
+                    querySnapshot.forEach((doc) => {
+                        if (doc.data().earned != none) {
+                            badge_earned = doc.data().earned;
+                            if (badge_earned == null) {
+
+                                badge_earned = ""
+                            }
+                            add_to_activity_feed = `<div class="flex flex-row mt-2 mx-4">
+                            </div>
+                            <div class="flex flex-row bg-[#fff6e5] rounded-xl mt-2 m-4">
+                                <img class="h-20 mx-5 self-center" src="images/profile_pic.svg" alt="">
+                                <div class="p-2 ">
+                                    <div class="py-2 flex flex-row justify-between">
+                                        <h1 class="font-semibold inline text-lg"><span id="activity-username">${doc.data().earned}${doc.id}</span></h1>
+                                        <img class="h-6 pr-3 inline ml-auto" src="images/star_icon.svg" alt="">
+                                    </div>
+                                    <p class="text-xs pb-4 pr-1" id="accomplishment-phrase"></p>
+                                </div>
+                            </div>`
+                        } else {
+                            add_to_activity_feed = `<div class="flex flex-row bg-[#fff6e5] rounded-xl mt-2 m-4">
+                            <img class="h-20 mx-5 self-center" src="images/profile_pic.svg" alt="">
+                            <div class="p-2 ">
+                                <div class="py-2">
+                                    <h1 class="font-semibold inline text-lg"><span id="activity-username">${doc.id}</span></h1>
+                                </div>
+                                <p class="text-xs pb-4 pr-1" id="activity-feed-phrase"></p>
+                            </div>
+                        </div>`
+                        }
+                        jQuery('#activity_feed').append(add_to_activity_feed);
+                    })
+                })
+            })
+        }
+    })
+}
 
 async function exercise_counter(exercise_type) {
     firebase.auth().onAuthStateChanged((user) => {
@@ -327,7 +424,7 @@ async function addWorkout() {
 }
 
 
-function insertNameFromFirestore() {
+function insertNameAndPicFromFirestore() {
     // Check if the user is logged in:
     firebase.auth().onAuthStateChanged(user => {
         if (user) {
@@ -336,8 +433,16 @@ function insertNameFromFirestore() {
             currentUser.get().then(userDoc => {
                 // Get the user name
                 let userName = userDoc.data().name;
-                console.log(userName);
-                jQuery("#name-goes-here").text(userName); // jQuery
+                let profilePicUrl = userDoc.data().image;
+                console.log(profilePicUrl)
+                // Get the download URL
+                if (profilePicUrl && profilePicUrl.startsWith('https://')) {
+                    // Set the user name and profile picture
+                    jQuery("#name-goes-here").text(userName);
+                    jQuery('#homepagepic').attr('src', profilePicUrl); // Set the src with the full URL
+                } else {
+                    console.error("Invalid URL for profile picture");
+                }
             })
         } else {
             console.log("No user is logged in."); // Log a message when no user is logged in
@@ -506,7 +611,7 @@ async function get_leaderboard_data() {
                             return db.collection("users").doc(id).get().then(userinfo => {
                                 let nickname = userinfo.data().nickname;
                                 leaderboardinfo[nickname] = {
-                                    "calories": 0, "badges": ""
+                                    "calories": 0, "badges": "", "profilepic": userinfo.data().image
                                 };
                                 return db.collection("users").doc(id).collection('workouts').where('startDate', '>=', firestoreStartDate).get().then(historydoc => {
                                     historydoc.forEach(historydata => {
@@ -519,18 +624,28 @@ async function get_leaderboard_data() {
                             });
                         });
                         Promise.all(leaderboardpromises).then(() => {
+                            for (let nickname in leaderboardinfo) {
+                                console.log(leaderboardinfo[nickname]["badges"])
+                                if (leaderboardinfo[nickname]["profilepic"] == undefined) {
+                                    leaderboardinfo[nickname]["profilepic"] = "./images/profile_pic.svg";
+                                }
+                                if (leaderboardinfo[nickname]["badges"] == null || leaderboardinfo[nickname]["badges"] == "") {
+                                    leaderboardinfo[nickname]["badges"] = `./images/empty.svg`;
+                                    console.log("this this")
+                                }
+                            }
                             i = 0;
-                            let calories_in_order = (Object.keys(leaderboardinfo).map(nickname => leaderboardinfo[nickname]["calories"])).sort().reverse();
+                            let calories_in_order = (Object.keys(leaderboardinfo).map(nickname => leaderboardinfo[nickname]["calories"]));
+                            calories_in_order.sort(function (a, b) { return a - b }).reverse();
                             console.log(calories_in_order);
                             for (index = 0; index < calories_in_order.length; index++) {
                                 for (let nickname in leaderboardinfo) {
                                     if (leaderboardinfo[nickname]["calories"] === calories_in_order[index]) {
                                         text_to_inject = `<div class="grid grid-cols-4 text-center place-items-center bg-[#fff6e5] m-4 rounded-lg p-3">
                                     <span class="grid grid-cols-2 text-center place-items-center"> <span>${i + 1}.</span><img class="w-8 h-8"
-                                            src="./images/profile_pic.svg" alt=""></span>
+                                            src="${leaderboardinfo[nickname]["profilepic"]}" alt=""></span>
                                     <span>${nickname}</span>
-                                    <span class="grid grid-cols-2 gap-2"><img class="w-6 h-6" src="./images/dumbbell1.svg" alt=""> <img
-                                            class="w-6 h-6" src="./images/dumbbell1.svg" alt=""></span>
+                                    <span class="grid grid-cols-1 gap-2"><img class="w-6 h-6" src="${leaderboardinfo[nickname]["badges"]}" alt=""></span>
                                     <span>${leaderboardinfo[nickname]["calories"]}</span>
                                 </div>`
                                         $('#leaderboardInfo').append(text_to_inject);
@@ -631,16 +746,24 @@ function show_recorded_workouts() {
                             </div>
                             <div class="flex flex-col justify-evenly  text-[16px] p-4">
                             <span>Calories burned: ${workouts.data().calories}</span>
-                            <span>KM: ${(workouts.data().endDate - workouts.data().startDate) / 60} mins</span>
+                            <span>Time: ${(workouts.data().endDate - workouts.data().startDate) / 60} mins </span>
                             </div>
+                            <div></div>
                         </div>`
                         );
                     }
                     else {
                         $("#recorded_workouts").append(
-                            `<div>
-                            Workout: ${workouts.data().exerciseType}
-
+                            `<div class="flex flex-row justify-evenly">
+                            <div class="flex flex-col justify-evenly  text-[16px] p-4">
+                            <span>Workout: ${workouts.data().exerciseType}</span>
+                            <span>Km: ${workouts.data().intensity}</span>
+                            </div>
+                            <div class="flex flex-col justify-evenly  text-[16px] p-4">
+                            <span>Calories burned: ${workouts.data().calories}</span>
+                            <span>Time: ${(workouts.data().endDate - workouts.data().startDate) / 60} mins </span>
+                            </div>
+                            <div></div>
                         </div>`
                         );
                     }
@@ -731,19 +854,19 @@ function logout() {
 }
 
 function homepage_handler() {
-    if (jQuery('#homepage').css("display") == "none") {
-        jQuery('#homepage').toggle();
-        jQuery('#leaderboard').css("display", "none");
-        jQuery('#activity_feed').css("display", "none");
-        jQuery('#datepicker').css("display", "none");
-        jQuery('#settings').css("display", "none");
-        jQuery('#add_workout').css("display", "none");
-        jQuery('#filter_activity').css("display", "none");
-        jQuery('#profile_info').css("display", "none");
-    }
+    jQuery('#homepage').css("display", "grid");
+    jQuery('#leaderboard').css("display", "none");
+    jQuery('#activity_feed').css("display", "none");
+    jQuery('#datepicker').css("display", "none");
+    jQuery('#settings').css("display", "none");
+    jQuery('#add_workout').css("display", "none");
+    jQuery('#filter_activity').css("display", "none");
+    jQuery('#profile_info').css("display", "none");
+
 }
 
 function leaderboard_handler() {
+
     if (jQuery('#leaderboard').css("display") == "none") {
         jQuery('#leaderboard').toggle();
         jQuery('#homepage').css("display", "none");
@@ -858,14 +981,14 @@ function show_workout_page_date() {
 }
 
 function setup() {
-
+    homepage_handler();
     leaderboard_current_date();
     show_workout_page_date();
     show_recorded_workouts();
     $('#week').change(get_leaderboard_data)
     $('#selectedDate').change(show_recorded_workouts);
     get_leaderboard_data();
-    insertNameFromFirestore();
+    insertNameAndPicFromFirestore();
     insertHomepageInfoFromFirestore();
     insertTodaysWorkoutInfoFromFirestore();
     insertYesterdaysWorkoutInfoFromFirestore();
@@ -877,7 +1000,7 @@ function setup() {
     jQuery('#calendar_button').click(calendar_handler);
     jQuery('#settings_button').click(settings_handler);
     jQuery('#add_workout_button').click(add_workout_handler);
-    jQuery('#exercises').click(additional_information_handler)
+    jQuery('#exercises').change(additional_information_handler);// fix this
     jQuery('#filter_button').click(filter_handler);
     jQuery('#cancel_button').click(activity_handler);
     jQuery('#profile_info_button').click(profile_info_handler);
@@ -889,6 +1012,30 @@ function setup() {
     jQuery('#logout_button').click(logout);
     $('#login').click(redirect_to_login);
     $('#signup').click(redirect_to_login);
+    var fileInput = $('#file-input');
+
+    // Pointer #2: Select the image element
+    var image = $('#pppreview');
+
+    // When a change happens to the File Chooser Input
+    fileInput.change(function (e) {
+        // Retrieve the selected file
+        ImageFile = e.target.files[0];
+        console.log("File selected:", imageFile); // Debugging
+
+        // Check if a file was selected
+        if (imageFile) {
+            // Create a blob URL for the selected image
+            var blob = URL.createObjectURL(imageFile);
+            console.log("Blob URL:", blob); // Debugging
+
+            // Display the image by setting the src attribute
+            image.attr('src', blob);
+        } else {
+            console.log("No file selected");
+            image.attr('src', '');
+        }
+    });
     firebase.auth().onAuthStateChanged((user) => {
         if (user) {
             // User is signed in, you can get the user ID.
