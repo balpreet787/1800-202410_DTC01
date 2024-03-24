@@ -216,7 +216,6 @@ function get_calories_burned(exerciseType, startDate, endDate, exercise_intensit
 function getActivityFeedInfo(currentUser) {
     var badge_earned = null
     var todays_date = new Date();
-    var firebaseDate = firebase.firestore.Timestamp.fromDate(todays_date)
     currentUser.get().then(userDoc => {
         currentUser.collection('workouts').orderBy('startDate', 'desc').get().then((querySnapshot) => {
             querySnapshot.forEach((doc) => {
@@ -412,9 +411,16 @@ function insertNameAndPicFromFirestore(currentUser) {
 function insertHomepageInfoFromFirestore(currentUser) {
     var todays_date = new Date(new Date().toDateString());
     var dates = [];
+    
+    var last_weeks_dates = [];
     var current_date = todays_date.getDay();
     var start_of_week = new Date(todays_date);
+    var last_weeks_start_date = new Date();
     start_of_week.setDate(start_of_week.getDate() - current_date);
+    last_weeks_start_date.setDate(start_of_week.getDate() - 7);
+    console.log(last_weeks_start_date)
+    var workout_time_in_current_week = 0;
+    var workout_time_last_week = 0;
     var number_of_workouts = 0;
     var calories_in_a_week = 0;
 
@@ -422,7 +428,34 @@ function insertHomepageInfoFromFirestore(currentUser) {
         var start_date = new Date(start_of_week);
         start_date.setDate(start_date.getDate() + i);
         dates.push(start_date.toDateString());
+        var start_last_week_date = new Date(last_weeks_start_date);
+        start_last_week_date.setDate(start_last_week_date.getDate() + i);
+        last_weeks_dates.push(start_last_week_date.toDateString());
     }
+
+    currentUser.collection("workouts").where('startDate', '>=', start_of_week).get().then((querySnapshot) => {
+        querySnapshot.forEach((doc) => {
+            var workoutDate = new Date(doc.data().startDate.toDate().toDateString())
+            if (dates.includes(workoutDate.toDateString())) {
+                workout_time_in_current_week += (doc.data().endDate - doc.data().startDate) / 60;
+            }
+        })
+        currentUser.collection("workouts").where('startDate', '>=', last_weeks_start_date).get().then((querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+                var workoutDate = new Date(doc.data().startDate.toDate().toDateString())
+                if (last_weeks_dates.includes(workoutDate.toDateString())) {
+                    workout_time_last_week += (doc.data().endDate - doc.data().startDate) / 60;
+                }
+            })
+            if (workout_time_in_current_week > workout_time_last_week) {
+                $("#motivational-message").text(`You worked out ${workout_time_in_current_week} more minutes than last week!`)
+            } else {
+                $("#motivational-message").text(`${workout_time_last_week - workout_time_in_current_week} more minutes to beat last week's workout time!`)
+            }
+        });
+    });
+
+
 
     currentUser.collection("workouts").where('startDate', '>=', start_of_week).get().then((querySnapshot) => {
         querySnapshot.forEach((doc) => {
