@@ -71,6 +71,8 @@ async function updateInfo(currentUser) {
                 jQuery('#homepage').toggle();
                 jQuery("#profile_info").css("display", "none");
                 jQuery('#settings').toggle();
+                jQuery('#confirmProfileUpdate').css("display", "flex").delay(3000).hide(0);
+
             })
             .catch((error) => {
                 // The document probably doesn't exist.
@@ -350,7 +352,7 @@ async function addWorkout(currentUser) {
                     console.log("Document successfully updated!");
                     jQuery('#homepage').toggle();
                     jQuery("#add_workout").css("display", "none");
-                    jQuery('#activity_feed').toggle();
+                    jQuery('#confirmAddWorkout').css("display", "flex").delay(3000).hide(0);
                 })
                 .catch((error) => {
                     console.error("Error updating document: ", error);
@@ -622,14 +624,15 @@ function populateUserInfo(currentUser) {
 
 function show_recorded_workouts(currentUser) {
     $("#recorded_workouts").empty();
-    input_date = $('#selectedDate').val();
-    selected_date = new Date(input_date);
-    selected_endDay = new Date(input_date);
-    selected_date.setHours(0, 0, 0, 0);
+    let input_date = $('#selectedDate').val();
 
-    selected_endDay.setHours(23, 59, 59, 999);
-    firebase_Startdate = firebase.firestore.Timestamp.fromDate(selected_date);
-    firebase_Enddate = firebase.firestore.Timestamp.fromDate(selected_endDay);
+    // Create local Date objects at the beginning and end of the selected day
+    let selected_date = new Date(input_date + "T00:00:00");
+    let selected_endDay = new Date(input_date + "T23:59:59");
+
+    // Convert the local date times directly to Firestore Timestamps
+    let firebase_Startdate = firebase.firestore.Timestamp.fromDate(selected_date);
+    let firebase_Enddate = firebase.firestore.Timestamp.fromDate(selected_endDay);
 
     currentUser.collection('workouts').where('startDate', '>=', firebase_Startdate).where('startDate', '<=', firebase_Enddate).get().then(recordedWorkout => {
         recordedWorkout.forEach(workouts => {
@@ -876,7 +879,8 @@ function show_workout_page_date() {
 }
 
 function setup() {
-
+    leaderboard_current_date();
+    show_workout_page_date();
     jQuery('#info').click(info_handler);
     jQuery('#aboutUs').click(aboutUs_handler)
     jQuery('#homepage_button').click(homepage_handler);
@@ -946,8 +950,6 @@ function setup() {
                 jQuery("#save_profile_info_button").click(function () { updateInfo(currentUser) });
                 jQuery('#profile_info_button').click(function () { profile_info_handler(currentUser) });
                 homepage_handler(currentUser);
-                leaderboard_current_date(currentUser);
-                show_workout_page_date(currentUser);
                 show_recorded_workouts(currentUser);
                 $('#week').change(function () { get_leaderboard_data(currentUser) })
                 $('#selectedDate').change(function () { show_recorded_workouts(currentUser) });
