@@ -71,6 +71,8 @@ async function updateInfo(currentUser) {
                 jQuery('#homepage').toggle();
                 jQuery("#profile_info").css("display", "none");
                 jQuery('#settings').toggle();
+                jQuery('#confirmProfileUpdate').css("display", "flex").delay(3000).hide(0);
+
             })
             .catch((error) => {
                 // The document probably doesn't exist.
@@ -373,7 +375,7 @@ async function addWorkout(currentUser) {
                     console.log("Document successfully updated!");
                     jQuery('#homepage').toggle();
                     jQuery("#add_workout").css("display", "none");
-                    jQuery('#activity_feed').toggle();
+                    jQuery('#confirmAddWorkout').css("display", "flex").delay(3000).hide(0);
                 })
                 .catch((error) => {
                     console.error("Error updating document: ", error);
@@ -429,7 +431,7 @@ function insertHomepageInfoFromFirestore(currentUser) {
                 calories_in_a_week += doc.data().calories;
                 console.log(calories_in_a_week)
             }
-            jQuery("#calories-go-here").text(calories_in_a_week.toFixed(2));
+            jQuery("#calories-go-here").text(parseInt(calories_in_a_week));
         });
     });
 
@@ -467,7 +469,7 @@ function insertTodaysWorkoutInfoFromFirestore(currentUser) {
     currentUser.collection('workouts').where('startDate', '>=', firebase_Startdate).where('startDate', '<=', firebase_Enddate).get().then(recordedWorkout => {
         recordedWorkout.forEach(workouts => {
             todays_calories += workouts.data().calories
-            jQuery("#todays-calories-go-here").text(todays_calories.toFixed(2));
+            jQuery("#todays-calories-go-here").text(parseInt(todays_calories));
         })
     })
 
@@ -645,14 +647,15 @@ function populateUserInfo(currentUser) {
 
 function show_recorded_workouts(currentUser) {
     $("#recorded_workouts").empty();
-    input_date = $('#selectedDate').val();
-    selected_date = new Date(input_date);
-    selected_endDay = new Date(input_date);
-    selected_date.setHours(0, 0, 0, 0);
+    let input_date = $('#selectedDate').val();
 
-    selected_endDay.setHours(23, 59, 59, 999);
-    firebase_Startdate = firebase.firestore.Timestamp.fromDate(selected_date);
-    firebase_Enddate = firebase.firestore.Timestamp.fromDate(selected_endDay);
+    // Create local Date objects at the beginning and end of the selected day
+    let selected_date = new Date(input_date + "T00:00:00");
+    let selected_endDay = new Date(input_date + "T23:59:59");
+
+    // Convert the local date times directly to Firestore Timestamps
+    let firebase_Startdate = firebase.firestore.Timestamp.fromDate(selected_date);
+    let firebase_Enddate = firebase.firestore.Timestamp.fromDate(selected_endDay);
 
     currentUser.collection('workouts').where('startDate', '>=', firebase_Startdate).where('startDate', '<=', firebase_Enddate).get().then(recordedWorkout => {
         recordedWorkout.forEach(workouts => {
@@ -697,25 +700,25 @@ function getActivityFeedInfo(currentUser) {
     var leaderboardID = undefined;
     var friendIDs = [];
     var activityfeedinfo = [];
-            currentUser.get().then(userDoc => {
-                leaderboardID = userDoc.data().leaderboardID;
-                db.collection("users").where("leaderboardID", "==", leaderboardID).get().then(querySnapshot => {
-                    querySnapshot.forEach(doc => {
-                        friendIDs.push(doc.id);
-                    });
+    currentUser.get().then(userDoc => {
+        leaderboardID = userDoc.data().leaderboardID;
+        db.collection("users").where("leaderboardID", "==", leaderboardID).get().then(querySnapshot => {
+            querySnapshot.forEach(doc => {
+                friendIDs.push(doc.id);
+            });
 
-                    let activityfeedpromises = friendIDs.map(function (id) {
-                        return db.collection("users").doc(id).get().then(userinfo => {
-                            let nickname = userinfo.data().nickname;
-                            let username = userinfo.data().name;
-                            let profilepic = userinfo.data().image;
-                            return db.collection("users").doc(id).collection('workouts').orderBy('startDate', 'desc').get().then(querySnapshot => {
-                                querySnapshot.forEach(doc => {
+            let activityfeedpromises = friendIDs.map(function (id) {
+                return db.collection("users").doc(id).get().then(userinfo => {
+                    let nickname = userinfo.data().nickname;
+                    let username = userinfo.data().name;
+                    let profilepic = userinfo.data().image;
+                    return db.collection("users").doc(id).collection('workouts').orderBy('startDate', 'desc').get().then(querySnapshot => {
+                        querySnapshot.forEach(doc => {
 
-                                    badge_earned = doc.data().earned;
-                                    badge_name = doc.data().earned_name;
-                                    workout_time = (doc.data().endDate - doc.data().startDate) / 60;
-                                    exercise_type = doc.data().exerciseType;
+                            badge_earned = doc.data().earned;
+                            badge_name = doc.data().earned_name;
+                            workout_time = (doc.data().endDate - doc.data().startDate) / 60;
+                            exercise_type = doc.data().exerciseType;
 
                                     activityfeedinfo.push({
                                         "startdate": doc.data().startDate, "calories": doc.data().calories, "username": username, "exercise_type": doc.data().exerciseType, "profilepic": profilepic, "nickname": nickname, "workouttime": workout_time, "badgesearned": badge_earned, "badge_name": badge_name
@@ -754,14 +757,15 @@ function getActivityFeedInfo(currentUser) {
                                                 <p class="text-xs pb-4 pr-1" id="accomplishment-phrase">${activityfeedinfo[i]["username"]} spent ${activityfeedinfo[i]["workouttime"]} minutes ${activityfeedinfo[i]["exercise_type"]} and earned a ${activityfeedinfo[i]["badge_name"]}!</p>
                                             </div>
                                         </div>`
-                                    }
-                                    jQuery("#activity_feed").append(add_to_activity_feed);}
-                        
-                    }).catch(error => {
-                        console.error("Error processing all user data: ", error);
-                    })
-                });
-            });
+                    }
+                    jQuery("#activity_feed").append(add_to_activity_feed);
+                }
+
+            }).catch(error => {
+                console.error("Error processing all user data: ", error);
+            })
+        });
+    });
 }
 
 function filterActivityFeed() {
@@ -941,7 +945,8 @@ function show_workout_page_date() {
 }
 
 function setup() {
-
+    leaderboard_current_date();
+    show_workout_page_date();
     jQuery('#info').click(info_handler);
     jQuery('#aboutUs').click(aboutUs_handler)
     jQuery('#homepage_button').click(homepage_handler);
@@ -1012,8 +1017,6 @@ function setup() {
                 jQuery("#save_profile_info_button").click(function () { updateInfo(currentUser) });
                 jQuery('#profile_info_button').click(function () { profile_info_handler(currentUser) });
                 homepage_handler(currentUser);
-                leaderboard_current_date(currentUser);
-                show_workout_page_date(currentUser);
                 show_recorded_workouts(currentUser);
                 $('#week').change(function () { get_leaderboard_data(currentUser) })
                 $('#selectedDate').change(function () { show_recorded_workouts(currentUser) });
