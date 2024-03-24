@@ -732,7 +732,7 @@ function getActivityFeedInfo(currentUser) {
                                     }
                                     if (badge_earned == null) {
                                         badge_earned = "";
-                                        add_to_activity_feed = `<div class="flex flex-row bg-[#fff6e5] rounded-xl mt-2 m-4">
+                                        add_to_activity_feed = `<div class="flex flex-row bg-[#fff6e5] rounded-xl mt-2 m-4 normal-activity">
                                             <img class="h-20 mx-5 self-center rounded-full w-20" src="${activityfeedinfo[i]["profilepic"]}" alt="">
                                             <div class="p-2 ">
                                                 <div class="py-2">
@@ -742,9 +742,9 @@ function getActivityFeedInfo(currentUser) {
                                             </div>
                                         </div>`;
                                     } else {
-                                        add_to_activity_feed = `<div class="flex flex-row mt-2 mx-4">
+                                        add_to_activity_feed = `<div class="flex flex-row mt-2 mx-4 ">
                                         </div>
-                                        <div class="flex flex-row bg-[#fff6e5] rounded-xl mt-2 m-4">
+                                        <div class="flex flex-row bg-[#fff6e5] rounded-xl mt-2 m-4 accomplishment-activity">
                                             <img class="h-20 mx-5 self-center rounded-full w-20" src=${activityfeedinfo[i]["profilepic"]}" alt="">
                                             <div class="p-2 ">
                                                 <div class="py-2 flex flex-row justify-between">
@@ -762,6 +762,22 @@ function getActivityFeedInfo(currentUser) {
                     })
                 });
             });
+}
+
+function filterActivityFeed() {
+    var selected_value = $("input[name='filter-activity-feed']:checked").val();
+    console.log("yoooooooooooooooooo")
+    if (selected_value == "accomplishment") {
+        jQuery(".accomplishment-activity").css("display", "grid");
+        jQuery(".normal-activity").css("display", "none");
+        jQuery('#activity_feed').css("display", "grid");
+        jQuery("#filter_activity").css("display", "none")
+    } else {
+        jQuery(".accomplishment-activity").css("display", "none");
+        jQuery(".normal-activity").css("display", "grid");
+        jQuery('#activity_feed').css("display", "grid");
+        jQuery("#filter_activity").css("display", "none")
+    }
 }
 
 
@@ -945,6 +961,7 @@ function setup() {
     jQuery('#logout_button').click(logout);
     $('#login').click(redirect_to_login);
     $('#signup').click(redirect_to_login);
+    $("#view-feed-button").click(filterActivityFeed);
     var fileInput = $('#file-input');
     let profilepic = undefined
     // Pointer #2: Select the image element
