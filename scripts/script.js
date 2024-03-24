@@ -1,6 +1,5 @@
 var ImageFile;
 
-=
 function uploadPic(postDocID) {
     console.log("inside uploadPic " + postDocID);
     console.log(ImageFile)
