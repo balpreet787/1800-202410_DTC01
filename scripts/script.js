@@ -431,7 +431,7 @@ function insertHomepageInfoFromFirestore(currentUser) {
                 calories_in_a_week += doc.data().calories;
                 console.log(calories_in_a_week)
             }
-            jQuery("#calories-go-here").text(calories_in_a_week.toFixed(2));
+            jQuery("#calories-go-here").text(parseInt(calories_in_a_week));
         });
     });
 
@@ -469,7 +469,7 @@ function insertTodaysWorkoutInfoFromFirestore(currentUser) {
     currentUser.collection('workouts').where('startDate', '>=', firebase_Startdate).where('startDate', '<=', firebase_Enddate).get().then(recordedWorkout => {
         recordedWorkout.forEach(workouts => {
             todays_calories += workouts.data().calories
-            jQuery("#todays-calories-go-here").text(todays_calories.toFixed(2));
+            jQuery("#todays-calories-go-here").text(parseInt(todays_calories));
         })
     })
 
@@ -700,42 +700,42 @@ function getActivityFeedInfo(currentUser) {
     var leaderboardID = undefined;
     var friendIDs = [];
     var activityfeedinfo = [];
-            currentUser.get().then(userDoc => {
-                leaderboardID = userDoc.data().leaderboardID;
-                db.collection("users").where("leaderboardID", "==", leaderboardID).get().then(querySnapshot => {
-                    querySnapshot.forEach(doc => {
-                        friendIDs.push(doc.id);
-                    });
+    currentUser.get().then(userDoc => {
+        leaderboardID = userDoc.data().leaderboardID;
+        db.collection("users").where("leaderboardID", "==", leaderboardID).get().then(querySnapshot => {
+            querySnapshot.forEach(doc => {
+                friendIDs.push(doc.id);
+            });
 
-                    let activityfeedpromises = friendIDs.map(function (id) {
-                        return db.collection("users").doc(id).get().then(userinfo => {
-                            let nickname = userinfo.data().nickname;
-                            let username = userinfo.data().name;
-                            let profilepic = userinfo.data().image;
-                            return db.collection("users").doc(id).collection('workouts').orderBy('startDate', 'desc').get().then(querySnapshot => {
-                                querySnapshot.forEach(doc => {
+            let activityfeedpromises = friendIDs.map(function (id) {
+                return db.collection("users").doc(id).get().then(userinfo => {
+                    let nickname = userinfo.data().nickname;
+                    let username = userinfo.data().name;
+                    let profilepic = userinfo.data().image;
+                    return db.collection("users").doc(id).collection('workouts').orderBy('startDate', 'desc').get().then(querySnapshot => {
+                        querySnapshot.forEach(doc => {
 
-                                    badge_earned = doc.data().earned;
-                                    badge_name = doc.data().earned_name;
-                                    workout_time = (doc.data().endDate - doc.data().startDate) / 60;
-                                    exercise_type = doc.data().exerciseType;
+                            badge_earned = doc.data().earned;
+                            badge_name = doc.data().earned_name;
+                            workout_time = (doc.data().endDate - doc.data().startDate) / 60;
+                            exercise_type = doc.data().exerciseType;
 
-                                    activityfeedinfo.push({
-                                        "startdate": doc.data().startDate, "calories": doc.data().calories, "username": username, "exercise_type": doc.data().exerciseType, "profilepic": profilepic, "nickname": nickname, "workouttime": workout_time, "badgesearned": badge_earned, "badge_name": badge_name
-                                    })
-                                });
-                            });
+                            activityfeedinfo.push({
+                                "startdate": doc.data().startDate, "calories": doc.data().calories, "username": username, "exercise_type": doc.data().exerciseType, "profilepic": profilepic, "nickname": nickname, "workouttime": workout_time, "badgesearned": badge_earned, "badge_name": badge_name
+                            })
                         });
                     });
-                    Promise.all(activityfeedpromises).then(() => {
-                        activityfeedinfo.sort((a, b)=> b.startdate - a.startdate);
-                        for (let i = 0; i < activityfeedinfo.length; i++)
-                {        if (exercise_type == "yoga") {
-                                        exercise_type = "doing yoga";
-                                    }
-                                    if (badge_earned == null) {
-                                        badge_earned = "";
-                                        add_to_activity_feed = `<div class="flex flex-row bg-[#fff6e5] rounded-xl mt-2 m-4">
+                });
+            });
+            Promise.all(activityfeedpromises).then(() => {
+                activityfeedinfo.sort((a, b) => b.startdate - a.startdate);
+                for (let i = 0; i < activityfeedinfo.length; i++) {
+                    if (exercise_type == "yoga") {
+                        exercise_type = "doing yoga";
+                    }
+                    if (badge_earned == null) {
+                        badge_earned = "";
+                        add_to_activity_feed = `<div class="flex flex-row bg-[#fff6e5] rounded-xl mt-2 m-4">
                                             <img class="h-20 mx-5 self-center rounded-full w-20" src="${activityfeedinfo[i]["profilepic"]}" alt="">
                                             <div class="p-2 ">
                                                 <div class="py-2">
@@ -744,8 +744,8 @@ function getActivityFeedInfo(currentUser) {
                                                 <p class="text-xs pb-4 pr-1" id="activity-feed-phrase">${activityfeedinfo[i]["username"]} spent ${activityfeedinfo[i]["workouttime"]} minutes ${activityfeedinfo[i]["exercise_type"]}!</p>
                                             </div>
                                         </div>`;
-                                    } else {
-                                        add_to_activity_feed = `<div class="flex flex-row mt-2 mx-4">
+                    } else {
+                        add_to_activity_feed = `<div class="flex flex-row mt-2 mx-4">
                                         </div>
                                         <div class="flex flex-row bg-[#fff6e5] rounded-xl mt-2 m-4">
                                             <img class="h-20 mx-5 self-center rounded-full w-20" src=${activityfeedinfo[i]["profilepic"]}" alt="">
@@ -757,14 +757,15 @@ function getActivityFeedInfo(currentUser) {
                                                 <p class="text-xs pb-4 pr-1" id="accomplishment-phrase">${activityfeedinfo[i]["username"]} spent ${activityfeedinfo[i]["workouttime"]} minutes ${activityfeedinfo[i]["exercise_type"]} and earned a ${activityfeedinfo[i]["badge_name"]}!</p>
                                             </div>
                                         </div>`
-                                    }
-                                    jQuery("#activity_feed").append(add_to_activity_feed);}
-                        
-                    }).catch(error => {
-                        console.error("Error processing all user data: ", error);
-                    })
-                });
-            });
+                    }
+                    jQuery("#activity_feed").append(add_to_activity_feed);
+                }
+
+            }).catch(error => {
+                console.error("Error processing all user data: ", error);
+            })
+        });
+    });
 }
 
 
