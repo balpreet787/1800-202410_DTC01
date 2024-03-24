@@ -66,7 +66,7 @@ async function updateInfo(currentUser) {
             leaderboardID: leaderboardID,
         }, { merge: true })
             .then(() => {
-                uploadPic(uid);
+                uploadPic(currentUser.id);
                 console.log("Document successfully updated!");
                 jQuery('#homepage').toggle();
                 jQuery("#profile_info").css("display", "none");
@@ -936,7 +936,7 @@ function setup() {
                 }
                 image.attr('src', profilepic);
                 jQuery("#save_workout_button").click(function () { addWorkout(currentUser) });
-                jQuery("#save_profile_info_button").click(function () { updateInfo(currentUser, uid) });
+                jQuery("#save_profile_info_button").click(function () { updateInfo(currentUser) });
                 jQuery('#profile_info_button').click(function () { profile_info_handler(currentUser) });
                 homepage_handler(currentUser);
                 leaderboard_current_date(currentUser);
