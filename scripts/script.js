@@ -406,7 +406,7 @@ function insertHomepageInfoFromFirestore(currentUser) {
                 calories_in_a_week += doc.data().calories;
                 console.log(calories_in_a_week)
             }
-            jQuery("#calories-go-here").text(calories_in_a_week);
+            jQuery("#calories-go-here").text(calories_in_a_week.toFixed(2));
         });
     });
 
@@ -444,7 +444,7 @@ function insertTodaysWorkoutInfoFromFirestore(currentUser) {
     currentUser.collection('workouts').where('startDate', '>=', firebase_Startdate).where('startDate', '<=', firebase_Enddate).get().then(recordedWorkout => {
         recordedWorkout.forEach(workouts => {
             todays_calories += workouts.data().calories
-            jQuery("#todays-calories-go-here").text(todays_calories);
+            jQuery("#todays-calories-go-here").text(todays_calories.toFixed(2));
         })
     })
 
