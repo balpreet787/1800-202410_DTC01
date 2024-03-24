@@ -722,6 +722,12 @@ function info_handler() {
     jQuery('#info-box').slideToggle()
 }
 
+
+function aboutUs_handler() {
+
+    jQuery('#aboutUs-box').slideToggle()
+}
+
 function redirect_to_login() {
     window.location.href = 'login.html';
 }
@@ -872,6 +878,7 @@ function show_workout_page_date() {
 function setup() {
 
     jQuery('#info').click(info_handler);
+    jQuery('#aboutUs').click(aboutUs_handler)
     jQuery('#homepage_button').click(homepage_handler);
     jQuery('#leaderboard_button').click(leaderboard_handler);
     jQuery('#activity_button').click(activity_handler);
