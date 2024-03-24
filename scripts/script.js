@@ -89,62 +89,84 @@ async function give_user_badge(exerciseType, currentUser) {
     var walking_count = (await currentUser.collection("exerciseCounter").doc("exercises").get()).get("walking");
     var cycling_count = (await currentUser.collection("exerciseCounter").doc("exercises").get()).get("cycling");
     var badge = null;
+    var badge_name = null;
     console.log(walking_count)
     if (exerciseType == "weightlifting") {
         if (weightlifting_count >= 20) {
             badge = "./images/weightliftingplatinum.svg";
+            badge_name = "platinum weightlifting badge";
         } else if (weightlifting_count >= 15) {
             badge = "./images/weightliftinggold.svg";
+            badge_name = "gold weightlifting badge";
         } else if (weightlifting_count >= 10) {
             badge = "./images/weightliftingsilver.svg";
+            badge_name = "silver weightlifting badge";
         } else if (weightlifting_count >= 5) {
             badge = "./images/weightliftingbronze.svg";
+            badge_name = "bronze weightlifting badge";
         }
     } else if (exerciseType == "yoga") {
         if (yoga_count >= 20) {
             badge = "./images/yogaplatinum.svg";
+            badge_name = "platinum yoga badge";
         } else if (yoga_count >= 15) {
             badge = "./images/yogagold.svg";
+            badge_name = "gold yoga badge";
         } else if (yoga_count >= 10) {
             badge = "./images/yogasilver.svg";
+            badge_name = "silver yoga badge";
         } else if (yoga_count >= 5) {
             badge = "./images/yogabronze.svg";
+            badge_name = "bronze yoga badge";
         }
     } else if (exerciseType == "running") {
         if (running_count >= 20) {
             badge = "./images/runningplatinum.svg";
+            badge_name = "platinum running badge";
         } else if (running_count >= 15) {
             badge = "./images/runninggold.svg";
+            badge_name = "gold running badge"
         } else if (running_count >= 10) {
             badge = "./images/runningsilver.svg";
+            badge_name = "silver running badge"
         } else if (running_count >= 5) {
             badge = "./images/runningbronze.svg";
+            badge_name = "bronze running badge"
         }
     } else if (exerciseType == "walking") {
         if (walking_count >= 20) {
             badge = "./images/walkingplatinum.svg";
+            badge_name = "platinum walking badge";
         } else if (walking_count >= 15) {
             badge = "./images/walkinggold.svg";
+            badge_name = "gold walking badge";
         } else if (walking_count >= 10) {
             badge = "./images/walkingsilver.svg";
+            badge_name = "silver walking badge";
         } else if (walking_count >= 5) {
             badge = "./images/walkingbronze.svg";
+            badge_name = "bronze walking badge";
         }
     } else if (exerciseType == "cycling") {
         if (cycling_count >= 20) {
             badge = "./images/cyclingplatinum.svg";
+            badge_name = "platinum cycling badge";
         } else if (cycling_count >= 15) {
             badge = "./images/cyclinggold.svg";
+            badge_name = "gold cycling badge";
         } else if (cycling_count >= 10) {
             badge = "./images/cyclingsilver.svg";
+            badge_name = "silver cycling badge";
         } else if (cycling_count >= 5) {
             badge = "./images/cyclingbronze.svg";
+            badge_name = "bronze cycling badge";
         }
     } else {
         badge = null;
+        badge_number = null;
     }
 
-    return badge;
+    return [badge, badge_name];
 
 
 }
@@ -346,7 +368,8 @@ async function addWorkout(currentUser) {
                 endDate: end_Date,
                 intensity: intensity,
                 calories: calories_burned,
-                earned: badges_earned,
+                earned: badges_earned[0],
+                earned_name: badges_earned[1]
             }, { merge: true })
                 .then(() => {
                     console.log("Document successfully updated!");
@@ -673,51 +696,77 @@ function show_recorded_workouts(currentUser) {
 }
 
 function getActivityFeedInfo(currentUser) {
-    var badge_earned = null
-    currentUser.get().then(userDoc => {
-        nickname = userDoc.data().nickname;
-        username = userDoc.data().name;
-        currentUser.collection('workouts').orderBy('startDate', 'desc').get().then((querySnapshot) => {
-            querySnapshot.forEach((doc) => {
-                badge_earned = doc.data().earned;
-                workout_time = (doc.data().endDate - doc.data().startDate) / 60;
-                exercise_type = doc.data().exerciseType
-                if (exercise_type == "yoga") {
-                    exercise_type = "doing yoga"
-                }
-                if (badge_earned == null) {
-                    badge_earned = ""
-                    add_to_activity_feed = `<div class="flex flex-row bg-[#fff6e5] rounded-xl mt-2 m-4">
-                            <img class="h-20 mx-5 self-center" src="images/profile_pic.svg" alt="">
-                            <div class="p-2 ">
-                                <div class="py-2">
-                                    <h1 class="font-semibold inline text-lg"><span id="activity-username">${nickname}</span></h1>
-                                </div>
-                                <p class="text-xs pb-4 pr-1" id="activity-feed-phrase">You just spent ${workout_time} minutes ${exercise_type}!</p>
-                            </div>
-                        </div>`
-                } else {
-                    add_to_activity_feed = `<div class="flex flex-row mt-2 mx-4">
-                            </div>
-                            <div class="flex flex-row bg-[#fff6e5] rounded-xl mt-2 m-4">
-                                <img class="h-20 mx-5 self-center" src="images/profile_pic.svg" alt="">
-                                <div class="p-2 ">
-                                    <div class="py-2 flex flex-row justify-between">
-                                        <h1 class="font-semibold inline text-lg"><span id="activity-username">${nickname}</span></h1>
-                                        <img class="h-6 pr-3 inline ml-auto" src="images/star_icon.svg" alt="">
-                                    </div>
-                                    <p class="text-xs pb-4 pr-1" id="accomplishment-phrase">You just spent ${workout_time} minutes ${exercise_type}!</p>
-                                </div>
-                            </div>`
-                }
+    var badge_earned = null;
+    var leaderboardID = undefined;
+    var friendIDs = [];
+    var activityfeedinfo = [];
+            currentUser.get().then(userDoc => {
+                leaderboardID = userDoc.data().leaderboardID;
+                db.collection("users").where("leaderboardID", "==", leaderboardID).get().then(querySnapshot => {
+                    querySnapshot.forEach(doc => {
+                        friendIDs.push(doc.id);
+                    });
 
-                jQuery('#activity_feed').append(add_to_activity_feed);
+                    let activityfeedpromises = friendIDs.map(function (id) {
+                        return db.collection("users").doc(id).get().then(userinfo => {
+                            let nickname = userinfo.data().nickname;
+                            let username = userinfo.data().name;
+                            let profilepic = userinfo.data().image;
+                            return db.collection("users").doc(id).collection('workouts').orderBy('startDate', 'desc').get().then(querySnapshot => {
+                                querySnapshot.forEach(doc => {
 
-            })
-        })
-    })
+                                    badge_earned = doc.data().earned;
+                                    badge_name = doc.data().earned_name;
+                                    workout_time = (doc.data().endDate - doc.data().startDate) / 60;
+                                    exercise_type = doc.data().exerciseType;
 
+                                    activityfeedinfo.push({
+                                        "startdate": doc.data().startDate, "calories": doc.data().calories, "username": username, "exercise_type": doc.data().exerciseType, "profilepic": profilepic, "nickname": nickname, "workouttime": workout_time, "badgesearned": badge_earned, "badge_name": badge_name
+                                    })
+                                });
+                            });
+                        });
+                    });
+                    Promise.all(activityfeedpromises).then(() => {
+                        activityfeedinfo.sort((a, b)=> b.startdate - a.startdate);
+                        for (let i = 0; i < activityfeedinfo.length; i++)
+                {        if (exercise_type == "yoga") {
+                                        exercise_type = "doing yoga";
+                                    }
+                                    if (badge_earned == null) {
+                                        badge_earned = "";
+                                        add_to_activity_feed = `<div class="flex flex-row bg-[#fff6e5] rounded-xl mt-2 m-4">
+                                            <img class="h-20 mx-5 self-center rounded-full w-20" src="${activityfeedinfo[i]["profilepic"]}" alt="">
+                                            <div class="p-2 ">
+                                                <div class="py-2">
+                                                    <h1 class="font-semibold inline text-lg"><span id="activity-username">${activityfeedinfo[i]["nickname"]}</span></h1>
+                                                </div>
+                                                <p class="text-xs pb-4 pr-1" id="activity-feed-phrase">${activityfeedinfo[i]["username"]} spent ${activityfeedinfo[i]["workouttime"]} minutes ${activityfeedinfo[i]["exercise_type"]}!</p>
+                                            </div>
+                                        </div>`;
+                                    } else {
+                                        add_to_activity_feed = `<div class="flex flex-row mt-2 mx-4">
+                                        </div>
+                                        <div class="flex flex-row bg-[#fff6e5] rounded-xl mt-2 m-4">
+                                            <img class="h-20 mx-5 self-center rounded-full w-20" src=${activityfeedinfo[i]["profilepic"]}" alt="">
+                                            <div class="p-2 ">
+                                                <div class="py-2 flex flex-row justify-between">
+                                                    <h1 class="font-semibold inline text-lg"><span id="activity-username">${activityfeedinfo[i]["nickname"]}</span></h1>
+                                                    <img  class="h-6 pr-3 inline ml-auto" src="${activityfeedinfo[i]["badgesearned"]}" alt="">
+                                                </div>
+                                                <p class="text-xs pb-4 pr-1" id="accomplishment-phrase">${activityfeedinfo[i]["username"]} spent ${activityfeedinfo[i]["workouttime"]} minutes ${activityfeedinfo[i]["exercise_type"]} and earned a ${activityfeedinfo[i]["badge_name"]}!</p>
+                                            </div>
+                                        </div>`
+                                    }
+                                    jQuery("#activity_feed").append(add_to_activity_feed);}
+                        
+                    }).catch(error => {
+                        console.error("Error processing all user data: ", error);
+                    })
+                });
+            });
 }
+
 
 
 function info_handler() {
