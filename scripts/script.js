@@ -784,7 +784,7 @@ function getActivityFeedInfo() {
             currentUser = db.collection("users").doc(user.uid)
             currentUser.get().then(userDoc => {
                 leaderboardID = userDoc.data().leaderboardID;
-                db.collection("users").where("leaderboardID", "==", leaderboardID).get().then((querySnapshot => {
+                db.collectitart on("users").where("leaderboardID", "==", leaderboardID).get().then((querySnapshot => {
                     querySnapshot.forEach((doc) => {
                         friendIDs.push(doc.id)
                     });
