@@ -776,17 +776,24 @@ function show_recorded_workouts() {
 
 function getActivityFeedInfo() {
     var badge_earned = null
+    var leaderboardID = undefined;
+    var friendIDs = [];
+    var leaderboardinfo = {};
     firebase.auth().onAuthStateChanged(user => {
         if (user) {
-            // currentUser = db.collection("users").doc(user.uid);
-            // currentUser.get().then(userDoc => {
-            //     let userName = userDoc.data().name;
-            //     console.log(userName);
-            //     jQuery("#activity-username").text(userName);
-            // })
+            currentUser = db.collection("users").doc(user.uid)
             currentUser.get().then(userDoc => {
+                leaderboardID = userDoc.data().leaderboardID;
+                db.collection("users").where("leaderboardID", "==", leaderboardID).get().then((querySnapshot => {
+                    querySnapshot.forEach((doc) => {
+                        friendIDs.push(doc.id)
+                    });
+
+                    var activity_feed_with_friends = friendIDs.map(function (id))
+                }))
                 nickname= userDoc.data().nickname;
                 username = userDoc.data().name;
+                profilepic = userDoc.data().image;
                 db.collection('users').doc(user.uid).collection('workouts').orderBy('startDate', 'desc').get().then((querySnapshot) => {
                     querySnapshot.forEach((doc) => {
                             badge_earned = doc.data().earned;
@@ -798,7 +805,7 @@ function getActivityFeedInfo() {
                             if (badge_earned == null) {
                                 badge_earned=""
                             add_to_activity_feed = `<div class="flex flex-row bg-[#fff6e5] rounded-xl mt-2 m-4">
-                            <img class="h-20 mx-5 self-center" src="images/profile_pic.svg" alt="">
+                            <img class="h-20 mx-5 self-center rounded-full w-20" src="${profilepic}" alt="">
                             <div class="p-2 ">
                                 <div class="py-2">
                                     <h1 class="font-semibold inline text-lg"><span id="activity-username">${nickname}</span></h1>
@@ -810,17 +817,16 @@ function getActivityFeedInfo() {
                                      add_to_activity_feed =  `<div class="flex flex-row mt-2 mx-4">
                             </div>
                             <div class="flex flex-row bg-[#fff6e5] rounded-xl mt-2 m-4">
-                                <img class="h-20 mx-5 self-center" src="images/profile_pic.svg" alt="">
+                                <img class="h-20 mx-5 self-center rounded-full w-20" src=${profilepic}" alt="">
                                 <div class="p-2 ">
                                     <div class="py-2 flex flex-row justify-between">
                                         <h1 class="font-semibold inline text-lg"><span id="activity-username">${nickname}</span></h1>
-                                        <img class="h-6 pr-3 inline ml-auto" src="images/star_icon.svg" alt="">
+                                        <img  class="h-6 pr-3 inline ml-auto" src="images/star_icon.svg" alt="">
                                     </div>
                                     <p class="text-xs pb-4 pr-1" id="accomplishment-phrase">You just spent ${workout_time} minutes ${exercise_type}!</p>
                                 </div>
                             </div>`
                             }
-
                         jQuery('#activity_feed').append(add_to_activity_feed);
 
                     })
