@@ -47,7 +47,7 @@ function uploadPic(postDocID) {
 
 
 
-async function updateInfo() {
+async function updateInfo(currentUser) {
 
     var nickname = jQuery("#nickname").val();
     var gender = jQuery("#gender").val();
@@ -56,190 +56,153 @@ async function updateInfo() {
     var leaderboardID = jQuery("#leaderboard_id").val();
     var dob = jQuery("#dob").val();
 
-    if (nickname != "" && height != "" && weight != "" && leaderboardID != "" && dob != "")
+    if (nickname != "" && height != "" && weight != "" && leaderboardID != "" && dob != "") {
+        currentUser.set({
+            nickname: nickname,
+            gender: gender,
+            height: height,
+            weight: weight,
+            dob: dob,
+            leaderboardID: leaderboardID,
+        }, { merge: true })
+            .then(() => {
+                uploadPic(currentUser.id);
+                console.log("Document successfully updated!");
+                jQuery('#homepage').toggle();
+                jQuery("#profile_info").css("display", "none");
+                jQuery('#settings').toggle();
+            })
+            .catch((error) => {
+                // The document probably doesn't exist.
+                console.error("Error updating document: ", error);
+            });
+    }
 
-        firebase.auth().onAuthStateChanged((user) => {
-            if (user) {
-                // User is signed in, you can get the user ID.
-                var uid = user.uid;
-                db.collection("users").doc(uid).set({
-                    nickname: nickname,
-                    gender: gender,
-                    height: height,
-                    weight: weight,
-                    dob: dob,
-                    leaderboardID: leaderboardID,
-                }, { merge: true })
-                    .then(() => {
-                        uploadPic(uid);
-                        console.log("Document successfully updated!");
-                        jQuery('#homepage').toggle();
-                        jQuery("#profile_info").css("display", "none");
-                        jQuery('#settings').toggle();
-                    })
-                    .catch((error) => {
-                        // The document probably doesn't exist.
-                        console.error("Error updating document: ", error);
-                    });
-            } else {
-                // No user is signed in.
-                console.log("No user is signed in.");
-            }
-        });
 }
 
-async function give_user_badge(exerciseType) {
-    return new Promise((resolve, reject) => {
-        firebase.auth().onAuthStateChanged(async (user) => {
-            if (user) {
-                var uid = user.uid;
-                var weightlifting_count = (await db.collection("users").doc(uid).collection("exerciseCounter").doc("exercises").get()).get("weightlifting");
-                var yoga_count = (await db.collection("users").doc(uid).collection("exerciseCounter").doc("exercises").get()).get("yoga");
-                var running_count = (await db.collection("users").doc(uid).collection("exerciseCounter").doc("exercises").get()).get("running");
-                var walking_count = (await db.collection("users").doc(uid).collection("exerciseCounter").doc("exercises").get()).get("walking");
-                var cycling_count = (await db.collection("users").doc(uid).collection("exerciseCounter").doc("exercises").get()).get("cycling");
-                var badge = null;
+async function give_user_badge(exerciseType, currentUser) {
+    var weightlifting_count = (await currentUser.collection("exerciseCounter").doc("exercises").get()).get("weightlifting");
+    var yoga_count = (await currentUser.collection("exerciseCounter").doc("exercises").get()).get("yoga");
+    var running_count = (await currentUser.collection("exerciseCounter").doc("exercises").get()).get("running");
+    var walking_count = (await currentUser.collection("exerciseCounter").doc("exercises").get()).get("walking");
+    var cycling_count = (await currentUser.collection("exerciseCounter").doc("exercises").get()).get("cycling");
+    var badge = null;
+    console.log(walking_count)
+    if (exerciseType == "weightlifting") {
+        if (weightlifting_count >= 20) {
+            badge = "./images/weightliftingplatinum.svg";
+        } else if (weightlifting_count >= 15) {
+            badge = "./images/weightliftinggold.svg";
+        } else if (weightlifting_count >= 10) {
+            badge = "./images/weightliftingsilver.svg";
+        } else if (weightlifting_count >= 5) {
+            badge = "./images/weightliftingbronze.svg";
+        }
+    } else if (exerciseType == "yoga") {
+        if (yoga_count >= 20) {
+            badge = "./images/yogaplatinum.svg";
+        } else if (yoga_count >= 15) {
+            badge = "./images/yogagold.svg";
+        } else if (yoga_count >= 10) {
+            badge = "./images/yogasilver.svg";
+        } else if (yoga_count >= 5) {
+            badge = "./images/yogabronze.svg";
+        }
+    } else if (exerciseType == "running") {
+        if (running_count >= 20) {
+            badge = "./images/runningplatinum.svg";
+        } else if (running_count >= 15) {
+            badge = "./images/runninggold.svg";
+        } else if (running_count >= 10) {
+            badge = "./images/runningsilver.svg";
+        } else if (running_count >= 5) {
+            badge = "./images/runningbronze.svg";
+        }
+    } else if (exerciseType == "walking") {
+        if (walking_count >= 20) {
+            badge = "./images/walkingplatinum.svg";
+        } else if (walking_count >= 15) {
+            badge = "./images/walkinggold.svg";
+        } else if (walking_count >= 10) {
+            badge = "./images/walkingsilver.svg";
+        } else if (walking_count >= 5) {
+            badge = "./images/walkingbronze.svg";
+        }
+    } else if (exerciseType == "cycling") {
+        if (cycling_count >= 20) {
+            badge = "./images/cyclingplatinum.svg";
+        } else if (cycling_count >= 15) {
+            badge = "./images/cyclinggold.svg";
+        } else if (cycling_count >= 10) {
+            badge = "./images/cyclingsilver.svg";
+        } else if (cycling_count >= 5) {
+            badge = "./images/cyclingbronze.svg";
+        }
+    } else {
+        badge = null;
+    }
 
-                if (exerciseType == "weightlifting") {
-                    if (weightlifting_count >= 20) {
-                        badge = "./images/weightliftingplatinum.svg";
-                    } else if (weightlifting_count >= 15) {
-                        badge = "./images/weightliftinggold.svg";
-                    } else if (weightlifting_count >= 10) {
-                        badge = "./images/weightliftingsilver.svg";
-                    } else if (weightlifting_count >= 5) {
-                        badge = "./images/weightliftingbronze.svg";
-                    }
-                } else if (exerciseType == "yoga") {
-                    if (yoga_count >= 20) {
-                        badge = "./images/yogaplatinum.svg";
-                    } else if (yoga_count >= 15) {
-                        badge = "./images/yogagold.svg";
-                    } else if (yoga_count >= 10) {
-                        badge = "./images/yogasilver.svg";
-                    } else if (yoga_count >= 5) {
-                        badge = "./images/yogabronze.svg";
-                    }
-                } else if (exerciseType == "running") {
-                    if (running_count >= 20) {
-                        badge = "./images/runningplatinum.svg";
-                    } else if (running_count >= 15) {
-                        badge = "./images/runninggold.svg";
-                    } else if (running_count >= 10) {
-                        badge = "./images/runningsilver.svg";
-                    } else if (running_count >= 5) {
-                        badge = "./images/runningbronze.svg";
-                    }
-                } else if (exerciseType == "walking") {
-                    if (walking_count >= 20) {
-                        badge = "./images/walkingplatinum.svg";
-                    } else if (walking_count >= 15) {
-                        badge = "./images/walkinggold.svg";
-                    } else if (walking_count >= 10) {
-                        badge = "./images/walkingsilver.svg";
-                    } else if (walking_count >= 5) {
-                        badge = "./images/walkingbronze.svg";
-                    }
-                } else if (exerciseType == "cycling") {
-                    if (cycling_count >= 20) {
-                        badge = "./images/cyclingplatinum.svg";
-                    } else if (cycling_count >= 15) {
-                        badge = "./images/cyclinggold.svg";
-                    } else if (cycling_count >= 10) {
-                        badge = "./images/cyclingsilver.svg";
-                    } else if (cycling_count >= 5) {
-                        badge = "./images/cyclingbronze.svg";
-                    }
-                } else {
-                    badge = null;
-                }
+    return badge;
 
-                resolve(badge);
 
-                try {
-                    // Code to be executed
-                } catch (error) {
-                    // Error handling
-                    reject(error);
-                }
-            }
-        });
-    });
 }
 
 
 
-function get_calories_burned(exerciseType, startDate, endDate, exercise_intensity) {
+function get_calories_burned(exerciseType, startDate, endDate, exercise_intensity, currentUser) {
     const startTime = new Date(startDate);
     const endTime = new Date(endDate);
     const difference = (endTime - startTime) / (1000 * 60); // Difference in minutes
 
     return new Promise((resolve, reject) => {
-        firebase.auth().onAuthStateChanged((user) => {
-            if (user) {
-                // User is signed in, you can get the user ID.
-                const currentUser = db.collection("users").doc(user.uid); // Go to the Firestore document of the user
-                currentUser.get().then(userDoc => {
-                    if (userDoc.exists) {
-                        // Get the document data
-                        const userData = userDoc.data();
-                        const user_weight = userData.weight;
-                        let calories; // Define calories here so it's accessible throughout
-                        let met = 0; // Initialize met to avoid reference errors
+        currentUser.get().then(userDoc => {
+            const userData = userDoc.data();
+            const user_weight = userData.weight;
+            let calories; // Define calories here so it's accessible throughout
+            let met = 0; // Initialize met to avoid reference errors
 
-                        if (exerciseType === "Weightlifting" || exerciseType === "yoga") {
-                            calories = exercise_intensity * user_weight * (difference / 60);
-                        } else if (exerciseType === "running") {
-                            calories = exercise_intensity * user_weight;
-                        } else if (exerciseType === "walking") {
-                            calories = .354 * exercise_intensity * user_weight * (difference / 60);
-                        } else {
-                            const speed = exercise_intensity / (difference / 60); // Speed in your desired unit per hour
-                            if (speed <= 16.0) {
-                                met = 4;
-                            } else if (speed <= 19.0) {
-                                met = 6;
-                            } else if (speed > 19.0) {
-                                met = 8;
-                            }
-                            calories = met * user_weight * (difference / 60);
-                        }
-                        console.log(calories, met);
-                        resolve(calories); // Resolve the promise with calories
-                    } else {
-                        console.log("No such document!");
-                        reject("No such document!"); // Reject the promise if the document doesn't exist
-                    }
-                }).catch(error => {
-                    console.log("Error getting document:", error);
-                    reject(error); // Reject the promise on error
-                });
+            if (exerciseType === "Weightlifting" || exerciseType === "yoga") {
+                calories = exercise_intensity * user_weight * (difference / 60);
+            } else if (exerciseType === "running") {
+                calories = exercise_intensity * user_weight;
+            } else if (exerciseType === "walking") {
+                calories = .354 * exercise_intensity * user_weight * (difference / 60);
             } else {
-                // No user is signed in.
-                console.log("No user is signed in.");
-                reject("No user is signed in."); // Reject the promise if no user is signed in
+                const speed = exercise_intensity / (difference / 60); // Speed in your desired unit per hour
+                if (speed <= 16.0) {
+                    met = 4;
+                } else if (speed <= 19.0) {
+                    met = 6;
+                } else if (speed > 19.0) {
+                    met = 8;
+                }
+                calories = met * user_weight * (difference / 60);
             }
+            console.log(calories, met);
+            resolve(calories); // Resolve the promise with calories
+
+        }).catch(error => {
+            console.log("Error getting document:", error);
+            reject(error); // Reject the promise on error
         });
+
     });
 }
 
-function getActivityFeedInfo() {
+function getActivityFeedInfo(currentUser) {
     var badge_earned = null
     var todays_date = new Date();
     var firebaseDate = firebase.firestore.Timestamp.fromDate(todays_date)
-    firebase.auth().onAuthStateChanged(user => {
-        if (user) {
-            currentUser = db.collection("users").doc(user.uid);
-            currentUser.get().then(userDoc => {
-                db.collection('users').doc(user.uid).collection('workouts').orderBy('startDate', 'desc').get().then((querySnapshot) => {
-                    querySnapshot.forEach((doc) => {
-                        if (doc.data().earned != none) {
-                            badge_earned = doc.data().earned;
-                            if (badge_earned == null) {
+    currentUser.get().then(userDoc => {
+        currentUser.collection('workouts').orderBy('startDate', 'desc').get().then((querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+                if (doc.data().earned != none) {
+                    badge_earned = doc.data().earned;
+                    if (badge_earned == null) {
 
-                                badge_earned = ""
-                            }
-                            add_to_activity_feed = `<div class="flex flex-row mt-2 mx-4">
+                        badge_earned = ""
+                    }
+                    add_to_activity_feed = `<div class="flex flex-row mt-2 mx-4">
                             </div>
                             <div class="flex flex-row bg-[#fff6e5] rounded-xl mt-2 m-4">
                                 <img class="h-20 mx-5 self-center" src="images/profile_pic.svg" alt="">
@@ -251,8 +214,8 @@ function getActivityFeedInfo() {
                                     <p class="text-xs pb-4 pr-1" id="accomplishment-phrase"></p>
                                 </div>
                             </div>`
-                        } else {
-                            add_to_activity_feed = `<div class="flex flex-row bg-[#fff6e5] rounded-xl mt-2 m-4">
+                } else {
+                    add_to_activity_feed = `<div class="flex flex-row bg-[#fff6e5] rounded-xl mt-2 m-4">
                             <img class="h-20 mx-5 self-center" src="images/profile_pic.svg" alt="">
                             <div class="p-2 ">
                                 <div class="py-2">
@@ -261,77 +224,67 @@ function getActivityFeedInfo() {
                                 <p class="text-xs pb-4 pr-1" id="activity-feed-phrase"></p>
                             </div>
                         </div>`
-                        }
-                        jQuery('#activity_feed').append(add_to_activity_feed);
-                    })
-                })
+                }
+                jQuery('#activity_feed').append(add_to_activity_feed);
             })
-        }
+        })
     })
+
 }
 
-async function exercise_counter(exercise_type) {
-    firebase.auth().onAuthStateChanged((user) => {
-        if (user) {
-            var uid = user.uid;
-            // User is signed in, you can get the user ID.
-            db.collection("users").doc(uid).collection("exerciseCounter").doc("exercises").get().then((exerciseCounter) => {
-                console.log(exerciseCounter.exists)
-                if (exerciseCounter.exists) {
-                    if (exerciseCounter.data()[exercise_type] == undefined || exerciseCounter.data()[exercise_type] == null) {
-                        db.collection("users").doc(uid).collection("exerciseCounter").doc("exercises").set({
-                            [exercise_type]: 1,
-                        }, { merge: true })
-                            .then(() => {
-                                console.log("done");
-                            })
-                            .catch((error) => {
-                                console.error("Error updating document: ", error);
-                            });;
-                    }
-                    else {
-                        let exerciseCount = parseInt(exerciseCounter.data()[exercise_type]);
-                        db.collection("users").doc(uid).collection("exerciseCounter").doc("exercises").update({
-                            [exercise_type]: 1 + exerciseCount,
-                        });
-                    }
+async function exercise_counter(exercise_type, currentUser) {
+    currentUser.collection("exerciseCounter").doc("exercises").get().then((exerciseCounter) => {
+        console.log(exerciseCounter.exists)
+        if (exerciseCounter.exists) {
+            if (exerciseCounter.data()[exercise_type] == undefined || exerciseCounter.data()[exercise_type] == null) {
+                currentUser.collection("exerciseCounter").doc("exercises").set({
+                    [exercise_type]: 1,
+                }, { merge: true })
+                    .then(() => {
+                        console.log("done");
+                    })
+                    .catch((error) => {
+                        console.error("Error updating document: ", error);
+                    });;
+            }
+            else {
+                let exerciseCount = parseInt(exerciseCounter.data()[exercise_type]);
+                currentUser.collection("exerciseCounter").doc("exercises").update({
+                    [exercise_type]: 1 + exerciseCount,
+                });
+            }
 
-                }
-                else {
-                    db.collection("users").doc(uid).collection("exerciseCounter").doc("exercises").set({
-                        [exercise_type]: 1,
-                    }, { merge: true })
-                        .then(() => {
-                            console.log("done");
-                        })
-                        .catch((error) => {
-                            console.error("Error updating document: ", error);
-                        });;
-                }
-            }).then(() => {
-                console.log("done")
-            }).catch((error) => {
-                console.error("Error fetching documents: ", error);
-            });
-
-        } else {
-            // No user is signed in.
-            console.log("No user is signed in.");
         }
+        else {
+            currentUser.collection("exerciseCounter").doc("exercises").set({
+                [exercise_type]: 1,
+            }, { merge: true })
+                .then(() => {
+                    console.log("done");
+                })
+                .catch((error) => {
+                    console.error("Error updating document: ", error);
+                });;
+        }
+    }).then(() => {
+        console.log("done")
+    }).catch((error) => {
+        console.error("Error fetching documents: ", error);
     });
+
+
 }
 
 
-async function addWorkout() {
+async function addWorkout(currentUser) {
     startDate = jQuery("#startDate").val();
     endDate = jQuery("#endDate").val();
     exercise_type = jQuery("#exercises").val();
-    await exercise_counter(exercise_type);
+    await exercise_counter(exercise_type, currentUser);
     if (exercise_type != "" && startDate != "" && endDate != "" && jQuery(".intensity").val() != "") {
         console.log(exercise_type)
         if (exercise_type == "weightlifting") {
             intensity = jQuery("#intensity").val();
-            console.log(intensity)
             if (intensity == "Light") {
                 exercise_intensity = 3
             }
@@ -363,222 +316,186 @@ async function addWorkout() {
         }
         else {
             intensity = jQuery("#distance").val();
-            console.log(intensity)
             exercise_intensity = parseFloat(jQuery("#distance").val())
         }
-        let calories_burned = await get_calories_burned(exercise_type, startDate, endDate, exercise_intensity);
-        let badges_earned = await give_user_badge(exercise_type);
+        let calories_burned = await get_calories_burned(exercise_type, startDate, endDate, exercise_intensity, currentUser);
+        let badges_earned = await give_user_badge(exercise_type, currentUser);
         let start_Date = firebase.firestore.Timestamp.fromDate(new Date(startDate));
         let end_Date = firebase.firestore.Timestamp.fromDate(new Date(endDate));
 
 
-        console.log(calories_burned)
-        firebase.auth().onAuthStateChanged((user) => {
-            if (user) {
-                // User is signed in, you can get the user ID.
-                var uid = user.uid;
-                console.log(uid)
-                let history_doc = []; // Assuming this is initialized earlier in your code
-                let history_num;
-                db.collection("users").doc(uid).collection("workouts").get().then((querySnapshot) => {
-                    querySnapshot.forEach((doc) => {
-                        history_doc.push(doc.id);
-                    });
+        let history_doc = [];
+        let history_num;
+        currentUser.collection("workouts").get().then((querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+                history_doc.push(doc.id);
+            });
 
-                    // Now that we have the documents, we can work with them here
-                    console.log(history_doc.length);
-                    if (history_doc.length == 0) {
-                        history_num = "history1";
-                    } else {
-                        history_num = "history" + (history_doc.length + 1).toString();
-                    }
-                    console.log(history_num);
-                    db.collection("users").doc(uid).collection("workouts").doc(history_num).set({
-                        exerciseType: exercise_type,
-                        startDate: start_Date,
-                        endDate: end_Date,
-                        intensity: intensity,
-                        calories: calories_burned,
-                        earned: badges_earned,
-                    }, { merge: true })
-                        .then(() => {
-                            console.log("Document successfully updated!");
-                            jQuery('#homepage').toggle();
-                            jQuery("#add_workout").css("display", "none");
-                            jQuery('#activity_feed').toggle();
-                        })
-                        .catch((error) => {
-                            console.error("Error updating document: ", error);
-                        });
-                }).catch((error) => {
-                    console.error("Error fetching documents: ", error);
-                });
-
-
+            console.log(history_doc.length);
+            if (history_doc.length == 0) {
+                history_num = "history1";
             } else {
-                // No user is signed in.
-                console.log("No user is signed in.");
+                history_num = "history" + (history_doc.length + 1).toString();
             }
+            console.log(history_num);
+            currentUser.collection("workouts").doc(history_num).set({
+                exerciseType: exercise_type,
+                startDate: start_Date,
+                endDate: end_Date,
+                intensity: intensity,
+                calories: calories_burned,
+                earned: badges_earned,
+            }, { merge: true })
+                .then(() => {
+                    console.log("Document successfully updated!");
+                    jQuery('#homepage').toggle();
+                    jQuery("#add_workout").css("display", "none");
+                    jQuery('#activity_feed').toggle();
+                })
+                .catch((error) => {
+                    console.error("Error updating document: ", error);
+                });
+        }).catch((error) => {
+            console.error("Error fetching documents: ", error);
         });
+
+
+
     }
 }
 
 
-function insertNameAndPicFromFirestore() {
-    // Check if the user is logged in:
-    firebase.auth().onAuthStateChanged(user => {
-        if (user) {
-            console.log(user.uid); // Let's know who the logged-in user is by logging their UID
-            currentUser = db.collection("users").doc(user.uid); // Go to the Firestore document of the user
-            currentUser.get().then(userDoc => {
-                // Get the user name
-                let userName = userDoc.data().name;
-                let profilePicUrl = userDoc.data().image;
-                console.log(profilePicUrl)
-                // Get the download URL
-                if (profilePicUrl && profilePicUrl.startsWith('https://')) {
-                    // Set the user name and profile picture
-                    jQuery("#name-goes-here").text(userName);
-                    jQuery('#homepagepic').attr('src', profilePicUrl); // Set the src with the full URL
-                } else {
-                    console.error("Invalid URL for profile picture");
-                }
-            })
+function insertNameAndPicFromFirestore(currentUser) {
+    currentUser.get().then(userDoc => {
+        // Get the user name
+        let userName = userDoc.data().name;
+        let profilePicUrl = userDoc.data().image;
+        console.log(profilePicUrl)
+        // Get the download URL
+        if (profilePicUrl && profilePicUrl.startsWith('https://')) {
+            // Set the user name and profile picture
+            jQuery("#name-goes-here").text(userName);
+            jQuery('#homepagepic').attr('src', profilePicUrl); // Set the src with the full URL
         } else {
-            console.log("No user is logged in."); // Log a message when no user is logged in
+            console.error("Invalid URL for profile picture");
         }
-    });
+    })
+
 }
 
 
-function insertHomepageInfoFromFirestore() {
-    firebase.auth().onAuthStateChanged(user => {
-        if (user) {
-            // User is signed in, you can get the user ID.
-            var uid = user.uid;
-            console.log(uid);
-            var todays_date = new Date(new Date().toDateString());
-            var dates = [];
-            var current_date = todays_date.getDay();
-            var start_of_week = new Date(todays_date);
-            start_of_week.setDate(start_of_week.getDate() - current_date);
-            var number_of_workouts = 0;
-            var calories_in_a_week = 0;
+function insertHomepageInfoFromFirestore(currentUser) {
+    var todays_date = new Date(new Date().toDateString());
+    var dates = [];
+    var current_date = todays_date.getDay();
+    var start_of_week = new Date(todays_date);
+    start_of_week.setDate(start_of_week.getDate() - current_date);
+    var number_of_workouts = 0;
+    var calories_in_a_week = 0;
 
-            for (i = 0; i < 7; i++) {
-                var start_date = new Date(start_of_week);
-                start_date.setDate(start_date.getDate() + i);
-                dates.push(start_date.toDateString());
+    for (i = 0; i < 7; i++) {
+        var start_date = new Date(start_of_week);
+        start_date.setDate(start_date.getDate() + i);
+        dates.push(start_date.toDateString());
+    }
+
+    currentUser.collection("workouts").where('startDate', '>=', start_of_week).get().then((querySnapshot) => {
+        querySnapshot.forEach((doc) => {
+            var workoutDate = new Date(doc.data().startDate.toDate().toDateString());
+            if (dates.includes(workoutDate.toDateString())) {
+                calories_in_a_week += doc.data().calories;
+                console.log(calories_in_a_week)
             }
-
-            db.collection("users").doc(uid).collection("workouts").where('startDate', '>=', start_of_week).get().then((querySnapshot) => {
-                querySnapshot.forEach((doc) => {
-                    var workoutDate = new Date(doc.data().startDate.toDate().toDateString());
-                    if (dates.includes(workoutDate.toDateString())) {
-                        calories_in_a_week += doc.data().calories;
-                        console.log(calories_in_a_week)
-                    }
-                    jQuery("#calories-go-here").text(calories_in_a_week);
-                });
-            });
-
-            db.collection("users").doc(uid).collection("workouts").where('startDate', '>=', start_of_week).get().then((querySnapshot) => {
-                querySnapshot.forEach((doc) => {
-                    var workoutDate = new Date(doc.data().startDate.toDate().toDateString());
-                    if (dates.includes(workoutDate.toDateString())) {
-                        number_of_workouts++;
-                    }
-                    jQuery("#workout-number-goes-here").text(number_of_workouts);
-                });
-
-            });
-        }
+            jQuery("#calories-go-here").text(calories_in_a_week.toFixed(2));
+        });
     });
+
+    currentUser.collection("workouts").where('startDate', '>=', start_of_week).get().then((querySnapshot) => {
+        querySnapshot.forEach((doc) => {
+            var workoutDate = new Date(doc.data().startDate.toDate().toDateString());
+            if (dates.includes(workoutDate.toDateString())) {
+                number_of_workouts++;
+            }
+            jQuery("#workout-number-goes-here").text(number_of_workouts);
+        });
+
+    });
+
 }
 
-function insertTodaysWorkoutInfoFromFirestore() {
-    firebase.auth().onAuthStateChanged(user => {
-        if (user) {
-            var uid = user.uid;
-            console.log(uid);
-            var selected_date = new Date();
-            var selected_endDay = new Date();
-            selected_date.setHours(0, 0, 0, 0);
-            selected_endDay.setHours(23, 59, 59, 999);
-            var firebase_Startdate = firebase.firestore.Timestamp.fromDate(selected_date);
-            var firebase_Enddate = firebase.firestore.Timestamp.fromDate(selected_endDay);
-            var todays_time = 0;
-            var todays_calories = 0;
-            var todays_workouts = 0;
+function insertTodaysWorkoutInfoFromFirestore(currentUser) {
+    var selected_date = new Date();
+    var selected_endDay = new Date();
+    selected_date.setHours(0, 0, 0, 0);
+    selected_endDay.setHours(23, 59, 59, 999);
+    var firebase_Startdate = firebase.firestore.Timestamp.fromDate(selected_date);
+    var firebase_Enddate = firebase.firestore.Timestamp.fromDate(selected_endDay);
+    var todays_time = 0;
+    var todays_calories = 0;
+    var todays_workouts = 0;
 
-            db.collection("users").doc(user.uid).collection('workouts').where('startDate', '>=', firebase_Startdate).where('startDate', '<=', firebase_Enddate).get().then(recordedWorkout => {
-                recordedWorkout.forEach(workouts => {
-                    todays_time += (workouts.data().endDate - workouts.data().startDate) / 60;
-                    jQuery("#todays-time-goes-here").text(todays_time);
-                })
-            })
-
-            db.collection("users").doc(user.uid).collection('workouts').where('startDate', '>=', firebase_Startdate).where('startDate', '<=', firebase_Enddate).get().then(recordedWorkout => {
-                recordedWorkout.forEach(workouts => {
-                    todays_calories += workouts.data().calories
-                    jQuery("#todays-calories-go-here").text(todays_calories);
-                })
-            })
-
-            db.collection("users").doc(user.uid).collection('workouts').where('startDate', '>=', firebase_Startdate).where('startDate', '<=', firebase_Enddate).get().then(recordedWorkout => {
-                recordedWorkout.forEach(workouts => {
-                    todays_workouts++;
-                    jQuery("#todays-workouts-go-here").text(todays_workouts);
-                })
-            })
-
-        }
+    currentUser.collection('workouts').where('startDate', '>=', firebase_Startdate).where('startDate', '<=', firebase_Enddate).get().then(recordedWorkout => {
+        recordedWorkout.forEach(workouts => {
+            todays_time += (workouts.data().endDate - workouts.data().startDate) / 60;
+            jQuery("#todays-time-goes-here").text(todays_time);
+        })
     })
-}
 
-function insertYesterdaysWorkoutInfoFromFirestore() {
-    firebase.auth().onAuthStateChanged(user => {
-        if (user) {
-            var uid = user.uid;
-            console.log(uid);
-            var yesterdays_date = new Date();
-            var yesterdays_end = new Date();
-            yesterdays_date.setDate(yesterdays_date.getDate() - 1);
-            yesterdays_end.setDate(yesterdays_end.getDate() - 1)
-            yesterdays_date.setHours(0, 0, 0, 0);
-            yesterdays_end.setHours(23, 59, 59, 999);
-            var firebase_Startdate = firebase.firestore.Timestamp.fromDate(yesterdays_date);
-            var firebase_Enddate = firebase.firestore.Timestamp.fromDate(yesterdays_end);
-            var yesterdays_time = 0;
-            var yesterdays_calories = 0;
-            var yesterdays_workouts = 0;
-
-            db.collection("users").doc(user.uid).collection('workouts').where('startDate', '>=', firebase_Startdate).where('startDate', '<=', firebase_Enddate).get().then(recordedWorkout => {
-                recordedWorkout.forEach(workouts => {
-                    yesterdays_time += (workouts.data().endDate - workouts.data().startDate) / 60;
-                    jQuery("#yesterdays-time-goes-here").text(yesterdays_time);
-                })
-            })
-
-            db.collection("users").doc(user.uid).collection('workouts').where('startDate', '>=', firebase_Startdate).where('startDate', '<=', firebase_Enddate).get().then(recordedWorkout => {
-                recordedWorkout.forEach(workouts => {
-                    yesterdays_calories += workouts.data().calories
-                    jQuery("#yesterdays-calories-go-here").text(yesterdays_calories);
-                })
-            })
-
-            db.collection("users").doc(user.uid).collection('workouts').where('startDate', '>=', firebase_Startdate).where('startDate', '<=', firebase_Enddate).get().then(recordedWorkout => {
-                recordedWorkout.forEach(workouts => {
-                    yesterdays_workouts++;
-                    jQuery("#yesterdays-workouts-go-here").text(yesterdays_workouts);
-                })
-            })
-
-        }
+    currentUser.collection('workouts').where('startDate', '>=', firebase_Startdate).where('startDate', '<=', firebase_Enddate).get().then(recordedWorkout => {
+        recordedWorkout.forEach(workouts => {
+            todays_calories += workouts.data().calories
+            jQuery("#todays-calories-go-here").text(todays_calories.toFixed(2));
+        })
     })
+
+    currentUser.collection('workouts').where('startDate', '>=', firebase_Startdate).where('startDate', '<=', firebase_Enddate).get().then(recordedWorkout => {
+        recordedWorkout.forEach(workouts => {
+            todays_workouts++;
+            jQuery("#todays-workouts-go-here").text(todays_workouts);
+        })
+    })
+
+
 }
 
-async function get_leaderboard_data() {
+function insertYesterdaysWorkoutInfoFromFirestore(currentUser) {
+    var yesterdays_date = new Date();
+    var yesterdays_end = new Date();
+    yesterdays_date.setDate(yesterdays_date.getDate() - 1);
+    yesterdays_end.setDate(yesterdays_end.getDate() - 1)
+    yesterdays_date.setHours(0, 0, 0, 0);
+    yesterdays_end.setHours(23, 59, 59, 999);
+    var firebase_Startdate = firebase.firestore.Timestamp.fromDate(yesterdays_date);
+    var firebase_Enddate = firebase.firestore.Timestamp.fromDate(yesterdays_end);
+    var yesterdays_time = 0;
+    var yesterdays_calories = 0;
+    var yesterdays_workouts = 0;
+
+    currentUser.collection('workouts').where('startDate', '>=', firebase_Startdate).where('startDate', '<=', firebase_Enddate).get().then(recordedWorkout => {
+        recordedWorkout.forEach(workouts => {
+            yesterdays_time += (workouts.data().endDate - workouts.data().startDate) / 60;
+            jQuery("#yesterdays-time-goes-here").text(yesterdays_time);
+        })
+    })
+
+    currentUser.collection('workouts').where('startDate', '>=', firebase_Startdate).where('startDate', '<=', firebase_Enddate).get().then(recordedWorkout => {
+        recordedWorkout.forEach(workouts => {
+            yesterdays_calories += workouts.data().calories
+            jQuery("#yesterdays-calories-go-here").text(yesterdays_calories);
+        })
+    })
+
+    currentUser.collection('workouts').where('startDate', '>=', firebase_Startdate).where('startDate', '<=', firebase_Enddate).get().then(recordedWorkout => {
+        recordedWorkout.forEach(workouts => {
+            yesterdays_workouts++;
+            jQuery("#yesterdays-workouts-go-here").text(yesterdays_workouts);
+        })
+    })
+
+
+}
+
+async function get_leaderboard_data(currentUser) {
     $("#leaderboardInfo").empty();
     let weekValue = $('#week').val();
     console.log(weekValue);
@@ -594,134 +511,116 @@ async function get_leaderboard_data() {
     let leaderboardID = undefined;
     let friendIDs = [];
     let leaderboardinfo = {};
-    firebase.auth().onAuthStateChanged(user => {
-        if (user) {
-            currentUser = db.collection("users").doc(user.uid);
-            currentUser.get().then(userDoc => {
-                leaderboardID = userDoc.data().leaderboardID;
-                db.collection('users').where('leaderboardID', '==', leaderboardID)
-                    .get()
-                    .then((querySnapshot) => {
-                        querySnapshot.forEach((doc) => {
-                            friendIDs.push(doc.id)
-                        });
+    currentUser.get().then(userDoc => {
+        leaderboardID = userDoc.data().leaderboardID;
+        db.collection('users').where('leaderboardID', '==', leaderboardID)
+            .get()
+            .then((querySnapshot) => {
+                querySnapshot.forEach((doc) => {
+                    friendIDs.push(doc.id)
+                });
 
-                        let leaderboardpromises = friendIDs.map(function (id) {
-                            console.log(id);
-                            return db.collection("users").doc(id).get().then(userinfo => {
-                                let nickname = userinfo.data().nickname;
-                                leaderboardinfo[nickname] = {
-                                    "calories": 0, "badges": "", "profilepic": userinfo.data().image
-                                };
-                                return db.collection("users").doc(id).collection('workouts').where('startDate', '>=', firestoreStartDate).get().then(historydoc => {
-                                    historydoc.forEach(historydata => {
-                                        if (historydata.data().startDate <= firestoreEndDate) {
-                                            leaderboardinfo[nickname]["calories"] += parseInt(historydata.data().calories);
-                                            leaderboardinfo[nickname]["badges"] = historydata.data().earned + " ";
-                                        }
-                                    });
-                                });
+                let leaderboardpromises = friendIDs.map(function (id) {
+                    console.log(id);
+                    return db.collection("users").doc(id).get().then(userinfo => {
+                        let nickname = userinfo.data().nickname;
+                        leaderboardinfo[nickname] = {
+                            "calories": 0, "badges": "", "profilepic": userinfo.data().image
+                        };
+                        return db.collection("users").doc(id).collection('workouts').where('startDate', '>=', firestoreStartDate).get().then(historydoc => {
+                            historydoc.forEach(historydata => {
+                                if (historydata.data().startDate <= firestoreEndDate) {
+                                    leaderboardinfo[nickname]["calories"] += parseInt(historydata.data().calories);
+                                    leaderboardinfo[nickname]["badges"] = historydata.data().earned + " ";
+                                }
                             });
                         });
-                        Promise.all(leaderboardpromises).then(() => {
-                            for (let nickname in leaderboardinfo) {
-                                console.log(leaderboardinfo[nickname]["badges"])
-                                if (leaderboardinfo[nickname]["profilepic"] == undefined) {
-                                    leaderboardinfo[nickname]["profilepic"] = "./images/profile_pic.svg";
-                                }
-                                if (leaderboardinfo[nickname]["badges"] == null || leaderboardinfo[nickname]["badges"] == "") {
-                                    leaderboardinfo[nickname]["badges"] = `./images/empty.svg`;
-                                    console.log("this this")
-                                }
-                            }
-                            i = 0;
-                            let calories_in_order = (Object.keys(leaderboardinfo).map(nickname => leaderboardinfo[nickname]["calories"]));
-                            calories_in_order.sort(function (a, b) { return a - b }).reverse();
-                            console.log(calories_in_order);
-                            for (index = 0; index < calories_in_order.length; index++) {
-                                for (let nickname in leaderboardinfo) {
-                                    if (leaderboardinfo[nickname]["calories"] === calories_in_order[index]) {
-                                        text_to_inject = `<div class="grid grid-cols-4 text-center place-items-center bg-[#fff6e5] m-4 rounded-lg p-3">
+                    });
+                });
+                Promise.all(leaderboardpromises).then(() => {
+                    for (let nickname in leaderboardinfo) {
+                        if (leaderboardinfo[nickname]["profilepic"] == undefined) {
+                            leaderboardinfo[nickname]["profilepic"] = "./images/profile_pic.svg";
+                        }
+                        if (leaderboardinfo[nickname]["badges"] == null || leaderboardinfo[nickname]["badges"] == "") {
+                            leaderboardinfo[nickname]["badges"] = `./images/empty.svg`;
+                        }
+                    }
+                    i = 0;
+                    let calories_in_order = (Object.keys(leaderboardinfo).map(nickname => leaderboardinfo[nickname]["calories"]));
+                    calories_in_order.sort(function (a, b) { return a - b }).reverse();
+                    console.log(calories_in_order);
+                    for (index = 0; index < calories_in_order.length; index++) {
+                        for (let nickname in leaderboardinfo) {
+                            if (leaderboardinfo[nickname]["calories"] === calories_in_order[index]) {
+                                text_to_inject = `<div class="grid grid-cols-4 text-center place-items-center bg-[#fff6e5] m-4 rounded-lg p-3">
                                     <span class="grid grid-cols-2 text-center place-items-center"> <span>${i + 1}.</span><img class="w-8 h-8"
                                             src="${leaderboardinfo[nickname]["profilepic"]}" alt=""></span>
                                     <span>${nickname}</span>
                                     <span class="grid grid-cols-1 gap-2"><img class="w-6 h-6" src="${leaderboardinfo[nickname]["badges"]}" alt=""></span>
                                     <span>${leaderboardinfo[nickname]["calories"]}</span>
                                 </div>`
-                                        $('#leaderboardInfo').append(text_to_inject);
-                                        i++
-                                        delete leaderboardinfo[nickname];
-                                        break;
-                                    }
-
-                                }
+                                $('#leaderboardInfo').append(text_to_inject);
+                                i++
+                                delete leaderboardinfo[nickname];
+                                break;
                             }
 
-                        }).catch(error => {
-                            console.error("Error processing all user data: ", error);
-                        });
-                    })
-                    .catch((error) => {
-                        console.error("Error getting documents: ", error);
-                    });
+                        }
+                    }
+
+                }).catch(error => {
+                    console.error("Error processing all user data: ", error);
+                });
             })
-        } else {
-            console.log("No user is logged in.");
-        }
-    });
+            .catch((error) => {
+                console.error("Error getting documents: ", error);
+            });
+    })
+
 }
 
-function populateUserInfo() {
-    firebase.auth().onAuthStateChanged(user => {
-        // Check if user is signed in:
-        if (user) {
+function populateUserInfo(currentUser) {
 
-            //go to the correct user document by referencing to the user uid
-            currentUser = db.collection("users").doc(user.uid)
-            //get the document for current user.
-            currentUser.get()
-                .then(userDoc => {
-                    //get the data fields of the user
-                    let leaderboard_id = userDoc.data().leaderboardID;
-                    let nickname = userDoc.data().nickname;
-                    let dob = userDoc.data().dob;
-                    let email = userDoc.data().email;
-                    let height = userDoc.data().height;
-                    let weight = userDoc.data().weight;
-                    let gender = userDoc.data().gender;
-                    console.log(userDoc.data())
-                    //if the data fields are not empty, then write them in to the form.
-                    if (leaderboard_id != null) {
-                        $("#leaderboard_id").val(leaderboard_id);
-                    }
-                    if (nickname != null) {
-                        $("#nickname").val(nickname);
-                    }
-                    if (dob != null) {
-                        $("#dob").val(dob);
-                    }
-                    if (email != null) {
-                        $("#email").val(email);
-                    }
-                    if (height != null) {
-                        $("#height").val(height);
-                    }
-                    if (weight != null) {
-                        $("#weight").val(weight);
-                    }
-                    if (gender != null) {
-                        $("#gender").val(gender);
-                    }
+    currentUser.get()
+        .then(userDoc => {
+            //get the data fields of the user
+            let leaderboard_id = userDoc.data().leaderboardID;
+            let nickname = userDoc.data().nickname;
+            let dob = userDoc.data().dob;
+            let email = userDoc.data().email;
+            let height = userDoc.data().height;
+            let weight = userDoc.data().weight;
+            let gender = userDoc.data().gender;
+            console.log(userDoc.data())
+            //if the data fields are not empty, then write them in to the form.
+            if (leaderboard_id != null) {
+                $("#leaderboard_id").val(leaderboard_id);
+            }
+            if (nickname != null) {
+                $("#nickname").val(nickname);
+            }
+            if (dob != null) {
+                $("#dob").val(dob);
+            }
+            if (email != null) {
+                $("#email").val(email);
+            }
+            if (height != null) {
+                $("#height").val(height);
+            }
+            if (weight != null) {
+                $("#weight").val(weight);
+            }
+            if (gender != null) {
+                $("#gender").val(gender);
+            }
 
-                })
-        } else {
-            // No user is signed in.
-            console.log("No user is signed in");
-        }
-    });
+        })
+
 }
 
-function show_recorded_workouts() {
+function show_recorded_workouts(currentUser) {
     $("#recorded_workouts").empty();
     input_date = $('#selectedDate').val();
     selected_date = new Date(input_date);
@@ -731,15 +630,12 @@ function show_recorded_workouts() {
     selected_endDay.setHours(23, 59, 59, 999);
     firebase_Startdate = firebase.firestore.Timestamp.fromDate(selected_date);
     firebase_Enddate = firebase.firestore.Timestamp.fromDate(selected_endDay);
-    console.log(firebase_Enddate);
-    console.log(firebase_Startdate);
-    firebase.auth().onAuthStateChanged(user => {
-        if (user) {
-            db.collection("users").doc(user.uid).collection('workouts').where('startDate', '>=', firebase_Startdate).where('startDate', '<=', firebase_Enddate).get().then(recordedWorkout => {
-                recordedWorkout.forEach(workouts => {
-                    if (workouts.data().exerciseType == 'weightlifting' || workouts.data().exerciseType == 'yoga') {
-                        $("#recorded_workouts").append(
-                            `<div class="flex flex-row justify-evenly">
+
+    currentUser.collection('workouts').where('startDate', '>=', firebase_Startdate).where('startDate', '<=', firebase_Enddate).get().then(recordedWorkout => {
+        recordedWorkout.forEach(workouts => {
+            if (workouts.data().exerciseType == 'weightlifting' || workouts.data().exerciseType == 'yoga') {
+                $("#recorded_workouts").append(
+                    `<div class="flex flex-row justify-evenly">
                             <div class="flex flex-col justify-evenly  text-[16px] p-4">
                             <span>Workout: ${workouts.data().exerciseType}</span>
                             <span>Intensity: ${workouts.data().intensity}</span>
@@ -750,11 +646,11 @@ function show_recorded_workouts() {
                             </div>
                             <div></div>
                         </div>`
-                        );
-                    }
-                    else {
-                        $("#recorded_workouts").append(
-                            `<div class="flex flex-row justify-evenly">
+                );
+            }
+            else {
+                $("#recorded_workouts").append(
+                    `<div class="flex flex-row justify-evenly">
                             <div class="flex flex-col justify-evenly  text-[16px] p-4">
                             <span>Workout: ${workouts.data().exerciseType}</span>
                             <span>Km: ${workouts.data().intensity}</span>
@@ -765,16 +661,15 @@ function show_recorded_workouts() {
                             </div>
                             <div></div>
                         </div>`
-                        );
-                    }
-                })
-            });
-        }
+                );
+            }
+        })
     });
+
 
 }
 
-function getActivityFeedInfo() {
+function getActivityFeedInfo(currentUser) {
     var badge_earned = null
     var leaderboardID = undefined;
     var friendIDs = [];
@@ -813,8 +708,8 @@ function getActivityFeedInfo() {
                                 <p class="text-xs pb-4 pr-1" id="activity-feed-phrase">You just spent ${workout_time} minutes ${exercise_type}!</p>
                             </div>
                         </div>`
-                            } else {
-                                     add_to_activity_feed =  `<div class="flex flex-row mt-2 mx-4">
+                } else {
+                    add_to_activity_feed = `<div class="flex flex-row mt-2 mx-4">
                             </div>
                             <div class="flex flex-row bg-[#fff6e5] rounded-xl mt-2 m-4">
                                 <img class="h-20 mx-5 self-center rounded-full w-20" src=${profilepic}" alt="">
@@ -829,17 +724,22 @@ function getActivityFeedInfo() {
                             }
                         jQuery('#activity_feed').append(add_to_activity_feed);
 
-                    })
-                })
             })
-        }
+        })
     })
+
 }
 
 
 function info_handler() {
 
     jQuery('#info-box').slideToggle()
+}
+
+
+function aboutUs_handler() {
+
+    jQuery('#aboutUs-box').slideToggle()
 }
 
 function redirect_to_login() {
@@ -961,8 +861,8 @@ function filter_handler() {
     }
 }
 
-function profile_info_handler() {
-    populateUserInfo();
+function profile_info_handler(currentUser) {
+    populateUserInfo(currentUser);
     if (jQuery('#profile_info').css("display") == "none") {
         jQuery('#profile_info').toggle()
         jQuery('#add_workout').css("display", "none");
@@ -976,9 +876,12 @@ function profile_info_handler() {
 function leaderboard_current_date() {
     const currentDate = new Date();
     const year = currentDate.getFullYear();
-    const weekNumber = Math.ceil(((currentDate - new Date(currentDate.getFullYear(), 0, 1)) / 86400000 + new Date(currentDate.getFullYear(), 0, 1).getDay() + 1) / 7);
+    const startOfYear = new Date(year, 0, 1);
+    const days = Math.floor((currentDate - startOfYear) / 86400000);
+    const weekNumber = Math.ceil((days + startOfYear.getDay() + 1) / 7);
     const formattedWeekNumber = weekNumber.toString().padStart(2, '0');
     $('#week').val(`${year}-W${formattedWeekNumber}`);
+
 }
 
 function show_workout_page_date() {
@@ -987,19 +890,9 @@ function show_workout_page_date() {
 }
 
 function setup() {
-    homepage_handler();
-    leaderboard_current_date();
-    show_workout_page_date();
-    show_recorded_workouts();
-    $('#week').change(get_leaderboard_data)
-    $('#selectedDate').change(show_recorded_workouts);
-    get_leaderboard_data();
-    insertNameAndPicFromFirestore();
-    insertHomepageInfoFromFirestore();
-    insertTodaysWorkoutInfoFromFirestore();
-    insertYesterdaysWorkoutInfoFromFirestore();
-    getActivityFeedInfo();
+
     jQuery('#info').click(info_handler);
+    jQuery('#aboutUs').click(aboutUs_handler)
     jQuery('#homepage_button').click(homepage_handler);
     jQuery('#leaderboard_button').click(leaderboard_handler);
     jQuery('#activity_button').click(activity_handler);
@@ -1009,7 +902,6 @@ function setup() {
     jQuery('#exercises').change(additional_information_handler);// fix this
     jQuery('#filter_button').click(filter_handler);
     jQuery('#cancel_button').click(activity_handler);
-    jQuery('#profile_info_button').click(profile_info_handler);
     // jQuery('#save_profile_info_button').click(settings_handler);
     jQuery('#cancel_profile_info_button').click(settings_handler);
     //jQuery('#save_workout_button').click(homepage_handler);
@@ -1019,7 +911,7 @@ function setup() {
     $('#login').click(redirect_to_login);
     $('#signup').click(redirect_to_login);
     var fileInput = $('#file-input');
-
+    let profilepic = undefined
     // Pointer #2: Select the image element
     var image = $('#pppreview');
 
@@ -1027,12 +919,12 @@ function setup() {
     fileInput.change(function (e) {
         // Retrieve the selected file
         ImageFile = e.target.files[0];
-        console.log("File selected:", imageFile); // Debugging
+        console.log("File selected:", ImageFile); // Debugging
 
         // Check if a file was selected
-        if (imageFile) {
+        if (ImageFile) {
             // Create a blob URL for the selected image
-            var blob = URL.createObjectURL(imageFile);
+            var blob = URL.createObjectURL(ImageFile);
             console.log("Blob URL:", blob); // Debugging
 
             // Display the image by setting the src attribute
@@ -1050,14 +942,35 @@ function setup() {
                 if (userDoc.exists) {
                     // Get the document data
                     const userData = userDoc.data();
-                    // Check if the 'nickname' field exists
                     if (userData.nickname === undefined || userData.nickname === null) {
                         jQuery('#homepage, #leaderboard, #activity_feed, #datepicker, #settings').css("display", "none");
                         jQuery("#profile_info").css("display", "flex");
                     }
+                    if (userData.image === undefined || userData.image === null) {
+                        profilepic = "./images/profile_pic.svg";
+                    }
+                    else {
+                        profilepic = userData.image;
+                    }
                 } else {
                     console.log("No such document!");
                 }
+                image.attr('src', profilepic);
+                jQuery("#save_workout_button").click(function () { addWorkout(currentUser) });
+                jQuery("#save_profile_info_button").click(function () { updateInfo(currentUser) });
+                jQuery('#profile_info_button').click(function () { profile_info_handler(currentUser) });
+                homepage_handler(currentUser);
+                leaderboard_current_date(currentUser);
+                show_workout_page_date(currentUser);
+                show_recorded_workouts(currentUser);
+                $('#week').change(function () { get_leaderboard_data(currentUser) })
+                $('#selectedDate').change(function () { show_recorded_workouts(currentUser) });
+                get_leaderboard_data(currentUser);
+                insertNameAndPicFromFirestore(currentUser);
+                insertHomepageInfoFromFirestore(currentUser);
+                insertTodaysWorkoutInfoFromFirestore(currentUser);
+                insertYesterdaysWorkoutInfoFromFirestore(currentUser);
+                getActivityFeedInfo(currentUser);
             }).catch(error => {
                 console.log("Error getting document:", error);
             });
@@ -1068,9 +981,6 @@ function setup() {
         }
     });
 
-
-    jQuery("#save_workout_button").click(addWorkout);
-    jQuery("#save_profile_info_button").click(updateInfo);
 }
 
 jQuery(document).ready(setup);
