@@ -763,7 +763,7 @@ function getActivityFeedInfo(currentUser) {
                     Promise.all(activityfeedpromises).then(() => {
                         activityfeedinfo.sort((a, b)=> b.startdate - a.startdate);
                         for (let i = 0; i < activityfeedinfo.length; i++)
-                {        if (exercise_type == "yoga") {
+                        {if (exercise_type == "yoga") {
                                         exercise_type = "doing yoga";
                                     }
                                     if (badge_earned == null) {
