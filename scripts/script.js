@@ -1,42 +1,25 @@
 var ImageFile;
 
-//------------------------------------------------
-// So, a new post document has just been added
-// and it contains a bunch of fields.
-// We want to store the image associated with this post,
-// such that the image name is the postid (guaranteed unique).
-// 
-// This function is called AFTER the post has been created, 
-// and we know the post's document id.
-//------------------------------------------------
 function uploadPic(postDocID) {
     console.log("inside uploadPic " + postDocID);
     console.log(ImageFile)
     var storageRef = storage.ref("images/" + postDocID + ".jpg");
 
-    storageRef.put(ImageFile)   //global variable ImageFile
+    storageRef.put(ImageFile)
 
-        // AFTER .put() is done
         .then(function () {
             console.log('2. Uploaded to Cloud Storage.');
             storageRef.getDownloadURL()
 
-                // AFTER .getDownloadURL is done
-                .then(function (url) { // Get URL of the uploaded file
+                .then(function (url) {
                     console.log("3. Got the download URL.");
 
-                    // Now that the image is on Storage, we can go back to the
-                    // post document, and update it with an "image" field
-                    // that contains the url of where the picture is stored.
                     db.collection("users").doc(postDocID).set({
-                        "image": url // Save the URL into users collection
+                        "image": url
                     }, { merge: true })
-                        // AFTER .update is done
                         .then(function () {
                             console.log('4. Added pic URL to Firestore.');
-                            // One last thing to do:
-                            // save this postID into an array for the OWNER
-                            // so we can show "my posts" in the future
+
                         })
                 })
         })
@@ -90,7 +73,6 @@ async function give_user_badge(exerciseType, currentUser) {
     var cycling_count = (await currentUser.collection("exerciseCounter").doc("exercises").get()).get("cycling");
     var badge = null;
     var badge_name = null;
-    console.log(walking_count)
     if (exerciseType == "weightlifting") {
         if (weightlifting_count >= 20) {
             badge = "./images/weightliftingplatinum.svg";
@@ -202,7 +184,6 @@ function get_calories_burned(exerciseType, startDate, endDate, exercise_intensit
                 }
                 calories = met * user_weight * (difference / 60);
             }
-            console.log(calories, met);
             resolve(calories); // Resolve the promise with calories
 
         }).catch(error => {
@@ -257,7 +238,6 @@ function getActivityFeedInfo(currentUser) {
 
 async function exercise_counter(exercise_type, currentUser) {
     currentUser.collection("exerciseCounter").doc("exercises").get().then((exerciseCounter) => {
-        console.log(exerciseCounter.exists)
         if (exerciseCounter.exists) {
             if (exerciseCounter.data()[exercise_type] == undefined || exerciseCounter.data()[exercise_type] == null) {
                 currentUser.collection("exerciseCounter").doc("exercises").set({
@@ -305,7 +285,6 @@ async function addWorkout(currentUser) {
     exercise_type = jQuery("#exercises").val();
     await exercise_counter(exercise_type, currentUser);
     if (exercise_type != "" && startDate != "" && endDate != "" && jQuery(".intensity").val() != "") {
-        console.log(exercise_type)
         if (exercise_type == "weightlifting") {
             intensity = jQuery("#intensity").val();
             if (intensity == "Light") {
@@ -323,7 +302,6 @@ async function addWorkout(currentUser) {
         }
         else if (exercise_type == "yoga") {
             intensity = jQuery("#intensity").val();
-            console.log(intensity)
             if (intensity == "Light") {
                 exercise_intensity = 2.5
             }
@@ -411,7 +389,7 @@ function insertNameAndPicFromFirestore(currentUser) {
 function insertHomepageInfoFromFirestore(currentUser) {
     var todays_date = new Date(new Date().toDateString());
     var dates = [];
-    
+
     var last_weeks_dates = [];
     var current_date = todays_date.getDay();
     var start_of_week = new Date(todays_date);
@@ -753,13 +731,12 @@ function getActivityFeedInfo(currentUser) {
                             workout_time = (doc.data().endDate - doc.data().startDate) / 60;
                             exercise_type = doc.data().exerciseType;
 
-                                    activityfeedinfo.push({
-                                        "startdate": doc.data().startDate, "calories": doc.data().calories, "username": username, "exercise_type": doc.data().exerciseType, "profilepic": profilepic, "nickname": nickname, "workouttime": workout_time, "badgesearned": badge_earned, "badge_name": badge_name
-                                    })
-                                });
-                            });
+                            activityfeedinfo.push({
+                                "startdate": doc.data().startDate, "calories": doc.data().calories, "username": username, "exercise_type": doc.data().exerciseType, "profilepic": profilepic, "nickname": nickname, "workouttime": workout_time, "badgesearned": badge_earned, "badge_name": badge_name
+                            })
                         });
                     });
+<<<<<<< HEAD
                     Promise.all(activityfeedpromises).then(() => {
                         activityfeedinfo.sort((a, b)=> b.startdate - a.startdate);
                         for (let i = 0; i < activityfeedinfo.length; i++)
@@ -769,6 +746,19 @@ function getActivityFeedInfo(currentUser) {
                                     if (badge_earned == null) {
                                         badge_earned = "";
                                         add_to_activity_feed = `<div class="flex flex-row bg-[#fff6e5] rounded-xl mt-2 m-4 normal-activity">
+=======
+                });
+            });
+            Promise.all(activityfeedpromises).then(() => {
+                activityfeedinfo.sort((a, b) => b.startdate - a.startdate);
+                for (let i = 0; i < activityfeedinfo.length; i++) {
+                    if (exercise_type == "yoga") {
+                        exercise_type = "doing yoga";
+                    }
+                    if (badge_earned == null) {
+                        badge_earned = "";
+                        add_to_activity_feed = `<div class="flex flex-row bg-[#fff6e5] rounded-xl mt-2 m-4 normal-activity">
+>>>>>>> 26cb6eec038b373e5b0c144e83baff416b7f227e
                                             <img class="h-20 mx-5 self-center rounded-full w-20" src="${activityfeedinfo[i]["profilepic"]}" alt="">
                                             <div class="p-2 ">
                                                 <div class="py-2">
@@ -777,8 +767,8 @@ function getActivityFeedInfo(currentUser) {
                                                 <p class="text-xs pb-4 pr-1" id="activity-feed-phrase">${activityfeedinfo[i]["username"]} spent ${activityfeedinfo[i]["workouttime"]} minutes ${activityfeedinfo[i]["exercise_type"]}!</p>
                                             </div>
                                         </div>`;
-                                    } else {
-                                        add_to_activity_feed = `<div class="flex flex-row mt-2 mx-4 ">
+                    } else {
+                        add_to_activity_feed = `<div class="flex flex-row mt-2 mx-4 ">
                                         </div>
                                         <div class="flex flex-row bg-[#fff6e5] rounded-xl mt-2 m-4 accomplishment-activity">
                                             <img class="h-20 mx-5 self-center rounded-full w-20" src=${activityfeedinfo[i]["profilepic"]}" alt="">
