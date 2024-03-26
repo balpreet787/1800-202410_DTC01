@@ -54,7 +54,7 @@ async function updateInfo(currentUser) {
                 jQuery('#homepage').toggle();
                 jQuery("#profile_info").css("display", "none");
                 jQuery('#settings').toggle();
-                jQuery('#confirmProfileUpdate').css("display", "flex").delay(3000).hide(0);
+                location.reload();
 
             })
             .catch((error) => {

@@ -14,31 +14,29 @@ function show_recorded_workouts(currentUser) {
         recordedWorkout.forEach(workouts => {
             if (workouts.data().exerciseType == 'weightlifting' || workouts.data().exerciseType == 'yoga') {
                 $("#recorded_workouts").append(
-                    `<div class="flex flex-row justify-evenly">
-                            <div class="flex flex-col justify-evenly  text-[16px] p-4">
-                            <span>Workout: ${workouts.data().exerciseType}</span>
-                            <span>Intensity: ${workouts.data().intensity}</span>
+                    `<div class="flex flex-row justify-evenly bg-[#fff6e5]">
+                            <div class="flex flex-col justify-evenly bg-[#fff6e5] text-[16px] p-4">
+                            <span><b>Workout:</b> ${workouts.data().exerciseType}</span>
+                            <span><b>Intensity:</b> ${workouts.data().intensity}</span>
                             </div>
-                            <div class="flex flex-col justify-evenly  text-[16px] p-4">
-                            <span>Calories burned: ${workouts.data().calories}</span>
-                            <span>Time: ${(workouts.data().endDate - workouts.data().startDate) / 60} mins </span>
+                            <div class="flex flex-col justify-evenly bg-[#fff6e5] text-[16px] p-4">
+                            <span><b>Calories burned:</b> ${workouts.data().calories}</span>
+                            <span><b>Time:</b> ${(workouts.data().endDate - workouts.data().startDate) / 60} mins </span>
                             </div>
-                            <div></div>
                         </div>`
                 );
             }
             else {
                 $("#recorded_workouts").append(
-                    `<div class="flex flex-row justify-evenly">
-                            <div class="flex flex-col justify-evenly  text-[16px] p-4">
-                            <span>Workout: ${workouts.data().exerciseType}</span>
-                            <span>Km: ${workouts.data().intensity}</span>
+                    `<div class="flex flex-row justify-evenly bg-[#fff6e5]">
+                            <div class="flex flex-col justify-evenly bg-[#fff6e5] text-[16px] p-4">
+                            <span><b>Workout:</b> ${workouts.data().exerciseType}</span>
+                            <span><b>Km:</b> ${workouts.data().intensity}</span>
                             </div>
-                            <div class="flex flex-col justify-evenly  text-[16px] p-4">
-                            <span>Calories burned: ${workouts.data().calories}</span>
-                            <span>Time: ${(workouts.data().endDate - workouts.data().startDate) / 60} mins </span>
+                            <div class="flex flex-col justify-evenly bg-[#fff6e5] text-[16px] p-4">
+                            <span><b>Calories burned:</b> ${workouts.data().calories}</span>
+                            <span><b>Time:</b> ${(workouts.data().endDate - workouts.data().startDate) / 60} mins </span>
                             </div>
-                            <div></div>
                         </div>`
                 );
             }
@@ -48,7 +46,7 @@ function show_recorded_workouts(currentUser) {
 
 function calendar_handler() {
     if (jQuery('#datepicker').css("display") == "none") {
-        jQuery('#datepicker').toggle()
+        jQuery('#datepicker').css("display", "flex")
         jQuery('#homepage').css("display", "none");
         jQuery('#leaderboard').css("display", "none");
         jQuery('#activity_feed').css("display", "none");
@@ -61,5 +59,6 @@ function calendar_handler() {
 
 function show_workout_page_date() {
     const currentDate = new Date();
-    $('#selectedDate').val(currentDate.toISOString().split('T')[0]);
+    const localDate = currentDate.toLocaleDateString('en-CA'); // 'en-CA' uses the YYYY-MM-DD format
+    $('#selectedDate').val(localDate);
 }

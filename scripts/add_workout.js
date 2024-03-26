@@ -241,7 +241,7 @@ async function addWorkout(currentUser) {
                     console.log("Document successfully updated!");
                     jQuery('#homepage').toggle();
                     jQuery("#add_workout").css("display", "none");
-                    jQuery('#confirmAddWorkout').css("display", "flex").delay(3000).hide(0);
+                    location.reload();
                 })
                 .catch((error) => {
                     console.error("Error updating document: ", error);
@@ -249,10 +249,9 @@ async function addWorkout(currentUser) {
         }).catch((error) => {
             console.error("Error fetching documents: ", error);
         });
-
-
-
     }
+
+
 }
 
 function add_workout_handler() {
@@ -264,6 +263,7 @@ function add_workout_handler() {
         jQuery('#settings').css("display", "none");
         jQuery('#filter_activity').css("display", "none");
         jQuery('#profile_info').css("display", "none");
+        jQuery('#datepicker').css("display", "none");
     }
 }
 
