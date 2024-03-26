@@ -73,11 +73,12 @@ function getActivityFeedInfo(currentUser) {
             });
             Promise.all(activityfeedpromises).then(() => {
                 activityfeedinfo.sort((a, b) => b.startdate - a.startdate);
+                let badge_earned = null
                 for (let i = 0; i < activityfeedinfo.length; i++) {
                     if (activityfeedinfo[i]["exercise_type"] == "yoga") {
                         activityfeedinfo[i]["exercise_type"] = "doing yoga";
                     }
-                    if (activityfeedinfo[i]["badgesearned"] == null) {
+                    if (activityfeedinfo[i]["badgesearned"] == badge_earned) {
                         activityfeedinfo[i]["badgesearned"] = "";
                         add_to_activity_feed = `<div class="flex flex-row bg-[#fff6e5] rounded-xl mt-2 m-4 normal-activity">
                                             <img class="h-20 mx-5 self-center rounded-full w-20" src="${activityfeedinfo[i]["profilepic"]}" alt="">
@@ -89,6 +90,7 @@ function getActivityFeedInfo(currentUser) {
                                             </div>
                                         </div>`
                     } else {
+                        badge_earned = activityfeedinfo[i]["badgesearned"]
                         add_to_activity_feed = `<div class="flex flex-row mt-2 mx-4 ">
                                         </div>
                                         <div class="flex flex-row bg-[#fff6e5] rounded-xl mt-2 m-4 accomplishment-activity">
