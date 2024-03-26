@@ -7,7 +7,6 @@ function getActivityFeedInfo(currentUser) {
                 if (doc.data().earned != none) {
                     badge_earned = doc.data().earned;
                     if (badge_earned == null) {
-
                         badge_earned = ""
                     }
                     add_to_activity_feed = `<div class="flex flex-row mt-2 mx-4">
@@ -75,11 +74,11 @@ function getActivityFeedInfo(currentUser) {
             Promise.all(activityfeedpromises).then(() => {
                 activityfeedinfo.sort((a, b) => b.startdate - a.startdate);
                 for (let i = 0; i < activityfeedinfo.length; i++) {
-                    if (exercise_type == "yoga") {
-                        exercise_type = "doing yoga";
+                    if (activityfeedinfo[i]["exercise_type"] == "yoga") {
+                        activityfeedinfo[i]["exercise_type"] = "doing yoga";
                     }
-                    if (badge_earned == null) {
-                        badge_earned = "";
+                    if (activityfeedinfo[i]["badgesearned"] == null) {
+                        activityfeedinfo[i]["badgesearned"] = "";
                         add_to_activity_feed = `<div class="flex flex-row bg-[#fff6e5] rounded-xl mt-2 m-4 normal-activity">
                                             <img class="h-20 mx-5 self-center rounded-full w-20" src="${activityfeedinfo[i]["profilepic"]}" alt="">
                                             <div class="p-2 ">
@@ -88,7 +87,7 @@ function getActivityFeedInfo(currentUser) {
                                                 </div>
                                                 <p class="text-xs pb-4 pr-1" id="activity-feed-phrase">${activityfeedinfo[i]["username"]} spent ${activityfeedinfo[i]["workouttime"]} minutes ${activityfeedinfo[i]["exercise_type"]}!</p>
                                             </div>
-                                        </div>`;
+                                        </div>`
                     } else {
                         add_to_activity_feed = `<div class="flex flex-row mt-2 mx-4 ">
                                         </div>
@@ -97,9 +96,9 @@ function getActivityFeedInfo(currentUser) {
                                             <div class="p-2 ">
                                                 <div class="py-2 flex flex-row justify-between">
                                                     <h1 class="font-semibold inline text-lg"><span id="activity-username">${activityfeedinfo[i]["nickname"]}</span></h1>
-                                                    <img  class="h-6 pr-3 inline ml-auto" src="${activityfeedinfo[i]["badgesearned"]}" alt="">
+                                                    <img class="h-6 pr-3 inline w-full justify-self-end" src="${activityfeedinfo[i]["badgesearned"]}" alt="">
                                                 </div>
-                                                <p class="text-xs pb-4 pr-1" id="accomplishment-phrase">${activityfeedinfo[i]["username"]} spent ${activityfeedinfo[i]["workouttime"]} minutes ${activityfeedinfo[i]["exercise_type"]} and earned a ${activityfeedinfo[i]["badge_name"]}!</p>
+                                                <p class="text-xs pb-4 pr-1 ml-auto" id="accomplishment-phrase">${activityfeedinfo[i]["username"]} spent ${activityfeedinfo[i]["workouttime"]} minutes ${activityfeedinfo[i]["exercise_type"]} and earned a ${activityfeedinfo[i]["badge_name"]}!</p>
                                             </div>
                                         </div>`
                     }
@@ -115,16 +114,17 @@ function getActivityFeedInfo(currentUser) {
 
 function filterActivityFeed() {
     var selected_value = $("input[name='filter-activity-feed']:checked").val();
-    console.log("yoooooooooooooooooo")
     if (selected_value == "accomplishment") {
-        jQuery(".accomplishment-activity").css("display", "grid");
+        jQuery(".accomplishment-activity").css("display", "flex");
         jQuery(".normal-activity").css("display", "none");
-        jQuery('#activity_feed').css("display", "grid");
+        jQuery('#activity_feed').css("display", "flex");
+        jQuery('#activity_feed').css("flex-direction", "column");
         jQuery("#filter_activity").css("display", "none")
     } else {
         jQuery(".accomplishment-activity").css("display", "none");
-        jQuery(".normal-activity").css("display", "grid");
-        jQuery('#activity_feed').css("display", "grid");
+        jQuery(".normal-activity").css("display", "flex");
+        jQuery('#activity_feed').css("display", "flex");
+        jQuery('#activity_feed').css("flex-direction", "column");
         jQuery("#filter_activity").css("display", "none")
     }
 }
