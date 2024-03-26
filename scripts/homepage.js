@@ -10,16 +10,15 @@ function insertNameAndPicFromFirestore(currentUser) {
             jQuery("#name-goes-here").text(userName);
             jQuery('#homepagepic').attr('src', profilePicUrl); // Set the src with the full URL
         } else {
-            console.error("Invalid URL for profile picture");
+            jQuery('#homepagepic').attr('src', './images/profile_pic.svg');
         }
     })
-
 }
 
 function insertHomepageInfoFromFirestore(currentUser) {
     var todays_date = new Date(new Date().toDateString());
     var dates = [];
-
+    console.log(currentUser)
     var last_weeks_dates = [];
     var current_date = todays_date.getDay();
     var start_of_week = new Date(todays_date);
