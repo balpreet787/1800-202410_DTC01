@@ -239,8 +239,6 @@ async function addWorkout(currentUser) {
             }, { merge: true })
                 .then(() => {
                     console.log("Document successfully updated!");
-                    jQuery('#homepage').toggle();
-                    jQuery("#add_workout").css("display", "none");
                     location.reload();
                 })
                 .catch((error) => {

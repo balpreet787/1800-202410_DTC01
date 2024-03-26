@@ -34,7 +34,7 @@ async function get_leaderboard_data(currentUser) {
                             historydoc.forEach(historydata => {
                                 if (historydata.data().startDate <= firestoreEndDate) {
                                     leaderboardinfo[nickname]["calories"] += parseInt(historydata.data().calories);
-                                    leaderboardinfo[nickname]["badges"] = historydata.data().earned + " ";
+                                    leaderboardinfo[nickname]["badges"] = historydata.data().earned;
                                 }
                             });
                         });
@@ -46,6 +46,7 @@ async function get_leaderboard_data(currentUser) {
                             leaderboardinfo[nickname]["profilepic"] = "./images/profile_pic.svg";
                         }
                         if (leaderboardinfo[nickname]["badges"] == null || leaderboardinfo[nickname]["badges"] == "") {
+                            console.log(leaderboardinfo[nickname])
                             leaderboardinfo[nickname]["badges"] = `./images/empty.svg`;
                         }
                     }
@@ -55,6 +56,7 @@ async function get_leaderboard_data(currentUser) {
                     console.log(calories_in_order);
                     for (index = 0; index < calories_in_order.length; index++) {
                         for (let nickname in leaderboardinfo) {
+                            console.log(leaderboardinfo[nickname]["badges"])
                             if (leaderboardinfo[nickname]["calories"] === calories_in_order[index]) {
                                 text_to_inject = `<div class="grid grid-cols-4 text-center place-items-center bg-[#fff6e5] m-4 rounded-lg p-3">
                                     <span class="grid grid-cols-2 text-center place-items-center"> <span>${i + 1}.</span><img class="w-8 h-8"
