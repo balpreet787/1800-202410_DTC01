@@ -169,6 +169,9 @@ async function exercise_counter(exercise_type, currentUser) {
 
 
 async function addWorkout(currentUser) {
+    jQuery('#homepage').toggle();
+    jQuery("#add_workout").css("display", "none");
+    jQuery('#confirmAddWorkout').css("display", "flex").delay(3000).hide(0);
     startDate = jQuery("#startDate").val();
     endDate = jQuery("#endDate").val();
     exercise_type = jQuery("#exercises").val();
@@ -216,6 +219,7 @@ async function addWorkout(currentUser) {
 
         let history_doc = [];
         let history_num;
+
         currentUser.collection("workouts").get().then((querySnapshot) => {
             querySnapshot.forEach((doc) => {
                 history_doc.push(doc.id);

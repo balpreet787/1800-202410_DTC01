@@ -34,7 +34,9 @@ async function get_leaderboard_data(currentUser) {
                             historydoc.forEach(historydata => {
                                 if (historydata.data().startDate <= firestoreEndDate) {
                                     leaderboardinfo[nickname]["calories"] += parseInt(historydata.data().calories);
-                                    leaderboardinfo[nickname]["badges"] = historydata.data().earned;
+                                    if (historydata.data().earned != null) {
+                                        leaderboardinfo[nickname]["badges"] = historydata.data().earned;
+                                    }
                                 }
                             });
                         });

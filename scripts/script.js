@@ -31,7 +31,11 @@ function uploadPic(postDocID) {
 
 
 async function updateInfo(currentUser) {
-
+    jQuery('#homepage').toggle();
+    jQuery("#profile_info").css("display", "none");
+    jQuery('#settings').toggle();
+    jQuery('#confirmProfileUpdate').css("display", "flex").delay(3000).hide(0);
+    location.reload();  
     var nickname = jQuery("#nickname").val();
     var gender = jQuery("#gender").val();
     var height = jQuery("#height").val();
@@ -51,10 +55,7 @@ async function updateInfo(currentUser) {
             .then(() => {
                 uploadPic(currentUser.id);
                 console.log("Document successfully updated!");
-                jQuery('#homepage').toggle();
-                jQuery("#profile_info").css("display", "none");
-                jQuery('#settings').toggle();
-                location.reload();
+
 
             })
             .catch((error) => {

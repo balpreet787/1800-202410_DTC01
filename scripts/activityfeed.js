@@ -37,7 +37,7 @@ function getActivityFeedInfo(currentUser) {
                     if (activityfeedinfo[i]["exercise_type"] == "yoga") {
                         activityfeedinfo[i]["exercise_type"] = "doing yoga";
                     }
-                    if (activityfeedinfo[i]["badgesearned"] == badge_earned) {
+                    if (activityfeedinfo[i]["badgesearned"] == badge_earned || activityfeedinfo[i]["badgesearned"]== null) {
                         activityfeedinfo[i]["badgesearned"] = "";
                         add_to_activity_feed = `<div class="flex flex-row bg-[#fff6e5] rounded-xl mt-2 m-4 normal-activity">
                                             <img class="h-20 mx-5 self-center rounded-full w-20" src="${activityfeedinfo[i]["profilepic"]}" alt="">
