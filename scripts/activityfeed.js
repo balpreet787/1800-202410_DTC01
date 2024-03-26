@@ -1,45 +1,4 @@
 function getActivityFeedInfo(currentUser) {
-    var badge_earned = null
-    var todays_date = new Date();
-    currentUser.get().then(userDoc => {
-        currentUser.collection('workouts').orderBy('startDate', 'desc').get().then((querySnapshot) => {
-            querySnapshot.forEach((doc) => {
-                if (doc.data().earned != none) {
-                    badge_earned = doc.data().earned;
-                    if (badge_earned == null) {
-                        badge_earned = ""
-                    }
-                    add_to_activity_feed = `<div class="flex flex-row mt-2 mx-4">
-                            </div>
-                            <div class="flex flex-row bg-[#fff6e5] rounded-xl mt-2 m-4">
-                                <img class="h-20 mx-5 self-center" src="images/profile_pic.svg" alt="">
-                                <div class="p-2 ">
-                                    <div class="py-2 flex flex-row justify-between">
-                                        <h1 class="font-semibold inline text-lg"><span id="activity-username">${doc.data().earned}${doc.id}</span></h1>
-                                        <img class="h-6 pr-3 inline ml-auto" src="images/star_icon.svg" alt="">
-                                    </div>
-                                    <p class="text-xs pb-4 pr-1" id="accomplishment-phrase"></p>
-                                </div>
-                            </div>`
-                } else {
-                    add_to_activity_feed = `<div class="flex flex-row bg-[#fff6e5] rounded-xl mt-2 m-4">
-                            <img class="h-20 mx-5 self-center" src="images/profile_pic.svg" alt="">
-                            <div class="p-2 ">
-                                <div class="py-2">
-                                    <h1 class="font-semibold inline text-lg"><span id="activity-username">${doc.id}</span></h1>
-                                </div>
-                                <p class="text-xs pb-4 pr-1" id="activity-feed-phrase"></p>
-                            </div>
-                        </div>`
-                }
-                jQuery('#activity_feed').append(add_to_activity_feed);
-            })
-        })
-    })
-
-}
-
-function getActivityFeedInfo(currentUser) {
     var badge_earned = null;
     var leaderboardID = undefined;
     var friendIDs = [];
