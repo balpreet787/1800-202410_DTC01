@@ -280,16 +280,17 @@ function additional_information_handler() {
     }
 }
 
+
 function remove_workout(currentUser, historyId) {
     console.log(currentUser)
     currentUser.collection("workouts").doc(historyId).get().then((doc) => {
         if (doc.exists) {
             exercise = doc.data().exerciseType
             currentUser.collection("exerciseCounter").doc("exercises").get().then((doc) => {
-                exercise_count = doc.data()[exercise]
-                console.log(exercise, exercise_count)
+                let exerciseCount = doc.data()[exercise]
+                console.log(exercise, exerciseCount)
                 currentUser.collection("exerciseCounter").doc("exercises").update({
-                    [exercise]: exercise_count - 1,
+                    [exercise]: exerciseCount - 1,
                 });
                 currentUser.collection("workouts").doc(historyId).delete().then(() => {
                     console.log("Document successfully deleted!");
@@ -305,5 +306,4 @@ function remove_workout(currentUser, historyId) {
     }).catch((error) => {
         console.error("Error getting document:", error);
     });
-
 }
