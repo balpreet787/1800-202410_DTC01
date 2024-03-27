@@ -280,17 +280,50 @@ function additional_information_handler() {
     }
 }
 
+function removeBadges(currentUser, exerciseType, exerciseCount) {
+    console.log(currentUser, exerciseType, exerciseCount)
+    if (exerciseCount == 5) {
+        console.log("asdkjaskd")
+        currentUser.collection("workouts").where("earned_name", "==", `bronze ${exerciseType} badge`).get().then((removedWorkout) => {
+            removedWorkout.forEach(workout => {
+                currentUser.collection("workouts").doc(workout.id).update({earned_name: null, earned: null})
+            })
+        })
+    } else if (exerciseCount == 10) {
+        currentUser.collection("workouts").where("earned_name", "==", `silver ${exerciseType} badge`).get().then((removedWorkout) => {
+            removedWorkout.forEach(workout => {
+                currentUser.collection("workouts").doc(workout.id).update({earned_name: `bronze ${exerciseType} badge`, earned:`./images/${exerciseType}bronze.svg`})
+            })
+        })
+    } else if (exerciseCount == 15) {
+        currentUser.collection("workouts").where("earned_name", "==", `gold ${exerciseType} badge`).get().then((removedWorkout) => {
+            removedWorkout.forEach(workout => {
+                currentUser.collection("workouts").doc(workout.id).update({earned_name: `silver ${exerciseType} badge`, earned:`./images/${exerciseType}silver.svg`})
+            })
+        })
+
+    } else if (exerciseCounter == 20) {
+        currentUser.collection("workouts").where("earned_name", "==", `platinum ${exerciseType} badge`).get().then((removedWorkout) => {
+            removedWorkout.forEach(workout => {
+                currentUser.collection("workouts").doc(workout.id).update({earned_name: `gold ${exerciseType} badge`, earned:`./images/${exerciseType}gold.svg`})
+            })
+        })
+    }
+}
+
+
 function remove_workout(currentUser, historyId) {
     console.log(currentUser)
     currentUser.collection("workouts").doc(historyId).get().then((doc) => {
         if (doc.exists) {
             exercise = doc.data().exerciseType
             currentUser.collection("exerciseCounter").doc("exercises").get().then((doc) => {
-                exercise_count = doc.data()[exercise]
-                console.log(exercise, exercise_count)
+                exerciseCount = doc.data()[exercise]
+                console.log(exercise, exerciseCount)
                 currentUser.collection("exerciseCounter").doc("exercises").update({
-                    [exercise]: exercise_count - 1,
+                    [exercise]: exerciseCount - 1,
                 });
+                removeBadges(currentUser, exercise, exerciseCount);
                 currentUser.collection("workouts").doc(historyId).delete().then(() => {
                     console.log("Document successfully deleted!");
                     location.reload();
@@ -307,3 +340,4 @@ function remove_workout(currentUser, historyId) {
     });
 
 }
+
