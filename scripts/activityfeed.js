@@ -54,10 +54,10 @@ function getActivityFeedInfo(currentUser) {
                                         </div>
                                         <div class="flex flex-row bg-[#fff6e5] rounded-xl mt-2 m-4 accomplishment-activity">
                                             <img class="h-20 mx-5 self-center rounded-full w-20" src=${activityfeedinfo[i]["profilepic"]}" alt="">
-                                            <div class="p-2 ">
-                                                <div class="py-2 flex flex-row justify-between">
+                                            <div class="p-2 w-full">
+                                                <div class="py-2 flex flex-row w-full">
                                                     <h1 class="font-semibold inline text-lg"><span id="activity-username">${activityfeedinfo[i]["nickname"]}</span></h1>
-                                                    <img class="h-6 pr-3 inline w-full justify-self-end" src="${activityfeedinfo[i]["badgesearned"]}" alt="">
+                                                    <div class="flex flex-row justify-end w-full"><img class="h-6 pr-3 inline w-full mx-auto" src="${activityfeedinfo[i]["badgesearned"]}" alt=""></div>
                                                 </div>
                                                 <p class="text-xs pb-4 pr-1 ml-auto" id="accomplishment-phrase">${activityfeedinfo[i]["username"]} spent ${activityfeedinfo[i]["workouttime"]} minutes ${activityfeedinfo[i]["exercise_type"]} and earned a ${activityfeedinfo[i]["badge_name"]}!</p>
                                             </div>
