@@ -14,7 +14,7 @@ function show_recorded_workouts(currentUser) {
         recordedWorkout.forEach(workouts => {
             if (workouts.data().exerciseType == 'weightlifting' || workouts.data().exerciseType == 'yoga') {
                 $("#recorded_workouts").append(
-                    `<div class="flex flex-row justify-evenly bg-[#fff6e5]">
+                    `<div class="flex flex-col justify-evenly bg-[#fff6e5]" id="${workouts.id}">
                             <div class="flex flex-col justify-evenly bg-[#fff6e5] text-[16px] p-4">
                             <span><b>Workout:</b> ${workouts.data().exerciseType}</span>
                             <span><b>Intensity:</b> ${workouts.data().intensity}</span>
@@ -22,6 +22,11 @@ function show_recorded_workouts(currentUser) {
                             <div class="flex flex-col justify-evenly bg-[#fff6e5] text-[16px] p-4">
                             <span><b>Calories burned:</b> ${workouts.data().calories}</span>
                             <span><b>Time:</b> ${(workouts.data().endDate - workouts.data().startDate) / 60} mins </span>
+                            </div>
+                            <div>
+                            <button class="hidden" id="${workouts.id}Cancel" >Cancel</button>
+                            <button id="${workouts.id}Delete">Delete</button>
+                            <button class="hidden" id="${workouts.id}Confirm" >Confirm</button>
                             </div>
                         </div>`
                 );
@@ -37,9 +42,15 @@ function show_recorded_workouts(currentUser) {
                             <span><b>Calories burned:</b> ${workouts.data().calories}</span>
                             <span><b>Time:</b> ${(workouts.data().endDate - workouts.data().startDate) / 60} mins </span>
                             </div>
+                            div>
+                            <button class="hidden" id="${workouts.id}Cancel" >Cancel</button>
+                            <button id="${workouts.id}Delete">Delete</button>
+                            <button class="hidden" id="${workouts.id}Confirm" >Confirm</button>
+                            </div>
                         </div>`
                 );
             }
+            deleteWorkoutHandler(currentUser, workouts.id);
         })
     });
 }
@@ -61,4 +72,20 @@ function show_workout_page_date() {
     const currentDate = new Date();
     const localDate = currentDate.toLocaleDateString('en-CA'); // 'en-CA' uses the YYYY-MM-DD format
     $('#selectedDate').val(localDate);
+}
+
+function deleteWorkoutHandler(currentUser, historyId) {
+    jQuery(`#${historyId}Delete`).click(function () {
+        jQuery(`#${historyId}Confirm`).css("display", "flex");
+        jQuery(`#${historyId}Cancel`).css("display", "flex");
+        jQuery(`#${historyId}Delete`).css("display", "none");
+    })
+    jQuery(`#${historyId}Cancel`).click(function () {
+        jQuery(`#${historyId}Confirm`).css("display", "none");
+        jQuery(`#${historyId}Cancel`).css("display", "none");
+        jQuery(`#${historyId}Delete`).css("display", "flex");
+    })
+    jQuery(`#${historyId}Confirm`).click(function () {
+        remove_workout(currentUser, historyId);
+    })
 }

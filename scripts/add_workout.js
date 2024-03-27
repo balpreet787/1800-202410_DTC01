@@ -279,3 +279,31 @@ function additional_information_handler() {
         jQuery('#intensity-div').css("display", "flex");
     }
 }
+
+function remove_workout(currentUser, historyId) {
+    console.log(currentUser)
+    currentUser.collection("workouts").doc(historyId).get().then((doc) => {
+        if (doc.exists) {
+            exercise = doc.data().exerciseType
+            currentUser.collection("exerciseCounter").doc("exercises").get().then((doc) => {
+                exercise_count = doc.data()[exercise]
+                console.log(exercise, exercise_count)
+                currentUser.collection("exerciseCounter").doc("exercises").update({
+                    [exercise]: exercise_count - 1,
+                });
+                currentUser.collection("workouts").doc(historyId).delete().then(() => {
+                    console.log("Document successfully deleted!");
+                    location.reload();
+
+                }).catch((error) => {
+                    console.error("Error removing document: ", error);
+                });
+            });
+        } else {
+            console.log("No such document!");
+        }
+    }).catch((error) => {
+        console.error("Error getting document:", error);
+    });
+
+}
