@@ -322,6 +322,7 @@ function remove_workout(currentUser, historyId) {
                 console.log(exercise, exerciseCount)
                 currentUser.collection("exerciseCounter").doc("exercises").update({
                     [exercise]: exerciseCount - 1,
+                    [exercise]: exerciseCount - 1,
                 });
                 removeBadges(currentUser, exercise, exerciseCount);
                 currentUser.collection("workouts").doc(historyId).delete().then(() => {
@@ -338,6 +339,5 @@ function remove_workout(currentUser, historyId) {
     }).catch((error) => {
         console.error("Error getting document:", error);
     });
-
 }
 

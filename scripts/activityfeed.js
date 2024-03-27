@@ -37,7 +37,7 @@ function getActivityFeedInfo(currentUser) {
                     if (activityfeedinfo[i]["exercise_type"] == "yoga") {
                         activityfeedinfo[i]["exercise_type"] = "doing yoga";
                     }
-                    if (activityfeedinfo[i]["badgesearned"] == badge_earned || activityfeedinfo[i]["badgesearned"]== null) {
+                    if (activityfeedinfo[i]["badgesearned"] == badge_earned || activityfeedinfo[i]["badgesearned"] == null) {
                         activityfeedinfo[i]["badgesearned"] = "";
                         add_to_activity_feed = `<div class="flex flex-row bg-[#fff6e5] rounded-xl mt-2 m-4 normal-activity">
                                             <img class="h-20 mx-5 self-center rounded-full w-20" src="${activityfeedinfo[i]["profilepic"]}" alt="">
@@ -55,9 +55,9 @@ function getActivityFeedInfo(currentUser) {
                                         <div class="flex flex-row bg-[#fff6e5] rounded-xl mt-2 m-4 accomplishment-activity">
                                             <img class="h-20 mx-5 self-center rounded-full w-20" src=${activityfeedinfo[i]["profilepic"]}" alt="">
                                             <div class="p-2 w-full">
-                                                <div class="py-2 flex flex-row w-full">
-                                                    <h1 class="font-semibold inline text-lg"><span id="activity-username">${activityfeedinfo[i]["nickname"]}</span></h1>
-                                                    <div class="flex flex-row justify-end w-full"><img class="h-6 pr-3 inline w-full mx-auto" src="${activityfeedinfo[i]["badgesearned"]}" alt=""></div>
+                                                <div class="py-2 flex flex-row justify-between">
+                                                    <div><h1 class="font-semibold inline text-lg"><span id="activity-username">${activityfeedinfo[i]["nickname"]}</span></h1></div>
+                                                   <div> <img class="h-6 pr-3 inline w-full justify-self-end" src="${activityfeedinfo[i]["badgesearned"]}" alt=""></div>
                                                 </div>
                                                 <p class="text-xs pb-4 pr-1 ml-auto" id="accomplishment-phrase">${activityfeedinfo[i]["username"]} spent ${activityfeedinfo[i]["workouttime"]} minutes ${activityfeedinfo[i]["exercise_type"]} and earned a ${activityfeedinfo[i]["badge_name"]}!</p>
                                             </div>
@@ -97,15 +97,15 @@ function filterActivityFeed() {
 }
 
 function resetFilteredActivityFeed() {
-        $("input[name='filter-activity-feed']").prop('checked', false);
-        jQuery(".reset_button").css("display", "none")
-        jQuery("#filter-activity").css("display", "none")
-        jQuery("#filter-accomplishment").css("display", "none")
-        jQuery(".accomplishment-activity").css("display", "flex");
-        jQuery(".normal-activity").css("display", "flex");
-        jQuery('#activity_feed').css("display", "flex");
-        jQuery('#activity_feed').css("flex-direction", "column");
-        jQuery("#filter_activity").css("display", "none")
+    $("input[name='filter-activity-feed']").prop('checked', false);
+    jQuery(".reset_button").css("display", "none")
+    jQuery("#filter-activity").css("display", "none")
+    jQuery("#filter-accomplishment").css("display", "none")
+    jQuery(".accomplishment-activity").css("display", "flex");
+    jQuery(".normal-activity").css("display", "flex");
+    jQuery('#activity_feed').css("display", "flex");
+    jQuery('#activity_feed').css("flex-direction", "column");
+    jQuery("#filter_activity").css("display", "none")
 }
 
 function activity_handler() {
