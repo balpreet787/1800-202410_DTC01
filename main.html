@@ -35,7 +35,7 @@
     <!------------------------------>
     <header class="sticky top-0 p-3 bg-[#ffb833]">
         <div class="flex flex-row justify-between font-bold">
-            <img src="./images/logo.svg" class="w-8 h-8" alt="logo">
+            <img src="./images/logo.svg" class="w-8 h-8" id="logo" alt="logo">
             <div class="">
                 <button id="add_workout_button" href=""><img src="./images/nav-icons/add-circle-svgrepo-com.svg"
                         class="w-8 h-8" alt=""></button>
@@ -221,7 +221,7 @@
         <div class=" border-b border-black">
             <button class="text-xl font-semibold p-2" id="aboutUs">About Us</button>
         </div>
-        <div class="text-center hidden  p-2 text-black" id="aboutUs-box">
+        <div class="text-center hidden border-b border-black p-2 text-black" id="aboutUs-box">
             CompetiFit is an application that helps fitness enthusiasts maintain a consistent exercise schedule by
             providing
             a sense of competition between users! Through CompetiFit, users can log their daily exercise, track their
@@ -243,7 +243,7 @@
             </form class="w-full">
             <label class="ml-2" for="leaderboard_id">Please enter a Friend ID of 5 digits.</label>
             <input class="outline outline-1 rounded-lg p-1.5 m-2" type="text" id="leaderboard_id"
-                placeholder="Leaderboard ID" required>
+                placeholder="Friend ID" required>
             <input class="outline outline-1 rounded-lg p-1.5 m-2" type="text" id="nickname" placeholder="Nickname"
                 required>
             <input class="outline outline-1 rounded-lg p-1.5 m-2" type="date" id="dob" placeholder="Date of Birth:"
