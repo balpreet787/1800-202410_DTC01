@@ -110,13 +110,11 @@ function populateUserInfo(currentUser) {
 
 
 function info_handler() {
-
     jQuery('#info-box').slideToggle()
 }
 
 
 function aboutUs_handler() {
-
     jQuery('#aboutUs-box').slideToggle()
 }
 
@@ -177,6 +175,7 @@ function setup() {
     jQuery('#add_workout_button').click(add_workout_handler);
     jQuery('#exercises').change(additional_information_handler);// fix this
     jQuery('#filter_button').click(filter_handler);
+    jQuery('.reset_button').click(resetFilteredActivityFeed);
     jQuery('#cancel_button').click(activity_handler);
     // jQuery('#save_profile_info_button').click(settings_handler);
     jQuery('#cancel_profile_info_button').click(settings_handler);

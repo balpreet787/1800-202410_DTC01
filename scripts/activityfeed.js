@@ -76,18 +76,36 @@ function getActivityFeedInfo(currentUser) {
 function filterActivityFeed() {
     var selected_value = $("input[name='filter-activity-feed']:checked").val();
     if (selected_value == "accomplishment") {
+        jQuery(".reset_button").css("display", "flex")
+        jQuery("#filter-activity").css("display", "none")
+        jQuery("#filter-accomplishment").css("display", "flex")
         jQuery(".accomplishment-activity").css("display", "flex");
         jQuery(".normal-activity").css("display", "none");
         jQuery('#activity_feed').css("display", "flex");
         jQuery('#activity_feed').css("flex-direction", "column");
         jQuery("#filter_activity").css("display", "none")
     } else {
+        jQuery(".reset_button").css("display", "flex")
+        jQuery("#filter-activity").css("display", "flex")
+        jQuery("#filter-accomplishment").css("display", "none")
         jQuery(".accomplishment-activity").css("display", "none");
         jQuery(".normal-activity").css("display", "flex");
         jQuery('#activity_feed').css("display", "flex");
         jQuery('#activity_feed').css("flex-direction", "column");
         jQuery("#filter_activity").css("display", "none")
     }
+}
+
+function resetFilteredActivityFeed() {
+        $("input[name='filter-activity-feed']").prop('checked', false);
+        jQuery(".reset_button").css("display", "none")
+        jQuery("#filter-activity").css("display", "none")
+        jQuery("#filter-accomplishment").css("display", "none")
+        jQuery(".accomplishment-activity").css("display", "flex");
+        jQuery(".normal-activity").css("display", "flex");
+        jQuery('#activity_feed').css("display", "flex");
+        jQuery('#activity_feed').css("flex-direction", "column");
+        jQuery("#filter_activity").css("display", "none")
 }
 
 function activity_handler() {
