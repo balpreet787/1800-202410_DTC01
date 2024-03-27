@@ -25,7 +25,7 @@
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Link to styles of your own -->
-    <link rel="stylesheet" href="./styles/style.css">
+    <!-- <link rel="stylesheet" href="./styles/style.css"> -->
 
 </head>
 
@@ -35,7 +35,7 @@
     <!------------------------------>
     <header class="sticky top-0 p-3 bg-[#ffb833]">
         <div class="flex flex-row justify-between font-bold">
-            <img src="./images/logo.svg" class="w-8 h-8" alt="logo">
+            <img src="./images/logo.svg" class="w-8 h-8" id="logo" alt="logo">
             <div class="">
                 <button id="add_workout_button" href=""><img src="./images/nav-icons/add-circle-svgrepo-com.svg"
                         class="w-8 h-8" alt=""></button>
@@ -72,14 +72,18 @@
             </div>
             <div class="grid grid-cols-2">
                 <div class="rounded-xl px-3.5 py-3 ml-4 mr-1 bg-[#fff6e5]">
-                    <img class="inline h-6 pr-1" src="images/timer.svg" alt="">
-                    <h1 class="inline font-bold text-sm">Calories</h1>
+                    <div class="flex flex-row items-end">
+                        <img class="inline h-5 pr-1" src="./images/burned.svg" alt="">
+                        <h1 class="inline font-bold leading-none text-sm">Calories</h1>
+                    </div>
                     <p class=" text-xs"><span class="font-bold text-2xl pr-2"><span
                                 id="calories-go-here">0</span></span>Calories Burned This Week</p>
                 </div>
                 <div class="rounded-xl px-3.5 py-3 ml-1 mr-4 bg-[#fff6e5]">
-                    <img class="inline h-6 pr-1" src="images/dumbbell1.svg" alt="">
-                    <h1 class="inline font-bold text-sm">Finished</h1>
+                    <div class="flex flex-row items-end">
+                        <img class="inline h-6 pr-1" src="images/dumbbell1.svg" alt="">
+                        <h1 class="inline font-bold leading-none text-sm">Finished</h1>
+                    </div>
                     <p class="text-xs"><span class="font-bold text-2xl pr-2"><span
                                 id="workout-number-goes-here">0</span></span> Completed Workouts This Week</p>
                 </div>
@@ -223,7 +227,7 @@
         <div class=" border-b border-black">
             <button class="text-xl font-semibold p-2" id="aboutUs">About Us</button>
         </div>
-        <div class="text-center hidden  p-2 text-black" id="aboutUs-box">
+        <div class="text-center hidden border-b border-black p-2 text-black" id="aboutUs-box">
             CompetiFit is an application that helps fitness enthusiasts maintain a consistent exercise schedule by
             providing
             a sense of competition between users! Through CompetiFit, users can log their daily exercise, track their
@@ -245,7 +249,7 @@
             </form class="w-full">
             <label class="ml-2" for="leaderboard_id">Please enter a Friend ID of 5 digits.</label>
             <input class="outline outline-1 rounded-lg p-1.5 m-2" type="text" id="leaderboard_id"
-                placeholder="Leaderboard ID" required>
+                placeholder="Friend ID" required>
             <input class="outline outline-1 rounded-lg p-1.5 m-2" type="text" id="nickname" placeholder="Nickname"
                 required>
             <input class="outline outline-1 rounded-lg p-1.5 m-2" type="date" id="dob" placeholder="Date of Birth:"
@@ -280,18 +284,18 @@
     <!-- Calender ends here -->
 
     <!-- Start of navigation footer -->
-    <footer class="fixed w-full bottom-0 p-3 bg-[#ffb833]">
-        <div class="grid grid-cols-5">
-            <button id="homepage_button" href="" class="flex justify-center"> <img src="./images/nav-icons/home.svg"
-                    class="w-8 h-8" alt=""></button>
-            <button id="leaderboard_button" href="" class="flex justify-center"><img
+    <footer class="fixed w-full bottom-0 ">
+        <div class="grid grid-cols-5 bg-[#ffb833]">
+            <button id="homepage_button" href="" class="flex justify-center py-3 bg-[#ffb833]"> <img
+                    src="./images/nav-icons/home.svg" class="w-8 h-8" alt=""></button>
+            <button id="leaderboard_button" href="" class="flex justify-center py-3 bg-[#ffb833]"><img
                     src="./images/nav-icons/leaderboard-star-svgrepo-co.svg" class="w-8 h-8" alt=""></button>
-            <button id="activity_button" href="" class="flex justify-center"><img
+            <button id="activity_button" href="" class="flex justify-center py-3 bg-[#ffb833]"><img
                     src="./images/nav-icons/activity-feed.svg" class="w-8 h-8" alt=""></button>
-            <button id="calendar_button" href="" class="flex justify-center"><img src="./images/nav-icons/calender.svg"
-                    class="w-8 h-8" alt=""></button>
-            <button id="settings_button" href="" class="flex justify-center"><img src="./images/nav-icons/setting.svg"
-                    class="w-8 h-8" alt=""></button>
+            <button id="calendar_button" href="" class="flex justify-center py-3 bg-[#ffb833]"><img
+                    src="./images/nav-icons/calender.svg" class="w-8 h-8" alt=""></button>
+            <button id="settings_button" href="" class="flex justify-center py-3 bg-[#ffb833]"><img
+                    src="./images/nav-icons/setting.svg" class="w-8 h-8" alt=""></button>
         </div>
     </footer>
     <!-- End of navigation footer -->

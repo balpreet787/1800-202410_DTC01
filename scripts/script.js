@@ -35,7 +35,7 @@ async function updateInfo(currentUser) {
     jQuery("#profile_info").css("display", "none");
     jQuery('#settings').toggle();
     jQuery('#confirmProfileUpdate').css("display", "flex").delay(3000).hide(0);
-    location.reload();  
+    location.reload();
     var nickname = jQuery("#nickname").val();
     var gender = jQuery("#gender").val();
     var height = jQuery("#height").val();
@@ -236,6 +236,7 @@ function setup() {
                 jQuery("#save_workout_button").click(function () { addWorkout(currentUser) });
                 jQuery("#save_profile_info_button").click(function () { updateInfo(currentUser) });
                 jQuery('#profile_info_button').click(function () { profile_info_handler(currentUser) });
+                jQuery('#logo').click(homepage_handler);
                 show_recorded_workouts(currentUser);
                 $('#week').change(function () { get_leaderboard_data(currentUser) })
                 $('#selectedDate').change(function () { show_recorded_workouts(currentUser) });
