@@ -10,7 +10,8 @@ function uploadPic(postDocID) {
                         "image": url
                     }, { merge: true })
                         .then(function () {
-                            console.log('4. Added pic URL to Firestore.');
+                            jQuery('#confirmProfileUpdate').css("display", "flex").delay(3000).hide(0);
+                            location.reload();
                         })
                 })
         })
@@ -21,16 +22,15 @@ function uploadPic(postDocID) {
 
 
 async function updateInfo(currentUser) {
-    jQuery('#homepage').toggle();
-    jQuery("#profile_info").css("display", "none");
-    jQuery('#settings').toggle();
-    jQuery('#confirmProfileUpdate').css("display", "flex").delay(3000).hide(0);
-    var nickname = jQuery("#nickname").val();
-    var gender = jQuery("#gender").val();
-    var height = jQuery("#height").val();
-    var weight = jQuery("#weight").val();
-    var leaderboardID = jQuery("#leaderboard_id").val();
-    var dob = jQuery("#dob").val();
+    $('#homepage').toggle();
+    $("#profile_info").css("display", "none");
+    $('#settings').toggle();
+    var nickname = $("#nickname").val();
+    var gender = $("#gender").val();
+    var height = $("#height").val();
+    var weight = $("#weight").val();
+    var leaderboardID = $("#leaderboard_id").val();
+    var dob = $("#dob").val();
 
     if (nickname != "" && height != "" && weight != "" && leaderboardID != "" && dob != "") {
         currentUser.set({
@@ -43,10 +43,6 @@ async function updateInfo(currentUser) {
         }, { merge: true })
             .then(() => {
                 uploadPic(currentUser.id);
-                // location.reload();
-                console.log("Document successfully updated!");
-
-
             })
             .catch((error) => {
                 // The document probably doesn't exist.
