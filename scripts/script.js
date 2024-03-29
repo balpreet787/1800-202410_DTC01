@@ -42,7 +42,12 @@ async function updateInfo(currentUser) {
             leaderboardID: leaderboardID,
         }, { merge: true })
             .then(() => {
-                uploadPic(currentUser.id);
+                if (ImageFile) {
+                    uploadPic(currentUser.id);
+                }
+                else {
+                    location.reload();
+                }
             })
             .catch((error) => {
                 // The document probably doesn't exist.
