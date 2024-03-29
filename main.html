@@ -37,8 +37,8 @@
         <div class="flex flex-row justify-between font-bold">
             <img src="./images/logo.svg" class="w-8 h-8 hover:cursor-pointer" id="logo" alt="logo">
             <div class="">
-                <button id="add_workout_button" href=""><img src="./images/nav-icons/add-circle-svgrepo-com.svg"
-                        class="w-8 h-8" alt=""></button>
+                <button id="add_workout_button" href=""><img id="add-workout-icon"
+                        src="./images/nav-icons/add-workout-black.svg" class="w-8 h-8" alt=""></button>
             </div>
         </div>
     </header>
@@ -142,14 +142,17 @@
             <button id="filter_button"><img class="h-10 inline mb-1 mr-2" src="images/filter_icon.svg" alt=""></button>
             <div class="outline outline-1 outline-gray-500 rounded-lg flex flex-rows justify-between w-full">
                 <input class="px-2 w-full" name="username-search" type="search" placeholder="Search for a user: ">
-                <input id="username-search-button" class="justify-end px-2 mr-auto hover:cursor-pointer" type="button" value="Search">
+                <input id="username-search-button" class="justify-end px-2 mr-auto hover:cursor-pointer" type="button"
+                    value="Search">
             </div>
             <div>
 
             </div>
         </div>
-        <p id="filter-accomplishment" class="px-6 py-1 underline hidden">Accomplishments<button class="reset_button px-2">x</button></p>
-        <p id="filter-activity" class="px-6 py-1 underline hidden">Activity<button class="reset_button px-2">x</button></p>
+        <p id="filter-accomplishment" class="px-6 py-1 underline hidden">Accomplishments<button
+                class="reset_button px-2">x</button></p>
+        <p id="filter-activity" class="px-6 py-1 underline hidden">Activity<button class="reset_button px-2">x</button>
+        </p>
         <button id="filter-search" class="px-6 py-1 underline hidden reset_button">Reset</button>
     </div>
     <!-- End of Activity Feed -->
@@ -300,15 +303,16 @@
     <footer class="fixed w-full bottom-0 ">
         <div class="grid grid-cols-5 bg-[#ffb833]">
             <button id="homepage_button" href="" class="flex justify-center py-3 bg-[#ffb833]"> <img
-                    src="./images/nav-icons/home.svg" class="w-8 h-8" alt=""></button>
+                    src="./images/nav-icons/home-white.svg" id="homepage-icon" class="w-8 h-8" alt=""></button>
             <button id="leaderboard_button" href="" class="flex justify-center py-3 bg-[#ffb833]"><img
-                    src="./images/nav-icons/leaderboard-star-svgrepo-co.svg" class="w-8 h-8" alt=""></button>
+                    src="./images/nav-icons/leaderboard-black.svg" id="leaderboard-icon" class="w-8 h-8"
+                    alt=""></button>
             <button id="activity_button" href="" class="flex justify-center py-3 bg-[#ffb833]"><img
-                    src="./images/nav-icons/activity-feed.svg" class="w-8 h-8" alt=""></button>
+                    src="./images/nav-icons/activity-feed-black.svg" id="activity-icon" class="w-8 h-8" alt=""></button>
             <button id="calendar_button" href="" class="flex justify-center py-3 bg-[#ffb833]"><img
-                    src="./images/nav-icons/calender.svg" class="w-8 h-8" alt=""></button>
+                    src="./images/nav-icons/calender-black.svg" class="w-8 h-8" id="calender-icon" alt=""></button>
             <button id="settings_button" href="" class="flex justify-center py-3 bg-[#ffb833]"><img
-                    src="./images/nav-icons/setting.svg" class="w-8 h-8" alt=""></button>
+                    src="./images/nav-icons/setting-black.svg" id="settings-icon" class="w-8 h-8" alt=""></button>
         </div>
     </footer>
     <!-- End of navigation footer -->

@@ -57,6 +57,12 @@ function showRecordedWorkouts(currentUser) {
 
 function calendarHandler() {
     if (jQuery('#datepicker').css("display") == "none") {
+        jQuery("#homepage-icon").attr('src', './images/nav-icons/home-black.svg')
+        jQuery("#calender-icon").attr('src', './images/nav-icons/calender-white.svg')
+        jQuery("#leaderboard-icon").attr('src', './images/nav-icons/leaderboard-black.svg')
+        jQuery("#activity-icon").attr('src', './images/nav-icons/activity-feed-black.svg')
+        jQuery("#settings-icon").attr('src', './images/nav-icons/setting-black.svg')
+        jQuery("#add-workout-icon").attr('src', './images/nav-icons/add-workout-black.svg')
         jQuery('#datepicker').css("display", "flex")
         jQuery('#homepage').css("display", "none");
         jQuery('#leaderboard').css("display", "none");
@@ -65,7 +71,7 @@ function calendarHandler() {
         jQuery('#add_workout').css("display", "none");
         jQuery('#filter_activity').css("display", "none");
         jQuery('#profile_info').css("display", "none");
-        
+
     }
 }
 

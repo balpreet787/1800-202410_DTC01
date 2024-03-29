@@ -149,6 +149,12 @@ function resetFilteredActivityFeed() {
 
 function activityHandler() {
     if (jQuery('#activity_feed').css("display") == "none") {
+        jQuery("#homepage-icon").attr('src', './images/nav-icons/home-black.svg')
+        jQuery("#calender-icon").attr('src', './images/nav-icons/calender-black.svg')
+        jQuery("#leaderboard-icon").attr('src', './images/nav-icons/leaderboard-black.svg')
+        jQuery("#activity-icon").attr('src', './images/nav-icons/activity-feed-white.svg')
+        jQuery("#settings-icon").attr('src', './images/nav-icons/setting-black.svg')
+        jQuery("#add-workout-icon").attr('src', './images/nav-icons/add-workout-black.svg')
         jQuery('#activity_feed').toggle();
         jQuery('#homepage').css("display", "none");
         jQuery('#leaderboard').css("display", "none");

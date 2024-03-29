@@ -258,6 +258,12 @@ async function addWorkout(currentUser) {
 
 function addWorkoutHandler() {
     if (jQuery('#add_workout').css("display") == "none") {
+        jQuery("#homepage-icon").attr('src', './images/nav-icons/home-black.svg')
+        jQuery("#calender-icon").attr('src', './images/nav-icons/calender-black.svg')
+        jQuery("#leaderboard-icon").attr('src', './images/nav-icons/leaderboard-black.svg')
+        jQuery("#activity-icon").attr('src', './images/nav-icons/activity-feed-black.svg')
+        jQuery("#settings-icon").attr('src', './images/nav-icons/setting-black.svg')
+        jQuery("#add-workout-icon").attr('src', './images/nav-icons/add-workout-white.svg')
         jQuery('#add_workout').toggle()
         jQuery('#homepage').css("display", "none");
         jQuery('#leaderboard').css("display", "none");
@@ -284,26 +290,26 @@ function removeBadges(currentUser, exerciseType, exerciseCount) {
     if (exerciseCount == 5) {
         currentUser.collection("workouts").where("earned_name", "==", `bronze ${exerciseType} badge`).get().then((removedWorkout) => {
             removedWorkout.forEach(workout => {
-                currentUser.collection("workouts").doc(workout.id).update({earned_name: null, earned: null})
+                currentUser.collection("workouts").doc(workout.id).update({ earned_name: null, earned: null })
             })
         })
     } else if (exerciseCount == 10) {
         currentUser.collection("workouts").where("earned_name", "==", `silver ${exerciseType} badge`).get().then((removedWorkout) => {
             removedWorkout.forEach(workout => {
-                currentUser.collection("workouts").doc(workout.id).update({earned_name: `bronze ${exerciseType} badge`, earned:`./images/${exerciseType}bronze.svg`})
+                currentUser.collection("workouts").doc(workout.id).update({ earned_name: `bronze ${exerciseType} badge`, earned: `./images/${exerciseType}bronze.svg` })
             })
         })
     } else if (exerciseCount == 15) {
         currentUser.collection("workouts").where("earned_name", "==", `gold ${exerciseType} badge`).get().then((removedWorkout) => {
             removedWorkout.forEach(workout => {
-                currentUser.collection("workouts").doc(workout.id).update({earned_name: `silver ${exerciseType} badge`, earned:`./images/${exerciseType}silver.svg`})
+                currentUser.collection("workouts").doc(workout.id).update({ earned_name: `silver ${exerciseType} badge`, earned: `./images/${exerciseType}silver.svg` })
             })
         })
 
     } else if (exerciseCounter == 20) {
         currentUser.collection("workouts").where("earned_name", "==", `platinum ${exerciseType} badge`).get().then((removedWorkout) => {
             removedWorkout.forEach(workout => {
-                currentUser.collection("workouts").doc(workout.id).update({earned_name: `gold ${exerciseType} badge`, earned:`./images/${exerciseType}gold.svg`})
+                currentUser.collection("workouts").doc(workout.id).update({ earned_name: `gold ${exerciseType} badge`, earned: `./images/${exerciseType}gold.svg` })
             })
         })
     }

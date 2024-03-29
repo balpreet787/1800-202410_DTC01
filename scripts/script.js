@@ -124,6 +124,12 @@ function logout() {
 
 function settingsHandler() {
     if (jQuery('#settings').css("display") == "none") {
+        jQuery("#homepage-icon").attr('src', './images/nav-icons/home-black.svg')
+        jQuery("#calender-icon").attr('src', './images/nav-icons/calender-black.svg')
+        jQuery("#leaderboard-icon").attr('src', './images/nav-icons/leaderboard-black.svg')
+        jQuery("#activity-icon").attr('src', './images/nav-icons/activity-feed-black.svg')
+        jQuery("#settings-icon").attr('src', './images/nav-icons/setting-white.svg')
+        jQuery("#add-workout-icon").attr('src', './images/nav-icons/add-workout-black.svg')
         jQuery('#settings').toggle()
         jQuery('#homepage').css("display", "none");
         jQuery('#leaderboard').css("display", "none");

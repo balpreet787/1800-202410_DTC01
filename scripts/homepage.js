@@ -154,6 +154,12 @@ function insertYesterdaysWorkoutInfoFromFirestore(currentUser) {
 }
 
 function homepageHandler() {
+    jQuery("#homepage-icon").attr('src', './images/nav-icons/home-white.svg')
+    jQuery("#calender-icon").attr('src', './images/nav-icons/calender-black.svg')
+    jQuery("#leaderboard-icon").attr('src', './images/nav-icons/leaderboard-black.svg')
+    jQuery("#activity-icon").attr('src', './images/nav-icons/activity-feed-black.svg')
+    jQuery("#settings-icon").attr('src', './images/nav-icons/setting-black.svg')
+    jQuery("#add-workout-icon").attr('src', './images/nav-icons/add-workout-black.svg')
     jQuery('#homepage').css("display", "grid");
     jQuery('#leaderboard').css("display", "none");
     jQuery('#activity_feed').css("display", "none");
@@ -162,6 +168,6 @@ function homepageHandler() {
     jQuery('#add_workout').css("display", "none");
     jQuery('#filter_activity').css("display", "none");
     jQuery('#profile_info').css("display", "none");
-    
+
 }
 
