@@ -144,14 +144,14 @@ function profileInfoHandler(currentUser) {
 
 
 function setup() {
-    leaderboardCurrentDate();
-    show_workout_page_date();
+    leaderboard_current_date();
+    showWorkoutPageDate();
     jQuery('#info').click(infoHandler);
     jQuery('#aboutUs').click(aboutUsHandler)
-    jQuery('#homepage_button').click(homepage_handler);
+    jQuery('#homepage_button').click(homepageHandler);
     jQuery('#leaderboard_button').click(leaderboardHandler);
     jQuery('#activity_button').click(activityHandler);
-    jQuery('#calendar_button').click(calendar_handler);
+    jQuery('#calendar_button').click(calendarHandler);
     jQuery('#settings_button').click(settingsHandler);
     jQuery('#add_workout_button').click(addWorkoutHandler);
     jQuery('#exercises').change(additionalInformationHandler);// fix this
@@ -160,7 +160,7 @@ function setup() {
     jQuery('.reset_button').click(resetFilteredActivityFeed);
     jQuery('#cancel_button').click(activityHandler);
     jQuery('#cancel_profile_info_button').click(settingsHandler);
-    jQuery('#cancel_workout_button').click(homepage_handler);
+    jQuery('#cancel_workout_button').click(homepageHandler);
     jQuery('#logout_button').click(redirectToSignup);
     jQuery('#logout_button').click(logout);
     $('#login').click(redirectToLogin);
@@ -215,10 +215,10 @@ function setup() {
                 jQuery("#save_workout_button").click(function () { addWorkout(currentUser) });
                 jQuery("#save_profile_info_button").click(function () { updateInfo(currentUser) });
                 jQuery('#profile_info_button').click(function () { profileInfoHandler(currentUser) });
-                jQuery('#logo').click(homepage_handler);
-                show_recorded_workouts(currentUser);
+                jQuery('#logo').click(homepageHandler);
+                showRecordedWorkouts(currentUser);
                 $('#week').change(function () { getLeaderboardData(currentUser) })
-                $('#selectedDate').change(function () { show_recorded_workouts(currentUser) });
+                $('#selectedDate').change(function () { showRecordedWorkouts(currentUser) });
                 getLeaderboardData(currentUser);
                 insertNameAndPicFromFirestore(currentUser);
                 insertHomepageInfoFromFirestore(currentUser);
