@@ -1,5 +1,5 @@
 function getActivityFeedInfo(currentUser) {
-    var badge_earned = null;
+    var badgesEarned = null;
     var leaderboardID = undefined;
     var friendIDs = [];
     var activityfeedinfo = [];
@@ -18,14 +18,14 @@ function getActivityFeedInfo(currentUser) {
                     return db.collection("users").doc(id).collection('workouts').orderBy('startDate', 'desc').limit(20).get().then(querySnapshot => {
                         querySnapshot.forEach(doc => {
 
-                            badge_earned = doc.data().earned;
-                            badge_name = doc.data().earned_name;
-                            workout_time = (doc.data().endDate - doc.data().startDate) / 60;
-                            exercise_type = doc.data().exerciseType;
+                            badgesEarned = doc.data().earned;
+                            badgeName = doc.data().earned_name;
+                            workoutTime = (doc.data().endDate - doc.data().startDate) / 60;
+                            exerciseType = doc.data().exerciseType;
                             intensity = doc.data().intensity;
 
                             activityfeedinfo.push({
-                                "startdate": doc.data().startDate, "calories": doc.data().calories, "username": username, "exercise_type": doc.data().exerciseType, "profilepic": profilepic, "nickname": nickname, "workouttime": workout_time, "badgesearned": badge_earned, "badge_name": badge_name, "intensity": intensity
+                                "startdate": doc.data().startDate, "calories": doc.data().calories, "username": username, "exerciseType": doc.data().exerciseType, "profilepic": profilepic, "nickname": nickname, "workouttime": workoutTime, "badgesearned": badgesEarned, "badgeName": badgeName, "intensity": intensity
                             })
                         });
                     });
@@ -33,7 +33,7 @@ function getActivityFeedInfo(currentUser) {
             });
             Promise.all(activityfeedpromises).then(() => {
                 activityfeedinfo.sort((a, b) => b.startdate - a.startdate);
-                let badge_earned = null
+                let badgesEarned = null
                 for (let i = 0; i < activityfeedinfo.length; i++) {
                     let startdate = activityfeedinfo[i]["startdate"].toDate();
                     activityDate = startdate.getDate();
@@ -42,21 +42,21 @@ function getActivityFeedInfo(currentUser) {
 
                     let activityDetails = ""
                     let activityIntensity = ""
-                    if (activityfeedinfo[i]["exercise_type"] == "yoga") {
-                        activityfeedinfo[i]["exercise_type"] = "doing yoga";
+                    if (activityfeedinfo[i]["exerciseType"] == "yoga") {
+                        activityfeedinfo[i]["exerciseType"] = "doing yoga";
                     }
-                    if (activityfeedinfo[i]["exercise_type"] == "weightlifting" || activityfeedinfo[i]["exercise_type"] == "doing yoga") {
-                        activityDetails = ` spent ${activityfeedinfo[i]["workouttime"]} minutes <b>${activityfeedinfo[i]["exercise_type"]}</b>`
+                    if (activityfeedinfo[i]["exerciseType"] == "weightlifting" || activityfeedinfo[i]["exerciseType"] == "doing yoga") {
+                        activityDetails = ` spent ${activityfeedinfo[i]["workouttime"]} minutes <b>${activityfeedinfo[i]["exerciseType"]}</b>`
                         activityIntensity = `<b>Intensity:</b> ${activityfeedinfo[i]["intensity"]}`
                     }
                     else {
-                        activityDetails = ` spent ${activityfeedinfo[i]["workouttime"]} minutes <b>${activityfeedinfo[i]["exercise_type"]}</b>`
+                        activityDetails = ` spent ${activityfeedinfo[i]["workouttime"]} minutes <b>${activityfeedinfo[i]["exerciseType"]}</b>`
                         activityIntensity = `<b>Distance:</b>${activityfeedinfo[i]["intensity"]} km`
 
                     }
-                    if (activityfeedinfo[i]["badgesearned"] == badge_earned || activityfeedinfo[i]["badgesearned"] == null) {
+                    if (activityfeedinfo[i]["badgesearned"] == badgesEarned || activityfeedinfo[i]["badgesearned"] == null) {
                         activityfeedinfo[i]["badgesearned"] = "";
-                        add_to_activity_feed = `<div class="flex flex-row bg-[#fff6e5] rounded-xl mt-2 m-4 normal-activity activity-feed-post${i} ${activityfeedinfo[i]["nickname"].toLowerCase()}">
+                        addToActivityFeed = `<div class="flex flex-row bg-[#fff6e5] rounded-xl mt-2 m-4 normal-activity activity-feed-post${i} ${activityfeedinfo[i]["nickname"].toLowerCase()}">
                                             <img class="h-20 mx-5 self-center rounded-full w-20" src="${activityfeedinfo[i]["profilepic"]}" alt="">
                                             <div class="p-2 ">
                                                 <div class="py-2 flex">
@@ -66,9 +66,9 @@ function getActivityFeedInfo(currentUser) {
                                             </div>
                                         </div>`
                     } else {
-                        badge_earned = activityfeedinfo[i]["badgesearned"]
+                        badgesEarned = activityfeedinfo[i]["badgesearned"]
 
-                        add_to_activity_feed = `<div class="flex flex-row mt-2 mx-4 ">
+                        addToActivityFeed = `<div class="flex flex-row mt-2 mx-4 ">
                                         </div>
                                         <div class="flex flex-row bg-[#fff6e5] rounded-xl mt-2 m-4 accomplishment-activity activity-feed-post${i} ${activityfeedinfo[i]["nickname"]}">
                                             <img class="h-20 mx-5 self-center rounded-full w-20" src=${activityfeedinfo[i]["profilepic"]}" alt="">
@@ -77,11 +77,11 @@ function getActivityFeedInfo(currentUser) {
                                                     <div><h1 class="font-semibold inline text-lg"><span id="activity-username">${activityfeedinfo[i]["nickname"]}</span></h1><span class="text-xs self-center my-auto">&nbsp;&nbsp;&bull;${activityDate}-${activityMonth}-${activityYear}</span></div>
                                                    <div> <img class="h-6 pr-3 inline w-full justify-self-end" src="${activityfeedinfo[i]["badgesearned"]}" alt=""></div>
                                                 </div>
-                                                <p class="text-xs pb-4 pr-1 ml-auto"  id="accomplishment-phrase">${activityfeedinfo[i]["username"]} ${activityDetails} and earned a ${activityfeedinfo[i]["badge_name"]}! </br> ${activityIntensity}</p>
+                                                <p class="text-xs pb-4 pr-1 ml-auto"  id="accomplishment-phrase">${activityfeedinfo[i]["username"]} ${activityDetails} and earned a ${activityfeedinfo[i]["badgeName"]}! </br> ${activityIntensity}</p>
                                             </div>
                                         </div>`
                     }
-                    jQuery("#activity_feed").append(add_to_activity_feed);
+                    jQuery("#activity_feed").append(addToActivityFeed);
                 }
 
             }).catch(error => {
@@ -112,8 +112,8 @@ function userSearchInActivityFeed() {
 
 
 function filterActivityFeed() {
-    var selected_value = $("input[name='filter-activity-feed']:checked").val();
-    if (selected_value == "accomplishment") {
+    var selectedValue = $("input[name='filter-activity-feed']:checked").val();
+    if (selectedValue == "accomplishment") {
         jQuery(".reset_button").css("display", "flex")
         jQuery("#filter-activity").css("display", "none")
         jQuery("#filter-accomplishment").css("display", "flex")
@@ -147,7 +147,7 @@ function resetFilteredActivityFeed() {
     jQuery("#filter_activity").css("display", "none")
 }
 
-function activity_handler() {
+function activityHandler() {
     if (jQuery('#activity_feed').css("display") == "none") {
         jQuery('#activity_feed').toggle();
         jQuery('#homepage').css("display", "none");
@@ -160,7 +160,7 @@ function activity_handler() {
     }
 }
 
-function filter_handler() {
+function filterHandler() {
     if (jQuery('#filter_activity').css("display") == "none") {
         jQuery('#filter_activity').toggle()
         jQuery('#add_workout').css("display", "none");
