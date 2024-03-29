@@ -148,7 +148,7 @@ function setup() {
     showWorkoutPageDate();
     jQuery('#info').click(infoHandler);
     jQuery('#aboutUs').click(aboutUsHandler)
-    jQuery('#homepage_button').click(homepage_handler);
+    jQuery('#homepage_button').click(homepageHandler);
     jQuery('#leaderboard_button').click(leaderboard_handler);
     jQuery('#activity_button').click(activityHandler);
     jQuery('#calendar_button').click(calendarHandler);
@@ -160,7 +160,7 @@ function setup() {
     jQuery('.reset_button').click(resetFilteredActivityFeed);
     jQuery('#cancel_button').click(activityHandler);
     jQuery('#cancel_profile_info_button').click(settingsHandler);
-    jQuery('#cancel_workout_button').click(homepage_handler);
+    jQuery('#cancel_workout_button').click(homepageHandler);
     jQuery('#logout_button').click(redirectToSignup);
     jQuery('#logout_button').click(logout);
     $('#login').click(redirectToLogin);
@@ -216,7 +216,7 @@ function setup() {
                 jQuery("#save_workout_button").click(function () { addWorkout(currentUser) });
                 jQuery("#save_profile_info_button").click(function () { updateInfo(currentUser) });
                 jQuery('#profile_info_button').click(function () { profileInfoHandler(currentUser) });
-                jQuery('#logo').click(homepage_handler);
+                jQuery('#logo').click(homepageHandler);
                 showRecordedWorkouts(currentUser);
                 $('#week').change(function () { get_leaderboard_data(currentUser) })
                 $('#selectedDate').change(function () { showRecordedWorkouts(currentUser) });
