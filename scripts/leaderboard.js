@@ -1,7 +1,6 @@
-async function get_leaderboard_data(currentUser) {
+async function getLeaderboardData(currentUser) {
     $("#leaderboardInfo").empty();
     let weekValue = $('#week').val();
-    console.log(weekValue);
     const [year, weekNumber] = weekValue.split('-W').map(Number);
     const janFirst = new Date(year, 0, 1);
     const daysToAdd = (weekNumber - 1) * 7 - janFirst.getDay();
@@ -24,7 +23,6 @@ async function get_leaderboard_data(currentUser) {
                 });
 
                 let leaderboardpromises = friendIDs.map(function (id) {
-                    console.log(id);
                     return db.collection("users").doc(id).get().then(userinfo => {
                         let nickname = userinfo.data().nickname;
                         leaderboardinfo[nickname] = {
@@ -55,10 +53,8 @@ async function get_leaderboard_data(currentUser) {
                     i = 0;
                     let calories_in_order = (Object.keys(leaderboardinfo).map(nickname => leaderboardinfo[nickname]["calories"]));
                     calories_in_order.sort(function (a, b) { return a - b }).reverse();
-                    console.log(calories_in_order);
                     for (index = 0; index < calories_in_order.length; index++) {
                         for (let nickname in leaderboardinfo) {
-                            console.log(leaderboardinfo[nickname]["badges"])
                             if (leaderboardinfo[nickname]["calories"] === calories_in_order[index]) {
                                 text_to_inject = `<div class="grid grid-cols-4 text-center place-items-center bg-[#fff6e5] m-4 rounded-lg p-3">
                                     <span class="grid grid-cols-2 text-center place-items-center"> <span>${i + 1}.</span><img class="w-8 h-8 rounded-full"
@@ -86,7 +82,7 @@ async function get_leaderboard_data(currentUser) {
     })
 }
 
-function leaderboard_handler() {
+function leaderboardHandler() {
 
     if (jQuery('#leaderboard').css("display") == "none") {
         jQuery('#leaderboard').toggle();
@@ -100,7 +96,7 @@ function leaderboard_handler() {
     }
 }
 
-function leaderboard_current_date() {
+function leaderboardCurrentDate() {
     const currentDate = new Date();
     const year = currentDate.getFullYear();
     const startOfYear = new Date(year, 0, 1);

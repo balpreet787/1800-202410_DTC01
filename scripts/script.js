@@ -144,12 +144,12 @@ function profileInfoHandler(currentUser) {
 
 
 function setup() {
-    leaderboard_current_date();
+    leaderboardCurrentDate();
     show_workout_page_date();
     jQuery('#info').click(infoHandler);
     jQuery('#aboutUs').click(aboutUsHandler)
     jQuery('#homepage_button').click(homepage_handler);
-    jQuery('#leaderboard_button').click(leaderboard_handler);
+    jQuery('#leaderboard_button').click(leaderboardHandler);
     jQuery('#activity_button').click(activityHandler);
     jQuery('#calendar_button').click(calendar_handler);
     jQuery('#settings_button').click(settingsHandler);
@@ -218,9 +218,9 @@ function setup() {
                 jQuery('#profile_info_button').click(function () { profileInfoHandler(currentUser) });
                 jQuery('#logo').click(homepage_handler);
                 show_recorded_workouts(currentUser);
-                $('#week').change(function () { get_leaderboard_data(currentUser) })
+                $('#week').change(function () { getLeaderboardData(currentUser) })
                 $('#selectedDate').change(function () { show_recorded_workouts(currentUser) });
-                get_leaderboard_data(currentUser);
+                getLeaderboardData(currentUser);
                 insertNameAndPicFromFirestore(currentUser);
                 insertHomepageInfoFromFirestore(currentUser);
                 insertTodaysWorkoutInfoFromFirestore(currentUser);
