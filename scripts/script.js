@@ -1,33 +1,23 @@
 var ImageFile;
 
 function uploadPic(postDocID) {
-    console.log("inside uploadPic " + postDocID);
-    console.log(ImageFile)
     var storageRef = storage.ref("images/" + postDocID + ".jpg");
-
     storageRef.put(ImageFile)
-
         .then(function () {
-            console.log('2. Uploaded to Cloud Storage.');
             storageRef.getDownloadURL()
-
                 .then(function (url) {
-                    console.log("3. Got the download URL.");
-
                     db.collection("users").doc(postDocID).set({
                         "image": url
                     }, { merge: true })
                         .then(function () {
                             console.log('4. Added pic URL to Firestore.');
-
                         })
                 })
         })
-        .catch((error) => {
+        .catch(() => {
             console.log("error uploading to cloud storage");
         })
 }
-
 
 
 async function updateInfo(currentUser) {
@@ -35,7 +25,6 @@ async function updateInfo(currentUser) {
     jQuery("#profile_info").css("display", "none");
     jQuery('#settings').toggle();
     jQuery('#confirmProfileUpdate').css("display", "flex").delay(3000).hide(0);
-    location.reload();
     var nickname = jQuery("#nickname").val();
     var gender = jQuery("#gender").val();
     var height = jQuery("#height").val();
@@ -54,6 +43,7 @@ async function updateInfo(currentUser) {
         }, { merge: true })
             .then(() => {
                 uploadPic(currentUser.id);
+                // location.reload();
                 console.log("Document successfully updated!");
 
 
