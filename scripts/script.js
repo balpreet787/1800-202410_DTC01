@@ -211,7 +211,6 @@ function setup() {
                 } else {
                     console.log("No such document!");
                 }
-                console.log(currentUser);
                 image.attr('src', profilepic);
                 jQuery("#save_workout_button").click(function () { addWorkout(currentUser) });
                 jQuery("#save_profile_info_button").click(function () { updateInfo(currentUser) });
