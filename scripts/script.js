@@ -149,12 +149,12 @@ function setup() {
     jQuery('#info').click(infoHandler);
     jQuery('#aboutUs').click(aboutUsHandler)
     jQuery('#homepage_button').click(homepageHandler);
-    jQuery('#leaderboard_button').click(leaderboard_handler);
+    jQuery('#leaderboard_button').click(leaderboardHandler);
     jQuery('#activity_button').click(activityHandler);
     jQuery('#calendar_button').click(calendarHandler);
     jQuery('#settings_button').click(settingsHandler);
-    jQuery('#add_workout_button').click(add_workout_handler);
-    jQuery('#exercises').change(additional_information_handler);// fix this
+    jQuery('#add_workout_button').click(addWorkoutHandler);
+    jQuery('#exercises').change(additionalInformationHandler);// fix this
     jQuery('#filter_button').click(filterHandler);
     jQuery('#username-search-button').click(userSearchInActivityFeed)
     jQuery('.reset_button').click(resetFilteredActivityFeed);
@@ -218,9 +218,9 @@ function setup() {
                 jQuery('#profile_info_button').click(function () { profileInfoHandler(currentUser) });
                 jQuery('#logo').click(homepageHandler);
                 showRecordedWorkouts(currentUser);
-                $('#week').change(function () { get_leaderboard_data(currentUser) })
+                $('#week').change(function () { getLeaderboardData(currentUser) })
                 $('#selectedDate').change(function () { showRecordedWorkouts(currentUser) });
-                get_leaderboard_data(currentUser);
+                getLeaderboardData(currentUser);
                 insertNameAndPicFromFirestore(currentUser);
                 insertHomepageInfoFromFirestore(currentUser);
                 insertTodaysWorkoutInfoFromFirestore(currentUser);

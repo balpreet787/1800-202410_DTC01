@@ -86,7 +86,7 @@ async function giveUserBadge(exerciseType, currentUser) {
 
 }
 
-function get_calories_burned(exerciseType, startDate, endDate, exercise_intensity, currentUser) {
+function getCaloriesBurned(exerciseType, startDate, endDate, exercise_intensity, currentUser) {
     const startTime = new Date(startDate);
     const endTime = new Date(endDate);
     const difference = (endTime - startTime) / (1000 * 60); // Difference in minutes
@@ -125,7 +125,7 @@ function get_calories_burned(exerciseType, startDate, endDate, exercise_intensit
     });
 }
 
-async function exercise_counter(exercise_type, currentUser) {
+async function countTheExercises(exercise_type, currentUser) {
     currentUser.collection("exerciseCounter").doc("exercises").get().then((exerciseCounter) => {
         if (exerciseCounter.exists) {
             if (exerciseCounter.data()[exercise_type] == undefined || exerciseCounter.data()[exercise_type] == null) {
@@ -175,7 +175,7 @@ async function addWorkout(currentUser) {
     startDate = jQuery("#startDate").val();
     endDate = jQuery("#endDate").val();
     exercise_type = jQuery("#exercises").val();
-    await exercise_counter(exercise_type, currentUser);
+    await countTheExercises(exercise_type, currentUser);
     if (exercise_type != "" && startDate != "" && endDate != "" && jQuery(".intensity").val() != "") {
         if (exercise_type == "weightlifting") {
             intensity = jQuery("#intensity").val();
@@ -211,7 +211,7 @@ async function addWorkout(currentUser) {
             intensity = jQuery("#distance").val();
             exercise_intensity = parseFloat(jQuery("#distance").val())
         }
-        let calories_burned = await get_calories_burned(exercise_type, startDate, endDate, exercise_intensity, currentUser);
+        let calories_burned = await getCaloriesBurned(exercise_type, startDate, endDate, exercise_intensity, currentUser);
         let badges_earned = await giveUserBadge(exercise_type, currentUser);
         let start_Date = firebase.firestore.Timestamp.fromDate(new Date(startDate));
         let end_Date = firebase.firestore.Timestamp.fromDate(new Date(endDate));
@@ -256,7 +256,7 @@ async function addWorkout(currentUser) {
 
 }
 
-function add_workout_handler() {
+function addWorkoutHandler() {
     if (jQuery('#add_workout').css("display") == "none") {
         jQuery('#add_workout').toggle()
         jQuery('#homepage').css("display", "none");
@@ -269,7 +269,7 @@ function add_workout_handler() {
     }
 }
 
-function additional_information_handler() {
+function additionalInformationHandler() {
     if (jQuery(this).val() == "cycling" || jQuery(this).val() == "running" || jQuery(this).val() == "walking") {
         jQuery('#distance-div').css("display", "flex");
         jQuery('#intensity-div').css("display", "none");
@@ -281,9 +281,7 @@ function additional_information_handler() {
 }
 
 function removeBadges(currentUser, exerciseType, exerciseCount) {
-    console.log(currentUser, exerciseType, exerciseCount)
     if (exerciseCount == 5) {
-        console.log("asdkjaskd")
         currentUser.collection("workouts").where("earned_name", "==", `bronze ${exerciseType} badge`).get().then((removedWorkout) => {
             removedWorkout.forEach(workout => {
                 currentUser.collection("workouts").doc(workout.id).update({earned_name: null, earned: null})
@@ -312,21 +310,18 @@ function removeBadges(currentUser, exerciseType, exerciseCount) {
 }
 
 
-function remove_workout(currentUser, historyId) {
-    console.log(currentUser)
+function removeWorkout(currentUser, historyId) {
     currentUser.collection("workouts").doc(historyId).get().then((doc) => {
         if (doc.exists) {
             exercise = doc.data().exerciseType
             currentUser.collection("exerciseCounter").doc("exercises").get().then((doc) => {
                 exerciseCount = doc.data()[exercise]
-                console.log(exercise, exerciseCount)
                 currentUser.collection("exerciseCounter").doc("exercises").update({
                     [exercise]: exerciseCount - 1,
                     [exercise]: exerciseCount - 1,
                 });
                 removeBadges(currentUser, exercise, exerciseCount);
                 currentUser.collection("workouts").doc(historyId).delete().then(() => {
-                    console.log("Document successfully deleted!");
                     location.reload();
 
                 }).catch((error) => {
