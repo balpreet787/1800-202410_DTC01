@@ -22,9 +22,10 @@ function getActivityFeedInfo(currentUser) {
                             badge_name = doc.data().earned_name;
                             workout_time = (doc.data().endDate - doc.data().startDate) / 60;
                             exercise_type = doc.data().exerciseType;
+                            intensity = doc.data().intensity;
 
                             activityfeedinfo.push({
-                                "startdate": doc.data().startDate, "calories": doc.data().calories, "username": username, "exercise_type": doc.data().exerciseType, "profilepic": profilepic, "nickname": nickname, "workouttime": workout_time, "badgesearned": badge_earned, "badge_name": badge_name
+                                "startdate": doc.data().startDate, "calories": doc.data().calories, "username": username, "exercise_type": doc.data().exerciseType, "profilepic": profilepic, "nickname": nickname, "workouttime": workout_time, "badgesearned": badge_earned, "badge_name": badge_name, "intensity": intensity
                             })
                         });
                     });
@@ -34,32 +35,49 @@ function getActivityFeedInfo(currentUser) {
                 activityfeedinfo.sort((a, b) => b.startdate - a.startdate);
                 let badge_earned = null
                 for (let i = 0; i < activityfeedinfo.length; i++) {
+                    let startdate = activityfeedinfo[i]["startdate"].toDate();
+                    activityDate = startdate.getDate();
+                    activityMonth = startdate.getMonth() + 1;
+                    activityYear = startdate.getFullYear()
+
+                    let activityDetails = ""
+                    let activityIntensity = ""
                     if (activityfeedinfo[i]["exercise_type"] == "yoga") {
                         activityfeedinfo[i]["exercise_type"] = "doing yoga";
+                    }
+                    if (activityfeedinfo[i]["exercise_type"] == "weightlifting" || activityfeedinfo[i]["exercise_type"] == "doing yoga") {
+                        activityDetails = ` spent ${activityfeedinfo[i]["workouttime"]} minutes <b>${activityfeedinfo[i]["exercise_type"]}</b>`
+                        activityIntensity = `<b>Intensity:</b> ${activityfeedinfo[i]["intensity"]}`
+                    }
+                    else {
+                        activityDetails = ` spent ${activityfeedinfo[i]["workouttime"]} minutes <b>${activityfeedinfo[i]["exercise_type"]}</b>`
+                        activityIntensity = `<b>Distance:</b>${activityfeedinfo[i]["intensity"]} km`
+
                     }
                     if (activityfeedinfo[i]["badgesearned"] == badge_earned || activityfeedinfo[i]["badgesearned"] == null) {
                         activityfeedinfo[i]["badgesearned"] = "";
                         add_to_activity_feed = `<div class="flex flex-row bg-[#fff6e5] rounded-xl mt-2 m-4 normal-activity activity-feed-post${i} ${activityfeedinfo[i]["nickname"].toLowerCase()}">
                                             <img class="h-20 mx-5 self-center rounded-full w-20" src="${activityfeedinfo[i]["profilepic"]}" alt="">
                                             <div class="p-2 ">
-                                                <div class="py-2">
-                                                    <h1 class="font-semibold inline text-lg"><span id="activity-username">${activityfeedinfo[i]["nickname"]}</span></h1>
+                                                <div class="py-2 flex">
+                                                    <h1 class="font-semibold inline text-lg"><span id="activity-username">${activityfeedinfo[i]["nickname"]}</span></h1><span class="text-xs self-center my-auto">&nbsp;&nbsp;&bull;${activityDate}-${activityMonth}-${activityYear}</span>
                                                 </div>
-                                                <p class="text-xs pb-4 pr-1" id="activity-feed-phrase">${activityfeedinfo[i]["username"]} spent ${activityfeedinfo[i]["workouttime"]} minutes ${activityfeedinfo[i]["exercise_type"]}!</p>
+                                                <p class="text-xs pb-4 pr-1" id="activity-feed-phrase">${activityfeedinfo[i]["username"]} ${activityDetails}!</br>${activityIntensity}</p>
                                             </div>
                                         </div>`
                     } else {
                         badge_earned = activityfeedinfo[i]["badgesearned"]
+
                         add_to_activity_feed = `<div class="flex flex-row mt-2 mx-4 ">
                                         </div>
                                         <div class="flex flex-row bg-[#fff6e5] rounded-xl mt-2 m-4 accomplishment-activity activity-feed-post${i} ${activityfeedinfo[i]["nickname"]}">
                                             <img class="h-20 mx-5 self-center rounded-full w-20" src=${activityfeedinfo[i]["profilepic"]}" alt="">
                                             <div class="p-2 w-full">
                                                 <div class="py-2 flex flex-row justify-between">
-                                                    <div><h1 class="font-semibold inline text-lg"><span id="activity-username">${activityfeedinfo[i]["nickname"]}</span></h1></div>
+                                                    <div><h1 class="font-semibold inline text-lg"><span id="activity-username">${activityfeedinfo[i]["nickname"]}</span></h1><span class="text-xs self-center my-auto">&nbsp;&nbsp;&bull;${activityDate}-${activityMonth}-${activityYear}</span></div>
                                                    <div> <img class="h-6 pr-3 inline w-full justify-self-end" src="${activityfeedinfo[i]["badgesearned"]}" alt=""></div>
                                                 </div>
-                                                <p class="text-xs pb-4 pr-1 ml-auto" id="accomplishment-phrase">${activityfeedinfo[i]["username"]} spent ${activityfeedinfo[i]["workouttime"]} minutes ${activityfeedinfo[i]["exercise_type"]} and earned a ${activityfeedinfo[i]["badge_name"]}!</p>
+                                                <p class="text-xs pb-4 pr-1 ml-auto"  id="accomplishment-phrase">${activityfeedinfo[i]["username"]} ${activityDetails} and earned a ${activityfeedinfo[i]["badge_name"]}! </br> ${activityIntensity}</p>
                                             </div>
                                         </div>`
                     }
