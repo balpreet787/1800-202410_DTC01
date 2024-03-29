@@ -86,6 +86,6 @@ function deleteWorkoutHandler(currentUser, historyId) {
         jQuery(`#${historyId}Delete`).css("display", "flex");
     })
     jQuery(`#${historyId}Confirm`).click(function () {
-        remove_workout(currentUser, historyId);
+        removeWorkout(currentUser, historyId);
     })
 }
