@@ -53,9 +53,7 @@ async function updateInfo(currentUser) {
 }
 
 
-
 function populateUserInfo(currentUser) {
-
     currentUser.get()
         .then(userDoc => {
             //get the data fields of the user
@@ -66,7 +64,6 @@ function populateUserInfo(currentUser) {
             let height = userDoc.data().height;
             let weight = userDoc.data().weight;
             let gender = userDoc.data().gender;
-            console.log(userDoc.data())
             //if the data fields are not empty, then write them in to the form.
             if (leaderboard_id != null) {
                 $("#leaderboard_id").val(leaderboard_id);
@@ -89,26 +86,24 @@ function populateUserInfo(currentUser) {
             if (gender != null) {
                 $("#gender").val(gender);
             }
-
         })
-
 }
 
 
-function info_handler() {
+function infoHandler() {
     jQuery('#info-box').slideToggle()
 }
 
 
-function aboutUs_handler() {
+function aboutUsHandler() {
     jQuery('#aboutUs-box').slideToggle()
 }
 
-function redirect_to_login() {
+function redirectToLogin() {
     window.location.href = 'login.html';
 }
 
-function redirect_to_signup() {
+function redirectToSignup() {
     window.location.href = 'index.html';
 }
 
@@ -122,7 +117,7 @@ function logout() {
 }
 
 
-function settings_handler() {
+function settingsHandler() {
     if (jQuery('#settings').css("display") == "none") {
         jQuery('#settings').toggle()
         jQuery('#homepage').css("display", "none");
@@ -135,7 +130,7 @@ function settings_handler() {
     }
 }
 
-function profile_info_handler(currentUser) {
+function profileInfoHandler(currentUser) {
     populateUserInfo(currentUser);
     if (jQuery('#profile_info').css("display") == "none") {
         jQuery('#profile_info').toggle()
@@ -151,27 +146,25 @@ function profile_info_handler(currentUser) {
 function setup() {
     leaderboard_current_date();
     show_workout_page_date();
-    jQuery('#info').click(info_handler);
-    jQuery('#aboutUs').click(aboutUs_handler)
+    jQuery('#info').click(infoHandler);
+    jQuery('#aboutUs').click(aboutUsHandler)
     jQuery('#homepage_button').click(homepage_handler);
     jQuery('#leaderboard_button').click(leaderboard_handler);
     jQuery('#activity_button').click(activityHandler);
     jQuery('#calendar_button').click(calendar_handler);
-    jQuery('#settings_button').click(settings_handler);
+    jQuery('#settings_button').click(settingsHandler);
     jQuery('#add_workout_button').click(add_workout_handler);
     jQuery('#exercises').change(additional_information_handler);// fix this
     jQuery('#filter_button').click(filterHandler);
     jQuery('#username-search-button').click(userSearchInActivityFeed)
     jQuery('.reset_button').click(resetFilteredActivityFeed);
     jQuery('#cancel_button').click(activityHandler);
-    // jQuery('#save_profile_info_button').click(settings_handler);
-    jQuery('#cancel_profile_info_button').click(settings_handler);
-    //jQuery('#save_workout_button').click(homepage_handler);
+    jQuery('#cancel_profile_info_button').click(settingsHandler);
     jQuery('#cancel_workout_button').click(homepage_handler);
-    jQuery('#logout_button').click(redirect_to_signup);
+    jQuery('#logout_button').click(redirectToSignup);
     jQuery('#logout_button').click(logout);
-    $('#login').click(redirect_to_login);
-    $('#signup').click(redirect_to_login);
+    $('#login').click(redirectToLogin);
+    $('#signup').click(redirectToLogin);
     $("#view-feed-button").click(filterActivityFeed);
     var fileInput = $('#file-input');
     let profilepic = undefined
@@ -222,7 +215,7 @@ function setup() {
                 image.attr('src', profilepic);
                 jQuery("#save_workout_button").click(function () { addWorkout(currentUser) });
                 jQuery("#save_profile_info_button").click(function () { updateInfo(currentUser) });
-                jQuery('#profile_info_button').click(function () { profile_info_handler(currentUser) });
+                jQuery('#profile_info_button').click(function () { profileInfoHandler(currentUser) });
                 jQuery('#logo').click(homepage_handler);
                 show_recorded_workouts(currentUser);
                 $('#week').change(function () { get_leaderboard_data(currentUser) })
