@@ -1,4 +1,4 @@
-async function give_user_badge(exerciseType, currentUser) {
+async function giveUserBadge(exerciseType, currentUser) {
     var weightlifting_count = (await currentUser.collection("exerciseCounter").doc("exercises").get()).get("weightlifting");
     var yoga_count = (await currentUser.collection("exerciseCounter").doc("exercises").get()).get("yoga");
     var running_count = (await currentUser.collection("exerciseCounter").doc("exercises").get()).get("running");
@@ -212,7 +212,7 @@ async function addWorkout(currentUser) {
             exercise_intensity = parseFloat(jQuery("#distance").val())
         }
         let calories_burned = await get_calories_burned(exercise_type, startDate, endDate, exercise_intensity, currentUser);
-        let badges_earned = await give_user_badge(exercise_type, currentUser);
+        let badges_earned = await giveUserBadge(exercise_type, currentUser);
         let start_Date = firebase.firestore.Timestamp.fromDate(new Date(startDate));
         let end_Date = firebase.firestore.Timestamp.fromDate(new Date(endDate));
 
