@@ -144,7 +144,7 @@ function profileInfoHandler(currentUser) {
 
 
 function setup() {
-    leaderboard_current_date();
+    leaderboardCurrentDate();
     showWorkoutPageDate();
     jQuery('#info').click(infoHandler);
     jQuery('#aboutUs').click(aboutUsHandler)

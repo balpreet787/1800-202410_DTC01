@@ -162,6 +162,6 @@ function homepageHandler() {
     jQuery('#add_workout').css("display", "none");
     jQuery('#filter_activity').css("display", "none");
     jQuery('#profile_info').css("display", "none");
-
+    
 }
 
