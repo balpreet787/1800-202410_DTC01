@@ -140,12 +140,17 @@
     <div class="hidden" id="activity_feed">
         <div class="flex flex-row mt-2 mx-4">
             <button id="filter_button"><img class="h-10 inline mb-1 mr-2" src="images/filter_icon.svg" alt=""></button>
-            <input class="outline outline-1 outline-gray-500 rounded-lg px-2 w-full" type="search">
+            <div class="outline outline-1 outline-gray-500 rounded-lg flex flex-rows justify-between w-full">
+                <input class="px-2 w-full" name="username-search" type="search" placeholder="Search for a user: ">
+                <input id="username-search-button" class="justify-end px-2 mr-auto hover:cursor-pointer" type="button" value="Search">
+            </div>
+            <div>
+
+            </div>
         </div>
-        <p id="filter-accomplishment" class="px-6 py-1 underline hidden">Accomplishments<button
-                class="reset_button px-2">x</button></p>
-        <p id="filter-activity" class="px-6 py-1 underline hidden">Activity<button class="reset_button px-2">x</button>
-        </p>
+        <p id="filter-accomplishment" class="px-6 py-1 underline hidden">Accomplishments<button class="reset_button px-2">x</button></p>
+        <p id="filter-activity" class="px-6 py-1 underline hidden">Activity<button class="reset_button px-2">x</button></p>
+        <button id="filter-search" class="px-6 py-1 underline hidden reset_button">Reset</button>
     </div>
     <!-- End of Activity Feed -->
 

@@ -15,7 +15,7 @@ function getActivityFeedInfo(currentUser) {
                     let nickname = userinfo.data().nickname;
                     let username = userinfo.data().name;
                     let profilepic = userinfo.data().image;
-                    return db.collection("users").doc(id).collection('workouts').orderBy('startDate', 'desc').get().then(querySnapshot => {
+                    return db.collection("users").doc(id).collection('workouts').orderBy('startDate', 'desc').limit(20).get().then(querySnapshot => {
                         querySnapshot.forEach(doc => {
 
                             badge_earned = doc.data().earned;
@@ -56,7 +56,7 @@ function getActivityFeedInfo(currentUser) {
                     }
                     if (activityfeedinfo[i]["badgesearned"] == badge_earned || activityfeedinfo[i]["badgesearned"] == null) {
                         activityfeedinfo[i]["badgesearned"] = "";
-                        add_to_activity_feed = `<div class="flex flex-row bg-[#fff6e5] rounded-xl mt-2 m-4 normal-activity">
+                        add_to_activity_feed = `<div class="flex flex-row bg-[#fff6e5] rounded-xl mt-2 m-4 normal-activity activity-feed-post${i} ${activityfeedinfo[i]["nickname"].toLowerCase()}">
                                             <img class="h-20 mx-5 self-center rounded-full w-20" src="${activityfeedinfo[i]["profilepic"]}" alt="">
                                             <div class="p-2 ">
                                                 <div class="py-2 flex">
@@ -70,7 +70,7 @@ function getActivityFeedInfo(currentUser) {
 
                         add_to_activity_feed = `<div class="flex flex-row mt-2 mx-4 ">
                                         </div>
-                                        <div class="flex flex-row bg-[#fff6e5] rounded-xl mt-2 m-4 accomplishment-activity">
+                                        <div class="flex flex-row bg-[#fff6e5] rounded-xl mt-2 m-4 accomplishment-activity activity-feed-post${i} ${activityfeedinfo[i]["nickname"]}">
                                             <img class="h-20 mx-5 self-center rounded-full w-20" src=${activityfeedinfo[i]["profilepic"]}" alt="">
                                             <div class="p-2 w-full">
                                                 <div class="py-2 flex flex-row justify-between">
@@ -90,6 +90,26 @@ function getActivityFeedInfo(currentUser) {
         });
     });
 }
+
+
+function userSearchInActivityFeed() {
+    var userSearched = $("input[name='username-search']").val().toLowerCase();
+    if (userSearched == "") {
+        $(`div.activity-feed-post${i}`).css("display", "flex")
+    } else {
+        for (let i = 0; i < 20; i++) {
+            if ($(`div.activity-feed-post${i}`).hasClass(`${userSearched}`)) {
+                $(`div.activity-feed-post${i}`).css("display", "flex")
+                jQuery("#filter-search").css("display", "flex")
+
+            } else if (!$(`div.activity-feed-post${i}`).hasClass(`${userSearched}`)) {
+                $(`div.activity-feed-post${i}`).css("display", "none")
+            }
+        }
+    }
+}
+
+
 
 function filterActivityFeed() {
     var selected_value = $("input[name='filter-activity-feed']:checked").val();
@@ -116,6 +136,7 @@ function filterActivityFeed() {
 
 function resetFilteredActivityFeed() {
     $("input[name='filter-activity-feed']").prop('checked', false);
+    jQuery("input[name='username-search']").val("")
     jQuery(".reset_button").css("display", "none")
     jQuery("#filter-activity").css("display", "none")
     jQuery("#filter-accomplishment").css("display", "none")
