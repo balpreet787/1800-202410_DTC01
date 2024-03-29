@@ -1,16 +1,16 @@
-function show_recorded_workouts(currentUser) {
+function showRecordedWorkouts(currentUser) {
     $("#recorded_workouts").empty();
-    let input_date = $('#selectedDate').val();
+    let inputDate = $('#selectedDate').val();
 
     // Create local Date objects at the beginning and end of the selected day
-    let selected_date = new Date(input_date + "T00:00:00");
-    let selected_endDay = new Date(input_date + "T23:59:59");
+    let selectedStartDate = new Date(inputDate + "T00:00:00");
+    let selectedEndDate = new Date(inputDate + "T23:59:59");
 
     // Convert the local date times directly to Firestore Timestamps
-    let firebase_Startdate = firebase.firestore.Timestamp.fromDate(selected_date);
-    let firebase_Enddate = firebase.firestore.Timestamp.fromDate(selected_endDay);
+    let firebaseStartdate = firebase.firestore.Timestamp.fromDate(selectedStartDate);
+    let firebaseEnddate = firebase.firestore.Timestamp.fromDate(selectedEndDate);
 
-    currentUser.collection('workouts').where('startDate', '>=', firebase_Startdate).where('startDate', '<=', firebase_Enddate).get().then(recordedWorkout => {
+    currentUser.collection('workouts').where('startDate', '>=', firebaseStartdate).where('startDate', '<=', firebaseEnddate).get().then(recordedWorkout => {
         recordedWorkout.forEach(workouts => {
             if (workouts.data().exerciseType == 'weightlifting' || workouts.data().exerciseType == 'yoga') {
                 $("#recorded_workouts").append(
@@ -55,7 +55,7 @@ function show_recorded_workouts(currentUser) {
     });
 }
 
-function calendar_handler() {
+function calendarHandler() {
     if (jQuery('#datepicker').css("display") == "none") {
         jQuery('#datepicker').css("display", "flex")
         jQuery('#homepage').css("display", "none");
@@ -68,7 +68,7 @@ function calendar_handler() {
     }
 }
 
-function show_workout_page_date() {
+function showWorkoutPageDate() {
     const currentDate = new Date();
     const localDate = currentDate.toLocaleDateString('en-CA'); // 'en-CA' uses the YYYY-MM-DD format
     $('#selectedDate').val(localDate);
