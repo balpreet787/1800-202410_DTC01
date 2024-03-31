@@ -56,7 +56,7 @@ function getActivityFeedInfo(currentUser) {
                     }
                     if (activityfeedinfo[i]["badgesearned"] == badgesEarned || activityfeedinfo[i]["badgesearned"] == null) {
                         activityfeedinfo[i]["badgesearned"] = "";
-                        addToActivityFeed = `<div class="flex flex-row bg-[#fff6e5] rounded-xl mt-2 m-4 normal-activity activity-feed-post${i} ${activityfeedinfo[i]["nickname"].toLowerCase()}">
+                        addToActivityFeed = `<div class="flex flex-row bg-[#fff6e5] rounded-xl shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px] mt-2 m-4 normal-activity activity-feed-post${i} ${activityfeedinfo[i]["nickname"].toLowerCase()}">
                                             <img class="h-20 mx-5 self-center rounded-full w-20" src="${activityfeedinfo[i]["profilepic"]}" alt="">
                                             <div class="p-2 ">
                                                 <div class="py-2 flex">
@@ -70,7 +70,7 @@ function getActivityFeedInfo(currentUser) {
 
                         addToActivityFeed = `<div class="flex flex-row mt-2 mx-4 ">
                                         </div>
-                                        <div class="flex flex-row bg-[#fff6e5] rounded-xl mt-2 m-4 accomplishment-activity activity-feed-post${i} ${activityfeedinfo[i]["nickname"]}">
+                                        <div class="flex flex-row bg-[#fff6e5] rounded-xl shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]mt-2 m-4 accomplishment-activity activity-feed-post${i} ${activityfeedinfo[i]["nickname"]}">
                                             <img class="h-20 mx-5 self-center rounded-full w-20" src=${activityfeedinfo[i]["profilepic"]}" alt="">
                                             <div class="p-2 w-full">
                                                 <div class="py-2 flex flex-row justify-between">

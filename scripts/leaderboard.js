@@ -56,7 +56,7 @@ async function getLeaderboardData(currentUser) {
                     for (index = 0; index < calories_in_order.length; index++) {
                         for (let nickname in leaderboardinfo) {
                             if (leaderboardinfo[nickname]["calories"] === calories_in_order[index]) {
-                                text_to_inject = `<div class="grid grid-cols-4 text-center place-items-center bg-[#fff6e5] m-4 rounded-lg p-3">
+                                text_to_inject = `<div class="grid grid-cols-4 text-center place-items-center bg-[#fff6e5] m-4 rounded-xl shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px] p-3">
                                     <span class="grid grid-cols-2 text-center place-items-center"> <span>${i + 1}.</span><img class="w-8 h-8 rounded-full"
                                             src="${leaderboardinfo[nickname]["profilepic"]}" alt=""></span>
                                     <span>${nickname}</span>

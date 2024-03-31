@@ -26,6 +26,14 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Link to styles of your own -->
     <!-- <link rel="stylesheet" href="./styles/style.css"> -->
+    <link href='https://fonts.googleapis.com/css?family=Inter' rel='stylesheet'>
+    <style>
+        * {
+            font-family: 'Inter';
+            color: #2B2B2B; 
+        }
+    </style>
+
 
 </head>
 
@@ -33,7 +41,7 @@
 
     <!------------------------------>
     <!-- Your HTML Layout go here -->
-    <div class="flex flex-row justify-between font-bold p-3 bg-[#ffb833]">
+    <div class="flex flex-row justify-between font-bold p-3 bg-[#ff9500]">
         <img src="./images/logo.svg" class="w-8 h-8" alt="logo">
         <div class="">
             <img src="./images/info_icon.png" class="w-8 h-8" id="info" alt="">
@@ -42,22 +50,22 @@
 
     <!------------------------------>
     <!-- Stuff for body goes here -->
-    <div class="text-center hidden  p-2 bg-orange-400 text-white" id="info-box">
+    <div class="text-center hidden  p-2 bg-[#ff9500] text-bold" id="info-box">
         CompetiFit is an application that helps fitness enthusiasts maintain a consistent exercise schedule by providing
         a sense of competition between users! Through CompetiFit, users can log their daily exercise, track their
         consistency through a leaderboard, and keep up to date with their friends on their activity feed.
     </div>
     <div class="flex flex-col place-content-center my-12">
 
-        <h1 class="text-6xl font-bold text-center">Competi<span class="text-blue-800">Fit</span></h1>
-        <div class="text-center">For the competive</div>
+        <h1 class="text-6xl font-black text-center">Competi<span class="font-black text-blue-800">Fit</span></h1>
+        <div class="text-center text-bold">For the competitive</div>
         <img class="mt-12" src="./images/landing_page_1.webp" alt="">
         <div class="flex flex-row justify-center gap-5 mt-5">
-            <button id="signup" class="bg-blue-800 text-2xl text-white font-bold py-4 px-4 rounded-xl">
+            <button id="signup" class="bg-[#eaa442] text-2xl text-white font-bold py-4 px-4 rounded-xl">
                 Sign Up
             </button>
             <button id="login"
-                class=" bg-blue-800 text-2xl hover:bg-blue-700 text-white font-bold py-4 px-6 rounded-xl">
+                class="bg-[#eaa442]  text-2xl hover:bg-blue-700 text-white font-bold py-4 px-6 rounded-xl">
                 Log In
             </button>
         </div>
