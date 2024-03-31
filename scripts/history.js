@@ -14,7 +14,7 @@ function showRecordedWorkouts(currentUser) {
         recordedWorkout.forEach(workouts => {
             if (workouts.data().exerciseType == 'weightlifting' || workouts.data().exerciseType == 'yoga') {
                 $("#recorded_workouts").append(
-                    `<div class="flex flex-col justify-evenly bg-[#fff6e5]" id="${workouts.id}">
+                    `<div class="flex flex-col justify-evenly bg-[#fff6e5] shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px] rounded-xl" id="${workouts.id}">
                             <div class="flex flex-row justify-between">
                             <div class="flex flex-col justify-evenly bg-[#fff6e5] text-[16px] p-4">
                             <span><b>Workout:</b> ${workouts.data().exerciseType}</span>
@@ -35,7 +35,7 @@ function showRecordedWorkouts(currentUser) {
             }
             else {
                 $("#recorded_workouts").append(
-                    `<div class="flex flex-row justify-evenly bg-[#fff6e5]">
+                    `<div class="flex flex-row justify-evenly bg-[#fff6e5] shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px] rounded-xl">
                             <div class="flex flex-col justify-evenly bg-[#fff6e5] text-[16px] p-4">
                             <span><b>Workout:</b> ${workouts.data().exerciseType}</span>
                             <span><b>Km:</b> ${workouts.data().intensity}</span>
