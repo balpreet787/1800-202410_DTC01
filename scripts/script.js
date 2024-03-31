@@ -227,15 +227,15 @@ function setup() {
                 jQuery("#save_profile_info_button").click(function () { updateInfo(currentUser) });
                 jQuery('#profile_info_button').click(function () { profileInfoHandler(currentUser) });
                 jQuery('#logo').click(homepageHandler);
-                showRecordedWorkouts(currentUser);
+                // showRecordedWorkouts(currentUser);
                 $('#week').change(function () { getLeaderboardData(currentUser) })
                 $('#selectedDate').change(function () { showRecordedWorkouts(currentUser) });
-                getLeaderboardData(currentUser);
+                // getLeaderboardData(currentUser);
                 insertNameAndPicFromFirestore(currentUser);
                 insertHomepageInfoFromFirestore(currentUser);
                 insertTodaysWorkoutInfoFromFirestore(currentUser);
                 insertYesterdaysWorkoutInfoFromFirestore(currentUser);
-                getActivityFeedInfo(currentUser);
+                // getActivityFeedInfo(currentUser);
             }).catch(error => {
                 console.log("Error getting document:", error);
             });
