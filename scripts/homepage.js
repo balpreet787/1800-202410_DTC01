@@ -161,6 +161,7 @@ function homepageHandler() {
     jQuery("#activity-icon").attr('src', './images/nav-icons/activity-feed-black.svg')
     jQuery("#settings-icon").attr('src', './images/nav-icons/setting-black.svg')
     jQuery("#add-workout-icon").attr('src', './images/nav-icons/add-workout-black.svg')
+    jQuery('#usernameAndPic').css('display', 'grid')
     jQuery('#homepage').css("display", "grid");
     jQuery('#leaderboard').css("display", "none");
     jQuery('#activity_feed').css("display", "none");

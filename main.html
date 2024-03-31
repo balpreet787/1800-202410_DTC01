@@ -30,7 +30,7 @@
     <style>
         * {
             font-family: 'Inter';
-            color: #2B2B2B; 
+            color: #2B2B2B;
         }
     </style>
 
@@ -40,13 +40,21 @@
     <!------------------------------>
     <!-- Your HTML Layout go here -->
     <!------------------------------>
-    <header class="sticky top-0 p-3 bg-[#ff9500]">
-        <div class="flex flex-row justify-between font-bold">
+    <header class="sticky top-0 ">
+        <div class="flex flex-row justify-between font-bold p-3  bg-[#ff9500]">
             <img src="./images/logo.svg" class="w-8 h-8 hover:cursor-pointer" id="logo" alt="logo">
             <div class="">
                 <button id="add_workout_button" href=""><img id="add-workout-icon"
                         src="./images/nav-icons/add-workout-black.svg" class="w-8 h-8" alt=""></button>
             </div>
+        </div>
+        <div
+            class="grid grid-cols-2 text-xl w-full  bg-[#ff9500] px-8 pt-2 pb-4 rounded-b-3xl shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]" id="usernameAndPic">
+            <div>
+                <h1>Hi, <span class="font-black" id="name-goes-here"></span>!</h1>
+                <div class="text-sm">Let's get going.</div>
+            </div>
+            <img class="w-16 h-16 ml-auto rounded-full" id="homepagepic" src="./images/profile_pic.svg" alt="">
         </div>
     </header>
 
@@ -62,15 +70,10 @@
         <div class="text-center hidden  p-2 bg-green-400 text-white text-sm" id="confirmAddWorkout">
             Workout successfully added.
         </div>
-        <div class="grid grid-cols-2 text-xl w-full  bg-[#ff9500] px-8 pt-2 pb-4 rounded-b-3xl shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]">
-            <div>
-                <h1>Hi, <span class="font-black" id="name-goes-here"></span>!</h1>
-                <div class="text-sm">Let's get going.</div>
-            </div>
-            <img class="w-16 h-16 ml-auto rounded-full" id="homepagepic" src="./images/profile_pic.svg" alt="">
-        </div>
+
         <div>
-            <div class="rounded-xl p-3 mx-4 my-4 shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]">
+            <div
+                class="rounded-xl p-3 mx-4 my-4 shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px] bg-[#fff6e5]">
                 <div>
                     <img class="inline h-6 pr-1" src="images/celebrate.svg" alt="">
                     <h1 class="inline font-black">Keep up the good work!</h1>
@@ -78,26 +81,30 @@
                 <p class="py-1 text-xs" id="motivational-message"></p>
             </div>
             <div class="grid grid-cols-2">
-                <div class="rounded-xl px-3.5 py-3 ml-4 mr-1 shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]">
+                <div
+                    class="rounded-xl px-3.5 py-3 ml-4 mr-1 shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px] bg-[#fff6e5]">
                     <div class="flex flex-row items-end">
                         <img class="inline h-5 pr-1" src="./images/burned.svg" alt="">
                         <h1 class="inline font-black leading-none text-sm">Calories</h1>
                     </div>
-                    <p class=" text-xs text-[#828282]"><span class="font-bold text-2xl pr-2"><span
-                                id="calories-go-here" class="font-black">0</span></span>Calories Burned This Week</p>
+                    <p class=" text-xs text-[#828282]"><span class="font-bold text-2xl pr-2"><span id="calories-go-here"
+                                class="font-black">0</span></span>Calories Burned This Week</p>
                 </div>
-                <div class="rounded-xl px-3.5 py-3 ml-1 mr-4 shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]">
+                <div
+                    class="rounded-xl px-3.5 py-3 ml-1 mr-4 shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px] bg-[#fff6e5]">
                     <div class="flex flex-row items-end">
                         <img class="inline h-6 pr-1" src="images/dumbbell1.svg" alt="">
                         <h1 class="inline font-black text-sm">Finished</h1>
                     </div>
                     <p class="text-xs text-[#828282]"><span class="font-bold text-2xl pr-2"><span
-                                id="workout-number-goes-here" class="font-black">0</span></span> Completed Workouts This Week</p>
+                                id="workout-number-goes-here" class="font-black">0</span></span> Completed Workouts This
+                        Week</p>
                 </div>
             </div>
         </div>
         <div>
-            <div class="rounded-xl p-3 mx-4 mt-2 mb-2 shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]">
+            <div
+                class="rounded-xl p-3 mx-4 mt-2 mb-2 shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px] bg-[#fff6e5]">
                 <img class="inline h-6 pr-1" src="images/today.svg" alt="">
                 <h1 class="inline font-black">Today's Workout</h1>
                 <div>
@@ -111,7 +118,8 @@
             </div>
         </div>
         <div>
-            <div class="rounded-xl p-3 mx-4 mb-3 shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]">
+            <div
+                class="rounded-xl p-3 mx-4 mb-3 shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px] bg-[#fff6e5]">
                 <img class=" inline h-6 pr-1" src="images/yesterday.svg" alt="">
                 <h1 class="inline font-black">Yesterday's Workout</h1>
                 <div>
@@ -120,7 +128,8 @@
                     <p class="text-xs p-2 text-[#828282]"><span class="font-bold text-2xl pr-2"><span
                                 id="yesterdays-calories-go-here" class="font-black">0</span></span>Calories Burned</p>
                     <p class="text-xs p-2 text-[#828282]"><span class="font-bold text-2xl pr-2"><span
-                                id="yesterdays-workouts-go-here" class="font-black">0</span></span>Completed Workouts</p>
+                                id="yesterdays-workouts-go-here" class="font-black">0</span></span>Completed Workouts
+                    </p>
                 </div>
             </div>
         </div>

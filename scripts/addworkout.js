@@ -264,6 +264,7 @@ function addWorkoutHandler() {
         jQuery("#activity-icon").attr('src', './images/nav-icons/activity-feed-black.svg')
         jQuery("#settings-icon").attr('src', './images/nav-icons/setting-black.svg')
         jQuery("#add-workout-icon").attr('src', './images/nav-icons/add-workout-white.svg')
+        jQuery('#usernameAndPic').css('display', 'none')
         jQuery('#add_workout').toggle()
         jQuery('#homepage').css("display", "none");
         jQuery('#leaderboard').css("display", "none");
