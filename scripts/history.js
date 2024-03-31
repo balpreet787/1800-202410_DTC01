@@ -19,15 +19,14 @@ function showRecordedWorkouts(currentUser) {
                             <span><b>Workout:</b> ${workouts.data().exerciseType}</span>
                             <span><b>Intensity:</b> ${workouts.data().intensity}</span>
                             </div>
-                            <button id="${workouts.id}Delete" class="p-2 self-start text-md">X</button>
-                            </div>
                             <div class="flex flex-col justify-evenly bg-[#fff6e5] text-[16px] p-4">
                             <span><b>Calories burned:</b> ${workouts.data().calories}</span>
                             <span><b>Time:</b> ${(workouts.data().endDate - workouts.data().startDate) / 60} mins </span>
                             </div>
-                            <div class="flex flex-row gap-5 p-4 justify-center">
-                            <button class="hidden underline" id="${workouts.id}Cancel">Cancel</button>
-                            <button class="hidden underline" id="${workouts.id}Confirm">Confirm Delete</button>
+                            <div>
+                            <button class="hidden" id="${workouts.id}Cancel" >Cancel</button>
+                            <button id="${workouts.id}Delete">Delete</button>
+                            <button class="hidden" id="${workouts.id}Confirm" >Confirm</button>
                             </div>
                         </div>`
                 );
