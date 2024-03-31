@@ -83,7 +83,6 @@ async function getLeaderboardData(currentUser) {
 }
 
 function leaderboardHandler() {
-    getLeaderboardData(currentUser);
     if (jQuery('#leaderboard').css("display") == "none") {
 
         jQuery("#homepage-icon").attr('src', './images/nav-icons/home-black.svg')
