@@ -148,6 +148,7 @@ function resetFilteredActivityFeed() {
 }
 
 function activityHandler() {
+    getActivityFeedInfo(currentUser);
     if (jQuery('#activity_feed').css("display") == "none") {
         jQuery("#homepage-icon").attr('src', './images/nav-icons/home-black.svg')
         jQuery("#calender-icon").attr('src', './images/nav-icons/calender-black.svg')
