@@ -2,6 +2,7 @@ function insertNameAndPicFromFirestore(currentUser) {
     currentUser.get().then(userDoc => {
         // Get the user name
         let userName = userDoc.data().name;
+        userName = userName.substring(0, userName.indexOf(' '));
         let profilePicUrl = userDoc.data().image;
         console.log(profilePicUrl)
         // Get the download URL
