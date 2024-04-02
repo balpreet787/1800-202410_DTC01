@@ -343,3 +343,21 @@ function removeWorkout(currentUser, historyId) {
     });
 }
 
+function updateworkout(currentUser, historyId) {
+    currentUser.collection("workouts").doc(historyId).get()
+        .then(userDoc => {
+            addWorkoutHandler()
+            //get the data fields of the user
+            let workoutType = userDoc.data().exerciseType;
+            let startDate = (userDoc.data().startDate).toDate();;
+            let endDate = (userDoc.data().endDate).toDate();
+            startDate = startDate.toISOString().slice(0, 16);
+            endDate = endDate.toISOString().slice(0, 16);
+            let intensity = userDoc.data().intensity
+            $("#exercises").val(workoutType);
+            $("#startDate").val(startDate);
+            $("#endDate").val(endDate);
+            $("#intensity").val(intensity);
+
+        })
+}

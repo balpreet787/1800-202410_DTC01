@@ -20,7 +20,10 @@ function showRecordedWorkouts(currentUser) {
                             <span><b>Workout:</b> ${workouts.data().exerciseType}</span>
                             <span><b>Intensity:</b> ${workouts.data().intensity}</span>
                             </div>
+                            <div>
+                            <button id="${workouts.id}Edit" class="p-2 self-start text-md">&#9998;</button>
                             <button id="${workouts.id}Delete" class="p-2 self-start text-md">X</button>
+                            </div>
                             </div>
                             <div class="flex flex-col justify-evenly bg-[#fff6e5] text-[16px] p-4">
                             <span><b>Calories burned:</b> ${workouts.data().calories}</span>
@@ -55,6 +58,8 @@ function showRecordedWorkouts(currentUser) {
                 );
             }
             deleteWorkoutHandler(currentUser, workouts.id);
+            jQuery(`#${workouts.id}Edit`).click(function(){updateworkout(currentUser, workouts.id)})
+            
         })
     });
 }
@@ -76,7 +81,7 @@ function calendarHandler() {
         jQuery('#add_workout').css("display", "none");
         jQuery('#filter_activity').css("display", "none");
         jQuery('#profile_info').css("display", "none");
-
+        
     }
 }
 
