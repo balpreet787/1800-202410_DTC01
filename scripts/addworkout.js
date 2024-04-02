@@ -307,7 +307,7 @@ function removeBadges(currentUser, exerciseType, exerciseCount) {
             })
         })
 
-    } else if (exerciseCounter == 20) {
+    } else if (exerciseCount == 20) {
         currentUser.collection("workouts").where("earned_name", "==", `platinum ${exerciseType} badge`).get().then((removedWorkout) => {
             removedWorkout.forEach(workout => {
                 currentUser.collection("workouts").doc(workout.id).update({ earned_name: `gold ${exerciseType} badge`, earned: `./images/${exerciseType}gold.svg` })
