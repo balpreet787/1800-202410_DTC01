@@ -35,21 +35,23 @@ function showRecordedWorkouts(currentUser) {
             }
             else {
                 $("#recorded_workouts").append(
-                    `<div class="flex flex-row justify-evenly bg-[#fff6e5] shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px] rounded-xl">
-                            <div class="flex flex-col justify-evenly bg-[#fff6e5] text-[16px] p-4">
-                            <span><b>Workout:</b> ${workouts.data().exerciseType}</span>
-                            <span><b>Km:</b> ${workouts.data().intensity}</span>
-                            </div>
-                            <div class="flex flex-col justify-evenly bg-[#fff6e5] text-[16px] p-4">
-                            <span><b>Calories burned:</b> ${workouts.data().calories}</span>
-                            <span><b>Time:</b> ${(workouts.data().endDate - workouts.data().startDate) / 60} mins </span>
-                            </div>
-                            div>
-                            <button class="hidden" id="${workouts.id}Cancel" >Cancel</button>
-                            <button id="${workouts.id}Delete">Delete</button>
-                            <button class="hidden" id="${workouts.id}Confirm" >Confirm</button>
-                            </div>
-                        </div>`
+                    `<div class="flex flex-col justify-evenly bg-[#fff6e5] shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px] rounded-xl" id="${workouts.id}">
+                    <div class="flex flex-row justify-between">
+                    <div class="flex flex-col justify-evenly bg-[#fff6e5] text-[16px] p-4">
+                    <span><b>Workout:</b> ${workouts.data().exerciseType}</span>
+                    <span><b>KM:</b> ${workouts.data().intensity}</span>
+                    </div>
+                    <button id="${workouts.id}Delete" class="p-2 self-start text-md">X</button>
+                    </div>
+                    <div class="flex flex-col justify-evenly bg-[#fff6e5] text-[16px] p-4">
+                    <span><b>Calories burned:</b> ${workouts.data().calories}</span>
+                    <span><b>Time:</b> ${(workouts.data().endDate - workouts.data().startDate) / 60} mins </span>
+                    </div>
+                    <div class="flex flex-row gap-5 p-4 justify-center">
+                    <button class="hidden underline" id="${workouts.id}Cancel">Cancel</button>
+                    <button class="hidden underline" id="${workouts.id}Confirm">Confirm Delete</button>
+                    </div>
+                </div>`
                 );
             }
             deleteWorkoutHandler(currentUser, workouts.id);
@@ -78,6 +80,32 @@ function calendarHandler() {
     }
 }
 
+function removeWorkout(currentUser, historyId) {
+    currentUser.collection("workouts").doc(historyId).get().then((doc) => {
+        if (doc.exists) {
+            exercise = doc.data().exerciseType
+            currentUser.collection("exerciseCounter").doc("exercises").get().then((doc) => {
+                exerciseCount = doc.data()[exercise]
+                currentUser.collection("exerciseCounter").doc("exercises").update({
+                    [exercise]: exerciseCount - 1,
+                    [exercise]: exerciseCount - 1,
+                });
+                removeBadges(currentUser, exercise, exerciseCount);
+                currentUser.collection("workouts").doc(historyId).delete().then(() => {
+                    location.reload();
+
+                }).catch((error) => {
+                    console.error("Error removing document: ", error);
+                });
+            });
+        } else {
+            console.log("No such document!");
+        }
+    }).catch((error) => {
+        console.error("Error getting document:", error);
+    });
+
+}
 function showWorkoutPageDate() {
     const currentDate = new Date();
     const localDate = currentDate.toLocaleDateString('en-CA'); // 'en-CA' uses the YYYY-MM-DD format
