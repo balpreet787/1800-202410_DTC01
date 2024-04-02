@@ -92,6 +92,7 @@ function leaderboardHandler() {
         jQuery("#add-workout-icon").attr('src', './images/nav-icons/add-workout-black.svg')
         jQuery("#settings-icon").attr('src', './images/nav-icons/setting-black.svg')
         jQuery('#usernameAndPic').css('display', 'none')
+        jQuery('#filter-and-search').css('display', 'none')
         jQuery('#leaderboard').toggle();
         jQuery('#homepage').css("display", "none");
         jQuery('#activity_feed').css("display", "none");

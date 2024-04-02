@@ -48,6 +48,14 @@
                         class="w-8 h-8" alt=""></button>
             </div>
         </div>
+        <div id="filter-and-search" class="hidden flex-row fixed p-3 bg-white w-full">
+            <button id="filter_button"><img class="h-10 inline mb-1 mr-2" src="images/filter_icon.svg" alt=""></button>
+            <div class="outline outline-1 outline-gray-500 rounded-lg flex flex-rows justify-between w-full">
+                <input class="px-2 w-full" name="username-search" type="search" placeholder="Search for a user ">
+                <input id="username-search-button" class="justify-end px-2 mr-auto hover:cursor-pointer" type="button"
+                    value="Search">
+            </div>
+        </div>
         <div class="grid grid-cols-2 text-xl w-full  bg-[#ff9500] px-8 pt-2 pb-4 rounded-b-3xl shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]"
             id="usernameAndPic">
             <div>
@@ -154,23 +162,14 @@
     <!-- End of Homepage -->
 
     <!-- Start of Activity Feed -->
-    <div class="hidden mb-16" id="activity_feed">
-        <div class="flex flex-row mt-2 mx-4">
-            <button id="filter_button"><img class="h-10 inline mb-1 mr-2" src="images/filter_icon.svg" alt=""></button>
-            <div class="outline outline-1 outline-gray-500 rounded-lg flex flex-rows justify-between w-full">
-                <input class="px-2 w-full" name="username-search" type="search" placeholder="Search for a user ">
-                <input id="username-search-button" class="justify-end px-2 mr-auto hover:cursor-pointer" type="button"
-                    value="Search">
-            </div>
-            <div>
-
-            </div>
+    <div>
+        <div class="hidden mb-16 mt-14" id="activity_feed">
+            <p id="filter-accomplishment" class="px-6 py-1 underline hidden">Accomplishments<button
+                    class="reset_button px-2">x</button></p>
+            <p id="filter-activity" class="px-6 py-1 underline hidden">Activity<button class="reset_button px-2">x</button>
+            </p>
+            <button id="filter-search" class="px-6 py-1 underline hidden reset_button">Reset</button>
         </div>
-        <p id="filter-accomplishment" class="px-6 py-1 underline hidden">Accomplishments<button
-                class="reset_button px-2">x</button></p>
-        <p id="filter-activity" class="px-6 py-1 underline hidden">Activity<button class="reset_button px-2">x</button>
-        </p>
-        <button id="filter-search" class="px-6 py-1 underline hidden reset_button">Reset</button>
     </div>
     <!-- End of Activity Feed -->
 
