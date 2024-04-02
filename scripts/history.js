@@ -80,32 +80,6 @@ function calendarHandler() {
     }
 }
 
-function removeWorkout(currentUser, historyId) {
-    currentUser.collection("workouts").doc(historyId).get().then((doc) => {
-        if (doc.exists) {
-            exercise = doc.data().exerciseType
-            currentUser.collection("exerciseCounter").doc("exercises").get().then((doc) => {
-                exerciseCount = doc.data()[exercise]
-                currentUser.collection("exerciseCounter").doc("exercises").update({
-                    [exercise]: exerciseCount - 1,
-                    [exercise]: exerciseCount - 1,
-                });
-                removeBadges(currentUser, exercise, exerciseCount);
-                currentUser.collection("workouts").doc(historyId).delete().then(() => {
-                    location.reload();
-
-                }).catch((error) => {
-                    console.error("Error removing document: ", error);
-                });
-            });
-        } else {
-            console.log("No such document!");
-        }
-    }).catch((error) => {
-        console.error("Error getting document:", error);
-    });
-
-}
 function showWorkoutPageDate() {
     const currentDate = new Date();
     const localDate = currentDate.toLocaleDateString('en-CA'); // 'en-CA' uses the YYYY-MM-DD format
