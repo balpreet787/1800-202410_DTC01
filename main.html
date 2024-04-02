@@ -44,17 +44,18 @@
         <div class="flex flex-row justify-between font-bold p-3  bg-[#ff9500]">
             <img src="./images/logo.svg" class="w-8 h-8 hover:cursor-pointer" id="logo" alt="logo">
             <div class="">
-                <button id="add_workout_button" href=""><img id="add-workout-icon"
-                        src="./images/nav-icons/add-workout-black.svg" class="w-8 h-8" alt=""></button>
+                <button id="settings_button" href=""><img id="settings-icon" src="./images/nav-icons/setting-black.svg"
+                        class="w-8 h-8" alt=""></button>
             </div>
         </div>
-        <div
-            class="grid grid-cols-2 text-xl w-full  bg-[#ff9500] px-8 pt-2 pb-4 rounded-b-3xl shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]" id="usernameAndPic">
+        <div class="grid grid-cols-2 text-xl w-full  bg-[#ff9500] px-8 pt-2 pb-4 rounded-b-3xl shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]"
+            id="usernameAndPic">
             <div>
                 <h1>Hi, <span class="font-black" id="name-goes-here"></span>!</h1>
                 <div class="text-sm">Let's get going.</div>
             </div>
-            <img class="w-16 h-16 ml-auto rounded-full" id="homepagepic" src="./images/profile_pic.svg" alt="">
+            <img class="w-16 h-16 ml-auto rounded-full hover:cursor-pointer" id="homepagepic"
+                src="./images/profile_pic.svg" alt="">
         </div>
     </header>
 
@@ -323,12 +324,15 @@
             <button id="leaderboard_button" href="" class="flex justify-center py-3 pt-2 bg-[#ff9500]"><img
                     src="./images/nav-icons/leaderboard-black.svg" id="leaderboard-icon" class="w-8 h-8"
                     alt=""></button>
+            <button id="add_workout_button" href=""
+                class="flex justify-center py-3 pt-2 bg-[#ff9500]  rounded-t-3xl"><img
+                    src="./images/nav-icons/add-workout-black.svg" id="add-workout-icon" class="w-8 h-8"
+                    alt=""></button>
             <button id="activity_button" href="" class="flex justify-center py-3 pt-2 bg-[#ff9500]"><img
                     src="./images/nav-icons/activity-feed-black.svg" id="activity-icon" class="w-8 h-8" alt=""></button>
             <button id="calendar_button" href="" class="flex justify-center py-3 pt-2 bg-[#ff9500]"><img
                     src="./images/nav-icons/calender-black.svg" class="w-8 h-8" id="calender-icon" alt=""></button>
-            <button id="settings_button" href="" class="flex justify-center py-3 pt-2 bg-[#ff9500]  rounded-t-3xl"><img
-                    src="./images/nav-icons/setting-black.svg" id="settings-icon" class="w-8 h-8" alt=""></button>
+
         </div>
     </footer>
     <!-- End of navigation footer -->

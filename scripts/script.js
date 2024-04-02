@@ -144,15 +144,19 @@ function settingsHandler() {
 
 function profileInfoHandler(currentUser) {
     populateUserInfo(currentUser);
-    if (jQuery('#profile_info').css("display") == "none") {
-        jQuery('#usernameAndPic').css('display', 'none')
-        jQuery('#profile_info').toggle()
-        jQuery('#add_workout').css("display", "none");
-        jQuery('#homepage').css("display", "none");
-        jQuery('#leaderboard').css("display", "none");
-        jQuery('#activity_feed').css("display", "none");
-        jQuery('#settings').css("display", "none");
-    }
+    jQuery("#homepage-icon").attr('src', './images/nav-icons/home-black.svg')
+    jQuery("#calender-icon").attr('src', './images/nav-icons/calender-black.svg')
+    jQuery("#leaderboard-icon").attr('src', './images/nav-icons/leaderboard-black.svg')
+    jQuery("#activity-icon").attr('src', './images/nav-icons/activity-feed-black.svg')
+    jQuery("#settings-icon").attr('src', './images/nav-icons/setting-white.svg')
+    jQuery("#add-workout-icon").attr('src', './images/nav-icons/add-workout-black.svg')
+    jQuery('#usernameAndPic').css('display', 'none')
+    jQuery('#profile_info').toggle()
+    jQuery('#add_workout').css("display", "none");
+    jQuery('#homepage').css("display", "none");
+    jQuery('#leaderboard').css("display", "none");
+    jQuery('#activity_feed').css("display", "none");
+    jQuery('#settings').css("display", "none");
 }
 
 
@@ -160,8 +164,8 @@ function setup() {
     leaderboardCurrentDate();
     showWorkoutPageDate();
     jQuery('#info').click(infoHandler);
-    jQuery('#aboutUs').click(aboutUsHandler)
-    jQuery('#homepage_button').click(homepageHandler);
+    jQuery('#aboutUs').click(aboutUsHandler);
+    jQuery('#homepage-icon').click(homepageHandler);
     jQuery('#leaderboard_button').click(leaderboardHandler);
     jQuery('#activity_button').click(activityHandler);
     jQuery('#calendar_button').click(calendarHandler);
@@ -228,6 +232,7 @@ function setup() {
                 jQuery("#save_workout_button").click(function () { addWorkout(currentUser) });
                 jQuery("#save_profile_info_button").click(function () { updateInfo(currentUser) });
                 jQuery('#profile_info_button').click(function () { profileInfoHandler(currentUser) });
+                jQuery('#homepagepic').click(function () { profileInfoHandler(currentUser) })
                 jQuery('#logo').click(homepageHandler);
                 showRecordedWorkouts(currentUser);
                 $('#week').change(function () { getLeaderboardData(currentUser) })
