@@ -1,4 +1,5 @@
 var ImageFile;
+var CurrentUser;
 
 function uploadPic(postDocID) {
     var storageRef = storage.ref("images/" + postDocID + ".jpg");
@@ -161,8 +162,43 @@ function profileInfoHandler(currentUser) {
     jQuery('#settings').css("display", "none");
 }
 
+async function userAuthentication(profilepic, image) {
+    firebase.auth().onAuthStateChanged((user) => {
+        if (user) {
+            // User is signed in, you can get the user ID.
+            CurrentUser = db.collection("users").doc(user.uid); // Go to the Firestore document of the user
+            CurrentUser.get().then(userDoc => {
+                if (userDoc.exists) {
+                    // Get the document data
+                    const userData = userDoc.data();
+                    if (userData.nickname === undefined || userData.nickname === null) {
+                        jQuery('#homepage, #leaderboard, #activity_feed, #datepicker, #settings').css("display", "none");
+                        jQuery("#profile_info").css("display", "flex");
+                    }
+                    if (userData.image === undefined || userData.image === null) {
+                        profilepic = "./images/profile_pic.svg";
+                    }
+                    else {
+                        profilepic = userData.image;
+                    }
+                } else {
+                    console.log("No such document!");
+                }
+                image.attr('src', profilepic);
 
-function setup() {
+            }).catch(error => {
+                console.log("Error getting document:", error);
+            });
+
+        } else {
+            // No user is signed in.
+            console.log("No user is signed in.");
+        }
+    });
+}
+
+async function setup() {
+
     leaderboardCurrentDate();
     showWorkoutPageDate();
     jQuery('#info').click(infoHandler);
@@ -209,52 +245,21 @@ function setup() {
             image.attr('src', '');
         }
     });
-    firebase.auth().onAuthStateChanged((user) => {
-        if (user) {
-            // User is signed in, you can get the user ID.
-            currentUser = db.collection("users").doc(user.uid); // Go to the Firestore document of the user
-            currentUser.get().then(userDoc => {
-                if (userDoc.exists) {
-                    // Get the document data
-                    const userData = userDoc.data();
-                    if (userData.nickname === undefined || userData.nickname === null) {
-                        jQuery('#homepage, #leaderboard, #activity_feed, #datepicker, #settings').css("display", "none");
-                        jQuery("#profile_info").css("display", "flex");
-                    }
-                    if (userData.image === undefined || userData.image === null) {
-                        profilepic = "./images/profile_pic.svg";
-                    }
-                    else {
-                        profilepic = userData.image;
-                    }
-                } else {
-                    console.log("No such document!");
-                }
-                image.attr('src', profilepic);
-                jQuery("#save_workout_button").click(function () { addWorkout(currentUser) });
-                jQuery("#save_profile_info_button").click(function () { updateInfo(currentUser) });
-                jQuery('#profile_info_button').click(function () { profileInfoHandler(currentUser) });
-                jQuery('#homepagepic').click(function () { profileInfoHandler(currentUser) })
-                jQuery('#logo').click(homepageHandler);
-                showRecordedWorkouts(currentUser);
-                $('#week').change(function () { getLeaderboardData(currentUser) })
-                $('#selectedDate').change(function () { showRecordedWorkouts(currentUser) });
-                getLeaderboardData(currentUser);
-                insertNameAndPicFromFirestore(currentUser);
-                insertHomepageInfoFromFirestore(currentUser);
-                insertTodaysWorkoutInfoFromFirestore(currentUser);
-                insertYesterdaysWorkoutInfoFromFirestore(currentUser);
-                getActivityFeedInfo(currentUser);
-            }).catch(error => {
-                console.log("Error getting document:", error);
-            });
-
-        } else {
-            // No user is signed in.
-            console.log("No user is signed in.");
-        }
-    });
-
+    await userAuthentication(profilepic, image);
+    jQuery("#save_workout_button").click(function () { addWorkout(CurrentUser) });
+    jQuery("#save_profile_info_button").click(function () { updateInfo(CurrentUser) });
+    jQuery('#profile_info_button').click(function () { profileInfoHandler(CurrentUser) });
+    jQuery('#homepagepic').click(function () { profileInfoHandler(CurrentUser) })
+    jQuery('#logo').click(homepageHandler);
+    showRecordedWorkouts(CurrentUser);
+    $('#week').change(function () { getLeaderboardData(CurrentUser) })
+    $('#selectedDate').change(function () { showRecordedWorkouts(CurrentUser) });
+    getLeaderboardData(CurrentUser);
+    insertNameAndPicFromFirestore(CurrentUser);
+    insertHomepageInfoFromFirestore(CurrentUser);
+    insertTodaysWorkoutInfoFromFirestore(CurrentUser);
+    insertYesterdaysWorkoutInfoFromFirestore(CurrentUser);
+    getActivityFeedInfo(CurrentUser);
 }
 
 jQuery(document).ready(setup);
