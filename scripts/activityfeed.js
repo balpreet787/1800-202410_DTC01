@@ -23,6 +23,7 @@ function getActivityFeedInfo(currentUser) {
                             workoutTime = (doc.data().endDate - doc.data().startDate) / 60;
                             exerciseType = doc.data().exerciseType;
                             intensity = doc.data().intensity;
+                            calories = doc.data().calories;
 
                             activityfeedinfo.push({
                                 "startdate": doc.data().startDate, "calories": doc.data().calories, "username": username, "exerciseType": doc.data().exerciseType, "profilepic": profilepic, "nickname": nickname, "workouttime": workoutTime, "badgesearned": badgesEarned, "badgeName": badgeName, "intensity": intensity
@@ -47,11 +48,11 @@ function getActivityFeedInfo(currentUser) {
                     }
                     if (activityfeedinfo[i]["exerciseType"] == "weightlifting" || activityfeedinfo[i]["exerciseType"] == "doing yoga") {
                         activityDetails = ` spent ${activityfeedinfo[i]["workouttime"]} minutes <b>${activityfeedinfo[i]["exerciseType"]}</b>`
-                        activityIntensity = `<b>Intensity:</b> ${activityfeedinfo[i]["intensity"]}`
+                        activityIntensity = `<b>Intensity: </b> ${activityfeedinfo[i]["intensity"]}`
                     }
                     else {
                         activityDetails = ` spent ${activityfeedinfo[i]["workouttime"]} minutes <b>${activityfeedinfo[i]["exerciseType"]}</b>`
-                        activityIntensity = `<b>Distance:</b>${activityfeedinfo[i]["intensity"]} km`
+                        activityIntensity = `<b>Distance: </b>${activityfeedinfo[i]["intensity"]} km`
 
                     }
                     if (activityfeedinfo[i]["badgesearned"] == badgesEarned || activityfeedinfo[i]["badgesearned"] == null) {
@@ -60,9 +61,9 @@ function getActivityFeedInfo(currentUser) {
                                             <img class="h-20 mx-5 self-center rounded-full w-20" src="${activityfeedinfo[i]["profilepic"]}" alt="">
                                             <div class="p-2 ">
                                                 <div class="py-2 flex">
-                                                    <h1 class="font-semibold inline text-lg"><span id="activity-username">${activityfeedinfo[i]["nickname"]}</span></h1><span class="text-xs self-center my-auto">&nbsp;&nbsp;&bull;${activityDate}-${activityMonth}-${activityYear}</span>
+                                                    <h1 class="font-semibold inline text-lg"><span id="activity-username">${activityfeedinfo[i]["nickname"]}</span></h1><span class="text-xs self-center my-auto">&nbsp;&nbsp;&bull; ${activityDate}-${activityMonth}-${activityYear}</span>
                                                 </div>
-                                                <p class="text-xs pb-4 pr-1" id="activity-feed-phrase">${activityfeedinfo[i]["username"]} ${activityDetails}!</br>${activityIntensity}</p>
+                                                <p class="text-xs pb-4 pr-1" id="activity-feed-phrase">${activityfeedinfo[i]["username"]} ${activityDetails}!</br><b>Calories Burned:</b> ${activityfeedinfo[i]["calories"]}</br>${activityIntensity}</p>
                                             </div>
                                         </div>`
                     } else {
@@ -74,10 +75,10 @@ function getActivityFeedInfo(currentUser) {
                                             <img class="h-20 mx-5 self-center rounded-full w-20" src=${activityfeedinfo[i]["profilepic"]}" alt="">
                                             <div class="p-2 w-full">
                                                 <div class="py-2 flex flex-row justify-between">
-                                                    <div><h1 class="font-semibold inline text-lg"><span id="activity-username">${activityfeedinfo[i]["nickname"]}</span></h1><span class="text-xs self-center my-auto">&nbsp;&nbsp;&bull;${activityDate}-${activityMonth}-${activityYear}</span></div>
+                                                    <div><h1 class="font-semibold inline text-lg"><span id="activity-username">${activityfeedinfo[i]["nickname"]}</span></h1><span class="text-xs self-center my-auto">&nbsp;&nbsp;&bull; ${activityDate}-${activityMonth}-${activityYear}</span></div>
                                                    <div> <img class="h-6 pr-3 inline w-full justify-self-end" src="${activityfeedinfo[i]["badgesearned"]}" alt=""></div>
                                                 </div>
-                                                <p class="text-xs pb-4 pr-1 ml-auto"  id="accomplishment-phrase">${activityfeedinfo[i]["username"]} ${activityDetails} and earned a ${activityfeedinfo[i]["badgeName"]}! </br> ${activityIntensity}</p>
+                                                <p class="text-xs pb-4 pr-1 ml-auto"  id="accomplishment-phrase">${activityfeedinfo[i]["username"]} ${activityDetails} and earned a ${activityfeedinfo[i]["badgeName"]}!</br><b>Calories Burned:</b> ${activityfeedinfo[i]["calories"]} </br> ${activityIntensity}</p>
                                             </div>
                                         </div>`
                     }
@@ -156,6 +157,7 @@ function activityHandler() {
         jQuery("#settings-icon").attr('src', './images/nav-icons/setting-black.svg')
         jQuery("#add-workout-icon").attr('src', './images/nav-icons/add-workout-black.svg')
         jQuery('#usernameAndPic').css('display', 'none')
+        jQuery('#filter-and-search').css('display', 'flex')
         jQuery('#activity_feed').toggle();
         jQuery('#homepage').css("display", "none");
         jQuery('#leaderboard').css("display", "none");

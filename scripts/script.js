@@ -133,6 +133,7 @@ function settingsHandler() {
         jQuery("#add-workout-icon").attr('src', './images/nav-icons/add-workout-black.svg')
         jQuery('#settings').toggle()
         jQuery('#usernameAndPic').css('display', 'none')
+        jQuery('#filter-and-search').css('display', 'none')
         jQuery('#homepage').css("display", "none");
         jQuery('#leaderboard').css("display", "none");
         jQuery('#activity_feed').css("display", "none");
@@ -152,6 +153,7 @@ function profileInfoHandler(currentUser) {
     jQuery("#settings-icon").attr('src', './images/nav-icons/setting-white.svg')
     jQuery("#add-workout-icon").attr('src', './images/nav-icons/add-workout-black.svg')
     jQuery('#usernameAndPic').css('display', 'none')
+    jQuery('#filter-and-search').css('display', 'none')
     jQuery('#profile_info').toggle()
     jQuery('#add_workout').css("display", "none");
     jQuery('#homepage').css("display", "none");
