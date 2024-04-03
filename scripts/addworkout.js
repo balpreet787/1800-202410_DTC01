@@ -169,91 +169,99 @@ async function countTheExercises(exercise_type, currentUser) {
 
 
 async function addWorkout(currentUser) {
-    jQuery('#homepage').toggle();
-    jQuery("#add_workout").css("display", "none");
-    jQuery('#confirmAddWorkout').css("display", "flex").delay(3000).hide(0);
     startDate = jQuery("#startDate").val();
     endDate = jQuery("#endDate").val();
+    verifyStartDate = new Date(startDate);
+    verifyEndDate = new Date(endDate);
+
     exercise_type = jQuery("#exercises").val();
-    await countTheExercises(exercise_type, currentUser);
-    if (exercise_type != "" && startDate != "" && endDate != "" && jQuery(".intensity").val() != "") {
-        if (exercise_type == "weightlifting") {
-            intensity = jQuery("#intensity").val();
-            if (intensity == "Light") {
-                exercise_intensity = 3
+    console.log(verifyEndDate - verifyStartDate)
+    if ((verifyEndDate - verifyStartDate) > 0) {
+        jQuery("#add_workout").css("display", "none");
+        jQuery('#confirmAddWorkout').css("display", "flex").delay(3000).hide(0);
+        jQuery('#homepage').toggle();
+        jQuery("#workoutWarning").css("display", "none");
+        await countTheExercises(exercise_type, currentUser);
+        if (exercise_type != "" && startDate != "" && endDate != "" && jQuery(".intensity").val() != "") {
+            if (exercise_type == "weightlifting") {
+                intensity = jQuery("#intensity").val();
+                if (intensity == "Light") {
+                    exercise_intensity = 3
+                }
+                else if (intensity == "Moderate") {
+                    exercise_intensity = 5
+                }
+                else if (intensity == "Hard") {
+                    exercise_intensity = 6
+                }
+                else if (intensity == "Very-hard") {
+                    exercise_intensity = 7
+                }
             }
-            else if (intensity == "Moderate") {
-                exercise_intensity = 5
+            else if (exercise_type == "yoga") {
+                intensity = jQuery("#intensity").val();
+                if (intensity == "Light") {
+                    exercise_intensity = 2.5
+                }
+                else if (intensity == "Moderate") {
+                    exercise_intensity = 4
+                }
+                else if (intensity == "Hard") {
+                    exercise_intensity = 6
+                }
+                else if (intensity == "Very-hard") {
+                    exercise_intensity = 7
+                }
             }
-            else if (intensity == "Hard") {
-                exercise_intensity = 6
+            else {
+                intensity = jQuery("#distance").val();
+                exercise_intensity = parseFloat(jQuery("#distance").val())
             }
-            else if (intensity == "Very-hard") {
-                exercise_intensity = 7
-            }
-        }
-        else if (exercise_type == "yoga") {
-            intensity = jQuery("#intensity").val();
-            if (intensity == "Light") {
-                exercise_intensity = 2.5
-            }
-            else if (intensity == "Moderate") {
-                exercise_intensity = 4
-            }
-            else if (intensity == "Hard") {
-                exercise_intensity = 6
-            }
-            else if (intensity == "Very-hard") {
-                exercise_intensity = 7
-            }
-        }
-        else {
-            intensity = jQuery("#distance").val();
-            exercise_intensity = parseFloat(jQuery("#distance").val())
-        }
-        let calories_burned = await getCaloriesBurned(exercise_type, startDate, endDate, exercise_intensity, currentUser);
-        let badges_earned = await giveUserBadge(exercise_type, currentUser);
-        let start_Date = firebase.firestore.Timestamp.fromDate(new Date(startDate));
-        let end_Date = firebase.firestore.Timestamp.fromDate(new Date(endDate));
+            let calories_burned = await getCaloriesBurned(exercise_type, startDate, endDate, exercise_intensity, currentUser);
+            let badges_earned = await giveUserBadge(exercise_type, currentUser);
+            let start_Date = firebase.firestore.Timestamp.fromDate(new Date(startDate));
+            let end_Date = firebase.firestore.Timestamp.fromDate(new Date(endDate));
 
 
-        let history_doc = [];
-        let history_num;
+            let history_doc = [];
+            let history_num;
 
-        currentUser.collection("workouts").get().then((querySnapshot) => {
-            querySnapshot.forEach((doc) => {
-                history_doc.push(doc.id);
-            });
-
-            console.log(history_doc.length);
-            if (history_doc.length == 0) {
-                history_num = "history1";
-            } else {
-                history_num = "history" + (history_doc.length + 1).toString();
-            }
-            console.log(history_num);
-            currentUser.collection("workouts").doc(history_num).set({
-                exerciseType: exercise_type,
-                startDate: start_Date,
-                endDate: end_Date,
-                intensity: intensity,
-                calories: calories_burned,
-                earned: badges_earned[0],
-                earned_name: badges_earned[1]
-            }, { merge: true })
-                .then(() => {
-                    console.log("Document successfully updated!");
-                    location.reload();
-                })
-                .catch((error) => {
-                    console.error("Error updating document: ", error);
+            currentUser.collection("workouts").get().then((querySnapshot) => {
+                querySnapshot.forEach((doc) => {
+                    history_doc.push(doc.id);
                 });
-        }).catch((error) => {
-            console.error("Error fetching documents: ", error);
-        });
+
+                console.log(history_doc.length);
+                if (history_doc.length == 0) {
+                    history_num = "history1";
+                } else {
+                    history_num = "history" + (history_doc.length + 1).toString();
+                }
+                console.log(history_num);
+                currentUser.collection("workouts").doc(history_num).set({
+                    exerciseType: exercise_type,
+                    startDate: start_Date,
+                    endDate: end_Date,
+                    intensity: intensity,
+                    calories: calories_burned,
+                    earned: badges_earned[0],
+                    earned_name: badges_earned[1]
+                }, { merge: true })
+                    .then(() => {
+                        console.log("Document successfully updated!");
+                        location.reload();
+                    })
+                    .catch((error) => {
+                        console.error("Error updating document: ", error);
+                    });
+            }).catch((error) => {
+                console.error("Error fetching documents: ", error);
+            });
+        }
     }
-
-
+    else {
+        jQuery("#workoutWarning").css("display", "flex");
+    }
 }
 
 function addWorkoutHandler() {

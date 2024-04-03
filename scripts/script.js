@@ -33,7 +33,7 @@ async function updateInfo(currentUser) {
     var leaderboardID = $("#leaderboard_id").val();
     var dob = $("#dob").val();
 
-    if (nickname != "" && height != "" && weight != "" && leaderboardID != "" && dob != "") {
+    if (nickname != "" && height != "" && weight != "" && dob != "") {
         currentUser.set({
             nickname: nickname,
             gender: gender,
