@@ -244,6 +244,10 @@ async function setup() {
         }
     });
     await userAuthentication(profilepic, image);
+    insertNameAndPicFromFirestore(CurrentUser);
+    insertHomepageInfoFromFirestore(CurrentUser);
+    insertTodaysWorkoutInfoFromFirestore(CurrentUser);
+    insertYesterdaysWorkoutInfoFromFirestore(CurrentUser);
     jQuery("#save_workout_button").click(function () { addWorkout(CurrentUser) });
     jQuery("#save_profile_info_button").click(function () { updateInfo(CurrentUser) });
     jQuery('#profile_info_button').click(function () { profileInfoHandler(CurrentUser) });
@@ -253,10 +257,7 @@ async function setup() {
     $('#week').change(function () { getLeaderboardData(CurrentUser) })
     $('#selectedDate').change(function () { showRecordedWorkouts(CurrentUser) });
     getLeaderboardData(CurrentUser);
-    insertNameAndPicFromFirestore(CurrentUser);
-    insertHomepageInfoFromFirestore(CurrentUser);
-    insertTodaysWorkoutInfoFromFirestore(CurrentUser);
-    insertYesterdaysWorkoutInfoFromFirestore(CurrentUser);
+
     getActivityFeedInfo(CurrentUser);
 }
 
