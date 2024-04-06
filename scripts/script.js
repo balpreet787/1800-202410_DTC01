@@ -132,6 +132,7 @@ function settingsHandler() {
         jQuery("#settings-icon").attr('src', './images/nav-icons/setting-white.svg')
         jQuery("#add-workout-icon").attr('src', './images/nav-icons/add-workout-black.svg')
         jQuery('#settings').toggle()
+        jQuery('#filter-and-search').css('display', 'none')
         jQuery('#usernameAndPic').css('display', 'none')
         jQuery('#homepage').css("display", "none");
         jQuery('#leaderboard').css("display", "none");
@@ -152,6 +153,7 @@ function profileInfoHandler(currentUser) {
     jQuery("#settings-icon").attr('src', './images/nav-icons/setting-white.svg')
     jQuery("#add-workout-icon").attr('src', './images/nav-icons/add-workout-black.svg')
     jQuery('#usernameAndPic').css('display', 'none')
+    jQuery('#filter-and-search').css('display', 'none')
     jQuery('#profile_info').toggle()
     jQuery('#add_workout').css("display", "none");
     jQuery('#homepage').css("display", "none");
@@ -215,6 +217,7 @@ async function setup() {
     jQuery('#filter_button').click(filterHandler);
     jQuery('#username-search-button').click(userSearchInActivityFeed)
     jQuery('.reset_button').click(resetFilteredActivityFeed);
+    jQuery('.reset_filtered_page').click(resetFilteredActivityFeed);
     jQuery('#cancel_button').click(activityHandler);
     jQuery('#cancel_profile_info_button').click(settingsHandler);
     jQuery('#cancel_workout_button').click(homepageHandler);

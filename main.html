@@ -50,7 +50,7 @@
         </div>
         <div id="filter-and-search" class="hidden flex-row fixed p-3 bg-white w-full">
             <button id="filter_button"><img class="h-10 inline mb-1 mr-2" src="images/filter_icon.svg" alt=""></button>
-            <div class="outline outline-1 outline-gray-500 rounded-lg flex flex-rows justify-between w-full">
+            <div class="outline outline-1 outline-[#ff9500] rounded-lg flex flex-rows justify-between w-full">
                 <input class="px-2 w-full" name="username-search" type="search" placeholder="Search for a user ">
                 <input id="username-search-button" class="justify-end px-2 mr-auto hover:cursor-pointer" type="button"
                     value="Search">
@@ -82,7 +82,7 @@
 
         <div>
             <div
-                class="rounded-xl p-3 mx-4 my-4 shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px] bg-[#fff6e5]">
+                class="rounded-xl p-3 mx-4 my-2 shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px] bg-[#fff6e5]">
                 <div>
                     <img class="inline h-6 pr-1" src="images/celebrate.svg" alt="">
                     <h1 class="inline font-black">Keep up the good work!</h1>
@@ -113,7 +113,7 @@
         </div>
         <div>
             <div
-                class="rounded-xl p-3 mx-4 mt-2 mb-2 shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px] bg-[#fff6e5]">
+                class="rounded-xl p-3 mx-4 mt-2 shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px] bg-[#fff6e5]">
                 <img class="inline h-6 pr-1" src="images/today.svg" alt="">
                 <h1 class="inline font-black">Today's Workout</h1>
                 <div>
@@ -128,7 +128,7 @@
         </div>
         <div>
             <div
-                class="rounded-xl p-3 mx-4 mb-3 shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px] bg-[#fff6e5]">
+                class="rounded-xl p-3 mt-2 mx-4 mb-3 shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px] bg-[#fff6e5]">
                 <img class=" inline h-6 pr-1" src="images/yesterday.svg" alt="">
                 <h1 class="inline font-black">Yesterday's Workout</h1>
                 <div>
@@ -143,42 +143,43 @@
             </div>
         </div>
     </div>
+    <!-- End of Homepage -->
 
     <!-- Leaderboard page starts here -->
     <div class="hidden mb-16" id="leaderboard">
-        <div class="text-right m-4">
-            <input type="week" id="week" name="week">
+        <div class="text-right m-4 flex flex-row rounded-lg justify-between">
+            <label class="py-2 font-bold px-2 " for="week">Leaderboard for: </label>
+            <input class="outline outline-1 outline-[#ff9500] rounded-lg py-1 px-[30px]" type="week" id="week" name="week">
         </div>
-        <div class="grid grid-cols-4 text-center m-4 p-3 font-extrabold">
-            <span>Rank</span>
-            <span>Name</span>
-            <span>Latest Badge</span>
-            <span>Points</span>
+        <div class="grid grid-cols-4 p-3 font-extrabold text-center">
+            <span class="text-sm">Rank</span>
+            <span class="text-sm">Name</span>
+            <span class="text-sm">Latest Badge</span>
+            <span class="text-sm">Points</span>
         </div>
         <div id="leaderboardInfo">
         </div>
     </div>
     <!-- Leaderboard page ends here -->
-    <!-- End of Homepage -->
 
     <!-- Start of Activity Feed -->
     <div>
-        <div class="hidden mb-16 mt-14" id="activity_feed">
+        <div class="hidden mb-16 mt-[68px]" id="activity_feed">
             <p id="filter-accomplishment" class="px-6 py-1 underline hidden">Accomplishments<button
                     class="reset_button px-2">x</button></p>
             <p id="filter-activity" class="px-6 py-1 underline hidden">Activity<button class="reset_button px-2">x</button>
             </p>
-            <button id="filter-search" class="px-6 py-1 underline hidden reset_button">Reset</button>
+            <button id="filter-search" class="px-6 py-1 underline hidden reset_filtered_page">Reset</button>
         </div>
     </div>
     <!-- End of Activity Feed -->
 
     <!-- Form to add new exercises starts here -->
-    <div class="hidden mx-8" id="add_workout">
+    <div class="hidden mx-4" id="add_workout">
         <div>
-            <div class="mt-5 text-center">
-                <label class="px-2" for="exercises">Choose the workout:</label>
-                <select class="p-2 px-4 rounded-lg bg-gray-300" id="exercises" name="Exercise">
+            <div class="flex flex-row justify-between py-2">
+                <label class="py-2 font-extrabold" for="exercises">Workout:</label>
+                <select class="py-2 px-[59px] rounded-lg outline outline-1 outline-[#ff9500] bg-white shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]" id="exercises" name="Exercise">
                     <option value="weightlifting">Weight lifting</option>
                     <option value="cycling">Cycling</option>
                     <option value="running">Running</option>
@@ -188,39 +189,39 @@
             </div>
             <div id="workoutWarning" class="text-sm pt-5 px-10 text-red-600 hidden">*Workout ending time must be higher than the starting
                 time.</div>
-            <div class="flex flex-col jusitfy-center">
-                <div class="flex gap-4 justify-between p-4 text-center">
-                    <label class="p-2" for="startDate">Start time:</label>
-                    <input class="p-1" type="datetime-local" id="startDate" name="startDate">
+            <div class="flex flex-col jusitfy-center py-2">
+                <div class="flex gap-4 justify-between text-center">
+                    <label class="py-2 font-extrabold" for="startDate">Start time:</label>
+                    <input class="outline outline-1 outline-[#ff9500] bg-white rounded-lg p-2 shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]" type="datetime-local" id="startDate" name="startDate">
                 </div>
-                <div class="flex gap-4 justify-between p-4 text-center">
-                    <label class="p-2" for="endDate">End time:</label>
-                    <input class=" p-1" type="datetime-local" id="endDate" name="endDate">
+                <div class="flex gap-4 justify-between text-center pt-4">
+                    <label class="py-2 font-extrabold" for="endDate">End time:</label>
+                    <input class="outline outline-1 outline-[#ff9500] bg-[white] rounded-lg p-2 shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]" type="datetime-local" id="endDate" name="endDate">
                 </div>
             </div>
             <!-- Additional information for weightlifting exercise and yoga starts here -->
-            <div class="flex gap-4 justify-between p-4 text-center" id="intensity-div">
-                <label class="p-2" for="intensity">Intensity:</label>
-                <select class="py-1 rounded-lg bg-gray-300 px-16 intensity" name="Intensity" id="intensity">
-                    <option class="py-1 rounded-lg bg-gray-300 px-16" value="Light">Light</option>
-                    <option class="py-1 rounded-lg bg-gray-300 px-16" value="Moderate">Moderate</option>
-                    <option class="py-1 rounded-lg bg-gray-300 px-16" value="Hard">Hard</option>
-                    <option class="py-1 rounded-lg bg-gray-300 px-16" value="Very-hard">Very Hard</option>
+            <div class="flex flex-row gap-4 justify-between text-center pt-2" id="intensity-div">
+                <label class="py-2 font-extrabold" for="intensity">Intensity:</label>
+                <select class="py-1 rounded-lg outline-[#ff9500] bg-white px-[70px] intensity outline outline-1 text-center shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]" name="Intensity" id="intensity">
+                    <option class="py-1 rounded-lg px-16" value="Light">Light</option>
+                    <option class="py-1 rounded-lg px-16" value="Moderate">Moderate</option>
+                    <option class="py-1 rounded-lg px-16" value="Hard">Hard</option>
+                    <option class="py-1 rounded-lg px-16" value="Very-hard">Very Hard</option>
                 </select>
             </div>
             <!-- Additional information for weightlifting exercise and yoga starts here -->
 
             <!-- Additional information for cycling, walking, and running ends here -->
-            <div class="gap-4 justify-between p-4 text-center hidden" id="distance-div">
-                <label class="p-2" for="distance">Distance:</label>
-                <input class="outline outline-1 rounded-lg px-[18px] intensity" type="number" id="distance" min="0"
+            <div class="justify-between pt-2 text-center hidden" id="distance-div">
+                <label class="py-2 font-extrabold" for="distance">Distance:</label>
+                <input class="outline outline-1 rounded-lg px-[13px] intensity outline-[#ff9500] bg-white shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]" type="number" id="distance" min="0"
                     placeholder="km">
             </div>
             <!-- Additional information for cycling, walking, and running starts here -->
 
             <div class="grid grid-cols-2 place-items-center my-5">
-                <button id="save_workout_button" class="w-1/2 bg-gray-300 rounded-lg  p-2">Save</button>
-                <button id="cancel_workout_button" class="w-1/2 bg-gray-300 rounded-lg  p-2">Cancel</button>
+                <button id="save_workout_button" class="w-1/2 bg-[#ff9500] text-[#fff6e5] rounded-lg  p-2 shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]">Save</button>
+                <button id="cancel_workout_button" class="w-1/2 bg-[#ff9500] text-[#fff6e5] rounded-lg  p-2 shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]">Cancel</button>
             </div>
         </div>
     </div>
@@ -238,7 +239,7 @@
             <label for="activity-filter">Activity</label>
             <br>
             <div class="flex justify-center">
-                <button id="view-feed-button" class="bg-gray-300 w-1/3 self-center rounded-lg py-2 my-4">
+                <button id="view-feed-button" class="bg-[#ff9500] text-[#fff6e5] w-1/3 self-center rounded-lg py-2 my-4">
                     View Feed
                 </button>
             </div>
@@ -255,7 +256,7 @@
         <div class=" border-b border-black">
             <button class="text-xl font-semibold p-2" id="aboutUs">About Us</button>
         </div>
-        <div class="text-center hidden border-b border-black p-2 text-black" id="aboutUs-box">
+        <div class="text-center hidden border-b border-black p-2 " id="aboutUs-box">
             CompetiFit is an application that helps fitness enthusiasts maintain a consistent exercise schedule by
             providing
             a sense of competition between users! Through CompetiFit, users can log their daily exercise, track their
@@ -275,44 +276,45 @@
                 <label class="self-center" for="file-input">Upload a profile picture:</label>
                 <input class="self-center ml-20 mb-2" type="file" id="file-input" accept="image/*">
             </form class="w-full">
-            <label class="ml-2" for="leaderboard_id">Please enter a Friend ID of 5 digits.</label>
-            <input class="outline outline-1 rounded-lg p-1.5 m-2" type="text" id="leaderboard_id"
-                placeholder="Friend ID" required>
-            <input class="outline outline-1 rounded-lg p-1.5 m-2" type="text" id="nickname" placeholder="Nickname"
+            <input class="outline outline-1 outline-[#ff9500] rounded-lg p-1.5 m-2" type="text" id="leaderboard_id"
+                placeholder="Friend ID (Optional)" required>
+            <input class="outline outline-1 outline-[#ff9500] rounded-lg p-1.5 m-2" type="text" id="nickname" placeholder="Nickname"
                 required>
-            <input class="outline outline-1 rounded-lg p-1.5 m-2" type="date" id="dob" placeholder="Date of Birth:"
+            <input class="outline outline-1 outline-[#ff9500] rounded-lg p-1.5 m-2" type="date" id="dob" placeholder="Date of Birth:"
                 required>
-            <select class="outline outline-1 rounded-lg p-1.5 m-2 flex" name="gender" id="gender" required>
+            <select class="outline outline-1 outline-[#ff9500] rounded-lg p-1.5 m-2 flex" name="gender" id="gender" required>
                 <option value="Not disclosed" disabled selected>Gender</option>
                 <option value="Female">Female</option>
                 <option value="Male">Male</option>
                 <option value="Not disclosed">Prefer not to disclose</option>
             </select>
             <div class="flex flex-row">
-                <div class="w-1/2 outline outline-1 rounded-lg m-2">
+                <div class="w-1/2 outline outline-1 outline-[#ff9500] rounded-lg m-2">
                     <input class=" p-1.5  w-4/6" type="number" min=1 max="250" id="height" placeholder="Height in cm"
-                        required> <label class="w-1/5" for="height">CM</label>
+                        required> <label class="w-1/5" for="height">cm</label>
                 </div>
-                <div class="w-1/2 outline outline-1 rounded-lg m-2">
+                <div class="w-1/2 outline outline-1 outline-[#ff9500] rounded-lg m-2">
                     <input class=" p-1.5  w-4/6" type="number" id="weight" min=1 max=250 placeholder="Weight in kg"
-                        required> <label class="w-1/5" for="weight">KG</label>
+                        required> <label class="w-1/5" for="weight">kg</label>
                 </div>
             </div>
             <div class="flex flex-row">
                 <button id="save_profile_info_button"
-                    class="bg-gray-300 rounded-lg p-1 container mx-auto w-1/3">Save</button>
+                    class="bg-[#ff9500] text-[#fff6e5] rounded-lg p-1 container mx-auto w-1/3">Save</button>
                 <button id="cancel_profile_info_button"
-                    class="bg-gray-300 rounded-lg p-1 container mx-auto w-1/3">Cancel</button>
+                    class="bg-[#ff9500] text-[#fff6e5] rounded-lg p-1 container mx-auto w-1/3">Cancel</button>
             </div>
         </div>
     </div>
     <!-- End of profile information page -->
 
     <!-- Calender starts here -->
-    <div id="datepicker" class="hidden flex-col justify-center align-middle py-4 "><input type="date" id="selectedDate"
-            class="flex flex-row justify-center align-middle bg-[#fff6e5]">
-        <div id="recorded_workouts" class="flex flex-col justify-center align-middle py-4  text-sm p-5 gap-6">
-
+    <div id="datepicker" class="hidden flex-col justify-right p-4">
+        <div class="flex flex-row justify-between">
+            <label class="py-2 font-bold px-2" for="date">Workouts for:</label>
+            <input class="outline outline-1 outline-[#ff9500] rounded-lg py-1 px-[30px]" name="date" type="date" id="selectedDate" class="">
+        </div>
+        <div id="recorded_workouts" class="flex flex-col justify-right text-sm gap-6">
         </div>
     </div>
     <!-- Calender ends here -->

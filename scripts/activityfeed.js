@@ -57,7 +57,7 @@ function getActivityFeedInfo(currentUser) {
                     }
                     if (activityfeedinfo[i]["badgesearned"] == badgesEarned || activityfeedinfo[i]["badgesearned"] == null) {
                         activityfeedinfo[i]["badgesearned"] = "";
-                        addToActivityFeed = `<div class="flex flex-row bg-[#fff6e5] rounded-xl shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px] mt-2 m-4 normal-activity activity-feed-post${i} ${activityfeedinfo[i]["nickname"].toLowerCase()}">
+                        addToActivityFeed = `<div class="flex flex-row bg-[#fff6e5] rounded-xl shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px] mt-2 mx-4 normal-activity activity-feed-post${i} ${activityfeedinfo[i]["nickname"].toLowerCase()}">
                                             <img class="h-20 mx-5 self-center rounded-full w-20" src="${activityfeedinfo[i]["profilepic"]}" alt="">
                                             <div class="p-2 ">
                                                 <div class="py-2 flex">
@@ -69,9 +69,9 @@ function getActivityFeedInfo(currentUser) {
                     } else {
                         badgesEarned = activityfeedinfo[i]["badgesearned"]
 
-                        addToActivityFeed = `<div class="flex flex-row mt-2 mx-4 ">
+                        addToActivityFeed = `<div class="flex flex-row mx-4 ">
                                         </div>
-                                        <div class="flex flex-row bg-[#fff6e5] rounded-xl shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]mt-2 m-4 accomplishment-activity activity-feed-post${i} ${activityfeedinfo[i]["nickname"]}">
+                                        <div class="flex flex-row bg-[#fff6e5] rounded-xl shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px] mt-2 mx-4 accomplishment-activity activity-feed-post${i} ${activityfeedinfo[i]["nickname"]}">
                                             <img class="h-20 mx-5 self-center rounded-full w-20" src=${activityfeedinfo[i]["profilepic"]}" alt="">
                                             <div class="p-2 w-full">
                                                 <div class="py-2 flex flex-row justify-between">
@@ -114,20 +114,35 @@ function userSearchInActivityFeed() {
 
 function filterActivityFeed() {
     var selectedValue = $("input[name='filter-activity-feed']:checked").val();
+    console.log(selectedValue)
     if (selectedValue == "accomplishment") {
         jQuery(".reset_button").css("display", "flex")
+        jQuery(".reset_filtered_page").css("display", "none")
         jQuery("#filter-activity").css("display", "none")
         jQuery("#filter-accomplishment").css("display", "flex")
         jQuery(".accomplishment-activity").css("display", "flex");
+        jQuery('#filter-and-search').css('display', 'flex')
         jQuery(".normal-activity").css("display", "none");
         jQuery('#activity_feed').css("display", "flex");
         jQuery('#activity_feed').css("flex-direction", "column");
         jQuery("#filter_activity").css("display", "none")
-    } else {
+    } else if (selectedValue == "activity") {
         jQuery(".reset_button").css("display", "flex")
+        jQuery(".reset_filtered_page").css("display", "none")
         jQuery("#filter-activity").css("display", "flex")
         jQuery("#filter-accomplishment").css("display", "none")
         jQuery(".accomplishment-activity").css("display", "none");
+        jQuery('#filter-and-search').css('display', 'flex')
+        jQuery(".normal-activity").css("display", "flex");
+        jQuery('#activity_feed').css("display", "flex");
+        jQuery('#activity_feed').css("flex-direction", "column");
+        jQuery("#filter_activity").css("display", "flex")
+    } else {
+        jQuery(".reset_button").css("display", "none")
+        jQuery(".reset_filtered_page").css("display", "none")
+        jQuery("#filter-accomplishment").css("display", "none")
+        jQuery(".accomplishment-activity").css("display", "none");
+        jQuery('#filter-and-search').css('display', 'flex')
         jQuery(".normal-activity").css("display", "flex");
         jQuery('#activity_feed').css("display", "flex");
         jQuery('#activity_feed').css("flex-direction", "column");
@@ -139,7 +154,9 @@ function resetFilteredActivityFeed() {
     $("input[name='filter-activity-feed']").prop('checked', false);
     jQuery("input[name='username-search']").val("")
     jQuery(".reset_button").css("display", "none")
+    jQuery(".reset_filtered_page").css("display", "none")
     jQuery("#filter-activity").css("display", "none")
+    jQuery('#filter-and-search').css('display', 'flex')
     jQuery("#filter-accomplishment").css("display", "none")
     jQuery(".accomplishment-activity").css("display", "flex");
     jQuery(".normal-activity").css("display", "flex");
@@ -171,7 +188,8 @@ function activityHandler() {
 
 function filterHandler() {
     if (jQuery('#filter_activity').css("display") == "none") {
-        jQuery('#filter_activity').toggle()
+        jQuery('#filter_activity').toggle();
+        jQuery('#filter-and-search').css('display', 'none')
         jQuery('#add_workout').css("display", "none");
         jQuery('#homepage').css("display", "none");
         jQuery('#leaderboard').css("display", "none");
