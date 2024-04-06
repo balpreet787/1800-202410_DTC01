@@ -128,7 +128,7 @@ function getCaloriesBurned(exerciseType, startDate, endDate, exercise_intensity,
 async function countTheExercises(exercise_type, currentUser) {
     currentUser.collection("exerciseCounter").doc("exercises").get().then((exerciseCounter) => {
         if (exerciseCounter.exists) {
-            if (exerciseCounter.data()[exercise_type] == undefined || exerciseCounter.data()[exercise_type] == null) {
+            if (exerciseCounter.data()[exercise_type] == undefined || exerciseCounter.data()[exercise_type] == null || exerciseCounter.data()[exercise_type] == 0) {
                 currentUser.collection("exerciseCounter").doc("exercises").set({
                     [exercise_type]: 1,
                 }, { merge: true })
@@ -163,138 +163,44 @@ async function countTheExercises(exercise_type, currentUser) {
     }).catch((error) => {
         console.error("Error fetching documents: ", error);
     });
-
-
 }
 
-
-async function addWorkout(currentUser) {
-    startDate = jQuery("#startDate").val();
-    endDate = jQuery("#endDate").val();
-    verifyStartDate = new Date(startDate);
-    verifyEndDate = new Date(endDate);
-
-    exercise_type = jQuery("#exercises").val();
-    console.log(verifyEndDate - verifyStartDate)
-    if ((verifyEndDate - verifyStartDate) > 0) {
-        jQuery("#add_workout").css("display", "none");
-        jQuery('#confirmAddWorkout').css("display", "flex").delay(3000).hide(0);
-        jQuery('#homepage').toggle();
-        jQuery("#workoutWarning").css("display", "none");
-        await countTheExercises(exercise_type, currentUser);
-        if (exercise_type != "" && startDate != "" && endDate != "" && jQuery(".intensity").val() != "") {
-            if (exercise_type == "weightlifting") {
-                intensity = jQuery("#intensity").val();
-                if (intensity == "Light") {
-                    exercise_intensity = 3
-                }
-                else if (intensity == "Moderate") {
-                    exercise_intensity = 5
-                }
-                else if (intensity == "Hard") {
-                    exercise_intensity = 6
-                }
-                else if (intensity == "Very-hard") {
-                    exercise_intensity = 7
-                }
-            }
-            else if (exercise_type == "yoga") {
-                intensity = jQuery("#intensity").val();
-                if (intensity == "Light") {
-                    exercise_intensity = 2.5
-                }
-                else if (intensity == "Moderate") {
-                    exercise_intensity = 4
-                }
-                else if (intensity == "Hard") {
-                    exercise_intensity = 6
-                }
-                else if (intensity == "Very-hard") {
-                    exercise_intensity = 7
-                }
-            }
-            else {
-                intensity = jQuery("#distance").val();
-                exercise_intensity = parseFloat(jQuery("#distance").val())
-            }
-            let calories_burned = await getCaloriesBurned(exercise_type, startDate, endDate, exercise_intensity, currentUser);
-            let badges_earned = await giveUserBadge(exercise_type, currentUser);
-            let start_Date = firebase.firestore.Timestamp.fromDate(new Date(startDate));
-            let end_Date = firebase.firestore.Timestamp.fromDate(new Date(endDate));
-
-
-            let history_doc = [];
-            let history_num;
-
-            currentUser.collection("workouts").get().then((querySnapshot) => {
-                querySnapshot.forEach((doc) => {
-                    history_doc.push(doc.id);
-                });
-
-                console.log(history_doc.length);
-                if (history_doc.length == 0) {
-                    history_num = "history1";
-                } else {
-                    history_num = "history" + (history_doc.length + 1).toString();
-                }
-                console.log(history_num);
-                currentUser.collection("workouts").doc(history_num).set({
-                    exerciseType: exercise_type,
-                    startDate: start_Date,
-                    endDate: end_Date,
-                    intensity: intensity,
-                    calories: calories_burned,
-                    earned: badges_earned[0],
-                    earned_name: badges_earned[1]
-                }, { merge: true })
-                    .then(() => {
-                        console.log("Document successfully updated!");
-                        location.reload();
-                    })
-                    .catch((error) => {
-                        console.error("Error updating document: ", error);
-                    });
-            }).catch((error) => {
-                console.error("Error fetching documents: ", error);
-            });
+function intensityHandler(exercise_type) {
+    if (exercise_type == "weightlifting") {
+        intensity = jQuery("#intensity").val();
+        if (intensity == "Light") {
+            exercise_intensity = 3
+        }
+        else if (intensity == "Moderate") {
+            exercise_intensity = 5
+        }
+        else if (intensity == "Hard") {
+            exercise_intensity = 6
+        }
+        else if (intensity == "Very-hard") {
+            exercise_intensity = 7
+        }
+    }
+    else if (exercise_type == "yoga") {
+        intensity = jQuery("#intensity").val();
+        if (intensity == "Light") {
+            exercise_intensity = 2.5
+        }
+        else if (intensity == "Moderate") {
+            exercise_intensity = 4
+        }
+        else if (intensity == "Hard") {
+            exercise_intensity = 6
+        }
+        else if (intensity == "Very-hard") {
+            exercise_intensity = 7
         }
     }
     else {
-        jQuery("#workoutWarning").css("display", "flex");
+        intensity = jQuery("#distance").val();
+        exercise_intensity = parseFloat(jQuery("#distance").val())
     }
-}
-
-function addWorkoutHandler() {
-    if (jQuery('#add_workout').css("display") == "none") {
-        jQuery("#homepage-icon").attr('src', './images/nav-icons/home-black.svg')
-        jQuery("#calender-icon").attr('src', './images/nav-icons/calender-black.svg')
-        jQuery("#leaderboard-icon").attr('src', './images/nav-icons/leaderboard-black.svg')
-        jQuery("#activity-icon").attr('src', './images/nav-icons/activity-feed-black.svg')
-        jQuery("#settings-icon").attr('src', './images/nav-icons/setting-black.svg')
-        jQuery("#add-workout-icon").attr('src', './images/nav-icons/add-workout-white.svg')
-        jQuery('#usernameAndPic').css('display', 'none')
-        jQuery('#filter-and-search').css('display', 'none')
-        jQuery('#add_workout').toggle()
-        jQuery('#homepage').css("display", "none");
-        jQuery('#leaderboard').css("display", "none");
-        jQuery('#activity_feed').css("display", "none");
-        jQuery('#settings').css("display", "none");
-        jQuery('#filter_activity').css("display", "none");
-        jQuery('#profile_info').css("display", "none");
-        jQuery('#datepicker').css("display", "none");
-    }
-}
-
-function additionalInformationHandler() {
-    if (jQuery(this).val() == "cycling" || jQuery(this).val() == "running" || jQuery(this).val() == "walking") {
-        jQuery('#distance-div').css("display", "flex");
-        jQuery('#intensity-div').css("display", "none");
-    }
-    else {
-        jQuery('#distance-div').css("display", "none");
-        jQuery('#intensity-div').css("display", "flex");
-        jQuery('#intensity-div').css("flex-direction", "flex-row");
-    }
+    return exercise_intensity;
 }
 
 function removeBadges(currentUser, exerciseType, exerciseCount) {
@@ -326,6 +232,117 @@ function removeBadges(currentUser, exerciseType, exerciseCount) {
     }
 }
 
+async function decreaseExerciseCount(exercise_type, currentUser) {
+    removeBadges(currentUser, updateWorkoutType, exerciseCount)
+    currentUser.collection("exerciseCounter").doc("exercises").update({
+        [exercise_type]: firebase.firestore.FieldValue.increment(-1)
+    })
+        .then(() => {
+            console.log("done");
+        })
+        .catch((error) => {
+            console.error("Error updating document: ", error);
+        });
+
+}
+
+async function addWorkout(currentUser, history_id = "", updateWorkoutType = "") {
+
+    startDate = jQuery("#startDate").val();
+    endDate = jQuery("#endDate").val();
+    verifyStartDate = new Date(startDate);
+    verifyEndDate = new Date(endDate);
+
+    exercise_type = jQuery("#exercises").val();
+    console.log(verifyEndDate - verifyStartDate)
+    if ((verifyEndDate - verifyStartDate) > 0) {
+        jQuery("#add_workout").css("display", "none");
+        jQuery('#confirmAddWorkout').css("display", "flex").delay(3000).hide(0);
+        jQuery('#homepage').toggle();
+        jQuery("#workoutWarning").css("display", "none");
+
+        if (exercise_type != "" && startDate != "" && endDate != "" && jQuery(".intensity").val() != "") {
+            if (history_id == "") {
+                unique_id = currentUser.collection("workouts").doc().id;
+                history_id = "history" + unique_id;
+            }
+            else {
+                await decreaseExerciseCount(updateWorkoutType, currentUser);
+
+            }
+            await countTheExercises(exercise_type, currentUser);
+            let exercise_intensity = intensityHandler(exercise_type);
+            let calories_burned = parseInt(await getCaloriesBurned(exercise_type, startDate, endDate, exercise_intensity, currentUser));
+            let badges_earned = await giveUserBadge(exercise_type, currentUser);
+            let start_Date = firebase.firestore.Timestamp.fromDate(new Date(startDate));
+            let end_Date = firebase.firestore.Timestamp.fromDate(new Date(endDate));
+
+
+
+            console.log(history_id);
+            currentUser.collection("workouts").doc(history_id).set({
+                exerciseType: exercise_type,
+                startDate: start_Date,
+                endDate: end_Date,
+                intensity: intensity,
+                calories: calories_burned,
+                earned: badges_earned[0],
+                earned_name: badges_earned[1]
+            }, { merge: true })
+                .then(() => {
+                    console.log("Document successfully updated!");
+                    // location.reload();
+                })
+                .catch((error) => {
+                    console.error("Error updating document: ", error);
+                });
+
+        }
+    }
+    else {
+        jQuery("#workoutWarning").css("display", "flex");
+    }
+}
+
+function addWorkoutHandler() {
+    if (jQuery('#add_workout').css("display") == "none") {
+        $("#exercises").val("weightlifting");
+        $("#startDate").val("");
+        $("#endDate").val("");
+        $("#intensity-div").css("display", "flex");
+        $("#distance-div").css("display", "none");
+        jQuery("#homepage-icon").attr('src', './images/nav-icons/home-black.svg')
+        jQuery("#calender-icon").attr('src', './images/nav-icons/calender-black.svg')
+        jQuery("#leaderboard-icon").attr('src', './images/nav-icons/leaderboard-black.svg')
+        jQuery("#activity-icon").attr('src', './images/nav-icons/activity-feed-black.svg')
+        jQuery("#settings-icon").attr('src', './images/nav-icons/setting-black.svg')
+        jQuery("#add-workout-icon").attr('src', './images/nav-icons/add-workout-white.svg')
+        jQuery('#usernameAndPic').css('display', 'none')
+        jQuery('#filter-and-search').css('display', 'none')
+        jQuery('#add_workout').toggle()
+        jQuery('#homepage').css("display", "none");
+        jQuery('#leaderboard').css("display", "none");
+        jQuery('#activity_feed').css("display", "none");
+        jQuery('#settings').css("display", "none");
+        jQuery('#filter_activity').css("display", "none");
+        jQuery('#profile_info').css("display", "none");
+        jQuery('#datepicker').css("display", "none");
+    }
+}
+
+function additionalInformationHandler() {
+    if (jQuery(this).val() == "cycling" || jQuery(this).val() == "running" || jQuery(this).val() == "walking") {
+        jQuery('#distance-div').css("display", "flex");
+        jQuery('#intensity-div').css("display", "none");
+    }
+    else {
+        jQuery('#distance-div').css("display", "none");
+        jQuery('#intensity-div').css("display", "flex");
+    }
+}
+
+
+
 
 function removeWorkout(currentUser, historyId) {
     currentUser.collection("workouts").doc(historyId).get().then((doc) => {
@@ -353,21 +370,40 @@ function removeWorkout(currentUser, historyId) {
     });
 }
 
-function updateworkout(currentUser, historyId) {
-    currentUser.collection("workouts").doc(historyId).get()
+function toLocalISOString(date) {
+    const offset = date.getTimezoneOffset();
+    const adjustedDate = new Date(date.getTime() - (offset * 60 * 1000));
+    return adjustedDate.toISOString().slice(0, 16);
+}
+
+function updateworkoutHandler(currentUser, historyID) {
+    currentUser.collection("workouts").doc(historyID).get()
         .then(userDoc => {
             addWorkoutHandler()
+            console.log(historyID)
+            jQuery("#save_workout_button").css("display", "none");
+            jQuery("#update_workout_button").css("display", "block");
             //get the data fields of the user
             let workoutType = userDoc.data().exerciseType;
             let startDate = (userDoc.data().startDate).toDate();;
             let endDate = (userDoc.data().endDate).toDate();
-            startDate = startDate.toISOString().slice(0, 16);
-            endDate = endDate.toISOString().slice(0, 16);
+            startDate = toLocalISOString(startDate);
+            endDate = toLocalISOString(endDate);
             let intensity = userDoc.data().intensity
             $("#exercises").val(workoutType);
             $("#startDate").val(startDate);
             $("#endDate").val(endDate);
-            $("#intensity").val(intensity);
+            if (workoutType == "weightlifting" || workoutType == "yoga") {
+                $("#intensity").val(intensity);
+                $("#intensity-div").css("display", "flex");
+                $("#distance-div").css("display", "none");
+            }
+            else {
+                $("#distance").val(intensity);
+                $("#intensity-div").css("display", "none");
+                $("#distance-div").css("display", "flex");
 
+            }
+            jQuery("#update_workout_button").click(function () { addWorkout(CurrentUser, historyID, workoutType) });
         })
 }
