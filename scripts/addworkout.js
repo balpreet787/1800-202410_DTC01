@@ -306,6 +306,11 @@ async function addWorkout(currentUser, history_id = "", updateWorkoutType = "") 
 
 function addWorkoutHandler() {
     if (jQuery('#add_workout').css("display") == "none") {
+        $("#exercises").val("weightlifting");
+        $("#startDate").val("");
+        $("#endDate").val("");
+        $("#intensity-div").css("display", "flex");
+        $("#distance-div").css("display", "none");
         jQuery("#homepage-icon").attr('src', './images/nav-icons/home-black.svg')
         jQuery("#calender-icon").attr('src', './images/nav-icons/calender-black.svg')
         jQuery("#leaderboard-icon").attr('src', './images/nav-icons/leaderboard-black.svg')
@@ -388,7 +393,17 @@ function updateworkoutHandler(currentUser, historyID) {
             $("#exercises").val(workoutType);
             $("#startDate").val(startDate);
             $("#endDate").val(endDate);
-            $("#intensity").val(intensity);
+            if (workoutType == "weightlifting" || workoutType == "yoga") {
+                $("#intensity").val(intensity);
+                $("#intensity-div").css("display", "flex");
+                $("#distance-div").css("display", "none");
+            }
+            else {
+                $("#distance").val(intensity);
+                $("#intensity-div").css("display", "none");
+                $("#distance-div").css("display", "flex");
+
+            }
             jQuery("#update_workout_button").click(function () { addWorkout(CurrentUser, historyID, workoutType) });
         })
 }
