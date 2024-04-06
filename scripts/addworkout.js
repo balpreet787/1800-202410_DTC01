@@ -128,7 +128,7 @@ function getCaloriesBurned(exerciseType, startDate, endDate, exercise_intensity,
 async function countTheExercises(exercise_type, currentUser) {
     currentUser.collection("exerciseCounter").doc("exercises").get().then((exerciseCounter) => {
         if (exerciseCounter.exists) {
-            if (exerciseCounter.data()[exercise_type] == undefined || exerciseCounter.data()[exercise_type] == null) {
+            if (exerciseCounter.data()[exercise_type] == undefined || exerciseCounter.data()[exercise_type] == null || exerciseCounter.data()[exercise_type] == 0) {
                 currentUser.collection("exerciseCounter").doc("exercises").set({
                     [exercise_type]: 1,
                 }, { merge: true })
@@ -163,12 +163,91 @@ async function countTheExercises(exercise_type, currentUser) {
     }).catch((error) => {
         console.error("Error fetching documents: ", error);
     });
+}
 
+function intensityHandler(exercise_type) {
+    if (exercise_type == "weightlifting") {
+        intensity = jQuery("#intensity").val();
+        if (intensity == "Light") {
+            exercise_intensity = 3
+        }
+        else if (intensity == "Moderate") {
+            exercise_intensity = 5
+        }
+        else if (intensity == "Hard") {
+            exercise_intensity = 6
+        }
+        else if (intensity == "Very-hard") {
+            exercise_intensity = 7
+        }
+    }
+    else if (exercise_type == "yoga") {
+        intensity = jQuery("#intensity").val();
+        if (intensity == "Light") {
+            exercise_intensity = 2.5
+        }
+        else if (intensity == "Moderate") {
+            exercise_intensity = 4
+        }
+        else if (intensity == "Hard") {
+            exercise_intensity = 6
+        }
+        else if (intensity == "Very-hard") {
+            exercise_intensity = 7
+        }
+    }
+    else {
+        intensity = jQuery("#distance").val();
+        exercise_intensity = parseFloat(jQuery("#distance").val())
+    }
+    return exercise_intensity;
+}
+
+function removeBadges(currentUser, exerciseType, exerciseCount) {
+    if (exerciseCount == 5) {
+        currentUser.collection("workouts").where("earned_name", "==", `bronze ${exerciseType} badge`).get().then((removedWorkout) => {
+            removedWorkout.forEach(workout => {
+                currentUser.collection("workouts").doc(workout.id).update({ earned_name: null, earned: null })
+            })
+        })
+    } else if (exerciseCount == 10) {
+        currentUser.collection("workouts").where("earned_name", "==", `silver ${exerciseType} badge`).get().then((removedWorkout) => {
+            removedWorkout.forEach(workout => {
+                currentUser.collection("workouts").doc(workout.id).update({ earned_name: `bronze ${exerciseType} badge`, earned: `./images/${exerciseType}bronze.svg` })
+            })
+        })
+    } else if (exerciseCount == 15) {
+        currentUser.collection("workouts").where("earned_name", "==", `gold ${exerciseType} badge`).get().then((removedWorkout) => {
+            removedWorkout.forEach(workout => {
+                currentUser.collection("workouts").doc(workout.id).update({ earned_name: `silver ${exerciseType} badge`, earned: `./images/${exerciseType}silver.svg` })
+            })
+        })
+
+    } else if (exerciseCount == 20) {
+        currentUser.collection("workouts").where("earned_name", "==", `platinum ${exerciseType} badge`).get().then((removedWorkout) => {
+            removedWorkout.forEach(workout => {
+                currentUser.collection("workouts").doc(workout.id).update({ earned_name: `gold ${exerciseType} badge`, earned: `./images/${exerciseType}gold.svg` })
+            })
+        })
+    }
+}
+
+async function decreaseExerciseCount(exercise_type, currentUser) {
+    removeBadges(currentUser, updateWorkoutType, exerciseCount)
+    currentUser.collection("exerciseCounter").doc("exercises").update({
+        [exercise_type]: firebase.firestore.FieldValue.increment(-1)
+    })
+        .then(() => {
+            console.log("done");
+        })
+        .catch((error) => {
+            console.error("Error updating document: ", error);
+        });
 
 }
 
+async function addWorkout(currentUser, history_id = "", updateWorkoutType = "") {
 
-async function addWorkout(currentUser) {
     startDate = jQuery("#startDate").val();
     endDate = jQuery("#endDate").val();
     verifyStartDate = new Date(startDate);
@@ -181,82 +260,43 @@ async function addWorkout(currentUser) {
         jQuery('#confirmAddWorkout').css("display", "flex").delay(3000).hide(0);
         jQuery('#homepage').toggle();
         jQuery("#workoutWarning").css("display", "none");
-        await countTheExercises(exercise_type, currentUser);
+
         if (exercise_type != "" && startDate != "" && endDate != "" && jQuery(".intensity").val() != "") {
-            if (exercise_type == "weightlifting") {
-                intensity = jQuery("#intensity").val();
-                if (intensity == "Light") {
-                    exercise_intensity = 3
-                }
-                else if (intensity == "Moderate") {
-                    exercise_intensity = 5
-                }
-                else if (intensity == "Hard") {
-                    exercise_intensity = 6
-                }
-                else if (intensity == "Very-hard") {
-                    exercise_intensity = 7
-                }
-            }
-            else if (exercise_type == "yoga") {
-                intensity = jQuery("#intensity").val();
-                if (intensity == "Light") {
-                    exercise_intensity = 2.5
-                }
-                else if (intensity == "Moderate") {
-                    exercise_intensity = 4
-                }
-                else if (intensity == "Hard") {
-                    exercise_intensity = 6
-                }
-                else if (intensity == "Very-hard") {
-                    exercise_intensity = 7
-                }
+            if (history_id == "") {
+                unique_id = currentUser.collection("workouts").doc().id;
+                history_id = "history" + unique_id;
             }
             else {
-                intensity = jQuery("#distance").val();
-                exercise_intensity = parseFloat(jQuery("#distance").val())
+                await decreaseExerciseCount(updateWorkoutType, currentUser);
+
             }
-            let calories_burned = await getCaloriesBurned(exercise_type, startDate, endDate, exercise_intensity, currentUser);
+            await countTheExercises(exercise_type, currentUser);
+            let exercise_intensity = intensityHandler(exercise_type);
+            let calories_burned = parseInt(await getCaloriesBurned(exercise_type, startDate, endDate, exercise_intensity, currentUser));
             let badges_earned = await giveUserBadge(exercise_type, currentUser);
             let start_Date = firebase.firestore.Timestamp.fromDate(new Date(startDate));
             let end_Date = firebase.firestore.Timestamp.fromDate(new Date(endDate));
 
 
-            let history_doc = [];
-            let history_num;
 
-            currentUser.collection("workouts").get().then((querySnapshot) => {
-                querySnapshot.forEach((doc) => {
-                    history_doc.push(doc.id);
+            console.log(history_id);
+            currentUser.collection("workouts").doc(history_id).set({
+                exerciseType: exercise_type,
+                startDate: start_Date,
+                endDate: end_Date,
+                intensity: intensity,
+                calories: calories_burned,
+                earned: badges_earned[0],
+                earned_name: badges_earned[1]
+            }, { merge: true })
+                .then(() => {
+                    console.log("Document successfully updated!");
+                    // location.reload();
+                })
+                .catch((error) => {
+                    console.error("Error updating document: ", error);
                 });
 
-                console.log(history_doc.length);
-                if (history_doc.length == 0) {
-                    history_num = "history1";
-                } else {
-                    history_num = "history" + (history_doc.length + 1).toString();
-                }
-                console.log(history_num);
-                currentUser.collection("workouts").doc(history_num).set({
-                    exerciseType: exercise_type,
-                    startDate: start_Date,
-                    endDate: end_Date,
-                    intensity: intensity,
-                    calories: calories_burned,
-                    earned: badges_earned[0],
-                    earned_name: badges_earned[1]
-                }, { merge: true })
-                    .then(() => {
-                        console.log("Document successfully updated!");
-                        location.reload();
-                    })
-                    .catch((error) => {
-                        console.error("Error updating document: ", error);
-                    });
-            }).catch((error) => {
-                console.error("Error fetching documents: ", error);
-            });
         }
     }
     else {
@@ -296,34 +336,7 @@ function additionalInformationHandler() {
     }
 }
 
-function removeBadges(currentUser, exerciseType, exerciseCount) {
-    if (exerciseCount == 5) {
-        currentUser.collection("workouts").where("earned_name", "==", `bronze ${exerciseType} badge`).get().then((removedWorkout) => {
-            removedWorkout.forEach(workout => {
-                currentUser.collection("workouts").doc(workout.id).update({ earned_name: null, earned: null })
-            })
-        })
-    } else if (exerciseCount == 10) {
-        currentUser.collection("workouts").where("earned_name", "==", `silver ${exerciseType} badge`).get().then((removedWorkout) => {
-            removedWorkout.forEach(workout => {
-                currentUser.collection("workouts").doc(workout.id).update({ earned_name: `bronze ${exerciseType} badge`, earned: `./images/${exerciseType}bronze.svg` })
-            })
-        })
-    } else if (exerciseCount == 15) {
-        currentUser.collection("workouts").where("earned_name", "==", `gold ${exerciseType} badge`).get().then((removedWorkout) => {
-            removedWorkout.forEach(workout => {
-                currentUser.collection("workouts").doc(workout.id).update({ earned_name: `silver ${exerciseType} badge`, earned: `./images/${exerciseType}silver.svg` })
-            })
-        })
 
-    } else if (exerciseCount == 20) {
-        currentUser.collection("workouts").where("earned_name", "==", `platinum ${exerciseType} badge`).get().then((removedWorkout) => {
-            removedWorkout.forEach(workout => {
-                currentUser.collection("workouts").doc(workout.id).update({ earned_name: `gold ${exerciseType} badge`, earned: `./images/${exerciseType}gold.svg` })
-            })
-        })
-    }
-}
 
 
 function removeWorkout(currentUser, historyId) {
@@ -352,21 +365,30 @@ function removeWorkout(currentUser, historyId) {
     });
 }
 
-function updateworkout(currentUser, historyId) {
-    currentUser.collection("workouts").doc(historyId).get()
+function toLocalISOString(date) {
+    const offset = date.getTimezoneOffset();
+    const adjustedDate = new Date(date.getTime() - (offset * 60 * 1000));
+    return adjustedDate.toISOString().slice(0, 16);
+}
+
+function updateworkoutHandler(currentUser, historyID) {
+    currentUser.collection("workouts").doc(historyID).get()
         .then(userDoc => {
             addWorkoutHandler()
+            console.log(historyID)
+            jQuery("#save_workout_button").css("display", "none");
+            jQuery("#update_workout_button").css("display", "block");
             //get the data fields of the user
             let workoutType = userDoc.data().exerciseType;
             let startDate = (userDoc.data().startDate).toDate();;
             let endDate = (userDoc.data().endDate).toDate();
-            startDate = startDate.toISOString().slice(0, 16);
-            endDate = endDate.toISOString().slice(0, 16);
+            startDate = toLocalISOString(startDate);
+            endDate = toLocalISOString(endDate);
             let intensity = userDoc.data().intensity
             $("#exercises").val(workoutType);
             $("#startDate").val(startDate);
             $("#endDate").val(endDate);
             $("#intensity").val(intensity);
-
+            jQuery("#update_workout_button").click(function () { addWorkout(CurrentUser, historyID, workoutType) });
         })
 }

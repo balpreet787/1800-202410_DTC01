@@ -61,13 +61,13 @@ function showRecordedWorkouts(currentUser) {
                 );
             }
             deleteWorkoutHandler(currentUser, workouts.id);
-            jQuery(`#${workouts.id}Edit`).click(function () { updateworkout(currentUser, workouts.id) })
+            jQuery(`#${workouts.id}Edit`).click(function () { updateworkoutHandler(currentUser, workouts.id) })
 
         })
     })
-    .catch((error) => {
-        console.error("Error", error)
-    })
+        .catch((error) => {
+            console.error("Error", error)
+        })
 }
 
 function calendarHandler() {

@@ -3,7 +3,8 @@ async function getLeaderboardData(currentUser) {
     let weekValue = $('#week').val();
     const [year, weekNumber] = weekValue.split('-W').map(Number);
     const janFirst = new Date(year, 0, 1);
-    const daysToAdd = (weekNumber - 1) * 7 - janFirst.getDay();
+    const offsetToFirstThursday = (11 - janFirst.getDay()) % 7;
+    const daysToAdd = (weekNumber - 1) * 7 + offsetToFirstThursday - janFirst.getDay();
     const weekStart = new Date(janFirst);
     weekStart.setDate(janFirst.getDate() + daysToAdd);
     const weekEnd = new Date(weekStart);
