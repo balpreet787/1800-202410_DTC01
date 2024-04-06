@@ -161,37 +161,41 @@ function profileInfoHandler(currentUser) {
 }
 
 async function userAuthentication(profilepic, image) {
-    firebase.auth().onAuthStateChanged((user) => {
-        if (user) {
-            // User is signed in, you can get the user ID.
-            CurrentUser = db.collection("users").doc(user.uid); // Go to the Firestore document of the user
-            CurrentUser.get().then(userDoc => {
-                if (userDoc.exists) {
-                    // Get the document data
-                    const userData = userDoc.data();
-                    if (userData.nickname === undefined || userData.nickname === null) {
-                        jQuery('#homepage, #leaderboard, #activity_feed, #datepicker, #settings').css("display", "none");
-                        jQuery("#profile_info").css("display", "flex");
+    return new Promise((resolve, reject) => {
+        firebase.auth().onAuthStateChanged((user) => {
+            if (user) {
+                // User is signed in, you can get the user ID.
+                let currentUser = db.collection("users").doc(user.uid); // Go to the Firestore document of the user
+                console.log("User is signed in."), CurrentUser;
+                currentUser.get().then(userDoc => {
+                    if (userDoc.exists) {
+                        // Get the document data
+                        const userData = userDoc.data();
+                        if (userData.nickname === undefined || userData.nickname === null) {
+                            jQuery('#homepage, #leaderboard, #activity_feed, #datepicker, #settings').css("display", "none");
+                            jQuery("#profile_info").css("display", "flex");
+                        }
+                        if (userData.image === undefined || userData.image === null) {
+                            profilepic = "./images/profile_pic.svg";
+                        }
+                        else {
+                            profilepic = userData.image;
+                        }
+                    } else {
+                        console.log("No such document!");
                     }
-                    if (userData.image === undefined || userData.image === null) {
-                        profilepic = "./images/profile_pic.svg";
-                    }
-                    else {
-                        profilepic = userData.image;
-                    }
-                } else {
-                    console.log("No such document!");
-                }
-                image.attr('src', profilepic);
+                    image.attr('src', profilepic);
+                    resolve(currentUser);
+                }).catch(error => {
+                    console.log("Error getting document:", error);
+                    reject("No user is signed in.");
+                });
 
-            }).catch(error => {
-                console.log("Error getting document:", error);
-            });
-
-        } else {
-            // No user is signed in.
-            console.log("No user is signed in.");
-        }
+            } else {
+                // No user is signed in.
+                console.log("No user is signed in.");
+            }
+        });
     });
 }
 
@@ -243,7 +247,8 @@ async function setup() {
             image.attr('src', '');
         }
     });
-    await userAuthentication(profilepic, image);
+    CurrentUser = await userAuthentication(profilepic, image);
+    console.log(CurrentUser);
     insertNameAndPicFromFirestore(CurrentUser);
     insertHomepageInfoFromFirestore(CurrentUser);
     insertTodaysWorkoutInfoFromFirestore(CurrentUser);
