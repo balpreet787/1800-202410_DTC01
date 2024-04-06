@@ -61,7 +61,10 @@ function showRecordedWorkouts(currentUser) {
             jQuery(`#${workouts.id}Edit`).click(function(){updateworkout(currentUser, workouts.id)})
             
         })
-    });
+    })
+    .catch((error) => {
+        console.error("Error", error)
+    })
 }
 
 function calendarHandler() {
@@ -72,6 +75,7 @@ function calendarHandler() {
         jQuery("#activity-icon").attr('src', './images/nav-icons/activity-feed-black.svg')
         jQuery("#settings-icon").attr('src', './images/nav-icons/setting-black.svg')
         jQuery("#add-workout-icon").attr('src', './images/nav-icons/add-workout-black.svg')
+        jQuery('#filter-and-search').css('display', 'none')
         jQuery('#usernameAndPic').css('display', 'none')
         jQuery('#datepicker').css("display", "flex")
         jQuery('#homepage').css("display", "none");
