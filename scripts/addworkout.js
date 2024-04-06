@@ -311,6 +311,8 @@ function addWorkoutHandler() {
         $("#endDate").val("");
         $("#intensity-div").css("display", "flex");
         $("#distance-div").css("display", "none");
+        $("#save_workout_button").css("display", "block");
+        $("#update_workout_button").css("display", "none");
         jQuery("#homepage-icon").attr('src', './images/nav-icons/home-black.svg')
         jQuery("#calender-icon").attr('src', './images/nav-icons/calender-black.svg')
         jQuery("#leaderboard-icon").attr('src', './images/nav-icons/leaderboard-black.svg')
@@ -341,8 +343,6 @@ function additionalInformationHandler() {
         jQuery('#intensity-div').css("flex-direction", "flex-row");
     }
 }
-
-
 
 
 function removeWorkout(currentUser, historyId) {
