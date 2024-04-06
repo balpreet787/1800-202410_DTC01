@@ -338,6 +338,7 @@ function additionalInformationHandler() {
     else {
         jQuery('#distance-div').css("display", "none");
         jQuery('#intensity-div').css("display", "flex");
+        jQuery('#intensity-div').css("flex-direction", "flex-row");
     }
 }
 

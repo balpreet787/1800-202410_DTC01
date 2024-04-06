@@ -188,9 +188,6 @@
                     <option value="yoga">Yoga</option>
                 </select>
             </div>
-            <div id="workoutWarning" class="text-sm pt-5 px-10 text-red-600 hidden">*Workout ending time must be higher
-                than the starting
-                time.</div>
             <div class="flex flex-col jusitfy-center py-2">
                 <div class="flex gap-4 justify-between text-center">
                     <label class="py-2 font-extrabold" for="startDate">Start time:</label>
@@ -201,6 +198,7 @@
                     <input class="outline outline-1 outline-[#ff9500] bg-[white] rounded-lg p-2 shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]" type="datetime-local" id="endDate" name="endDate">
                 </div>
             </div>
+            <div id="workoutWarning" class="text-center text-xs px-1 text-red-600 hidden">*Workout duration cannot be negative.</div>
             <!-- Additional information for weightlifting exercise and yoga starts here -->
             <div class="flex flex-row gap-4 justify-between text-center pt-2" id="intensity-div">
                 <label class="py-2 font-extrabold" for="intensity">Intensity:</label>
@@ -223,7 +221,7 @@
 
             <div class="grid grid-cols-2 place-items-center my-5">
                 <button id="save_workout_button" class="w-1/2 bg-[#ff9500] text-[#fff6e5] rounded-lg  p-2 shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]">Save</button>
-                <button id="update_workout_button" class="w-1/2 bg-gray-300 rounded-lg hidden p-2">Update</button>
+                <button id="update_workout_button" class="w-1/2 bg-[#ff9500] text-[#fff6e5] rounded-lg hidden p-2">Update</button>
                 <button id="cancel_workout_button" class="w-1/2 bg-[#ff9500] text-[#fff6e5] rounded-lg  p-2 shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]">Cancel</button>
             </div>
         </div>
