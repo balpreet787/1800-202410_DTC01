@@ -14,7 +14,7 @@ function showRecordedWorkouts(currentUser) {
         recordedWorkout.forEach(workouts => {
             if (workouts.data().exerciseType == 'weightlifting' || workouts.data().exerciseType == 'yoga') {
                 $("#recorded_workouts").append(
-                    `<div class="mt-4 flex flex-col justify-evenly bg-[#fff6e5] shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px] rounded-xl" id="${workouts.id}">
+                    `<div class="flex flex-col justify-evenly bg-[#fff6e5] shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px] rounded-xl" id="${workouts.id}">
                             <div class="flex flex-row justify-between">
                             <div class="flex flex-col justify-evenly bg-[#fff6e5] text-[16px] p-4">
                             <span><b>Workout:</b> ${workouts.data().exerciseType}</span>
@@ -29,7 +29,7 @@ function showRecordedWorkouts(currentUser) {
                             <span><b>Calories Burned:</b> ${workouts.data().calories}</span>
                             <span><b>Time:</b> ${(workouts.data().endDate - workouts.data().startDate) / 60} mins </span>
                             </div>
-                            <div class="flex flex-row gap-5 p-4 justify-center">
+                            <div class="flex flex-row justify-center gap-3 pb-2">
                             <button class="hidden underline" id="${workouts.id}Cancel">Cancel</button>
                             <button class="hidden underline" id="${workouts.id}Confirm">Confirm Delete</button>
                             </div>
@@ -38,7 +38,7 @@ function showRecordedWorkouts(currentUser) {
             }
             else {
                 $("#recorded_workouts").append(
-                    `<div class="mt-4 flex flex-col justify-evenly bg-[#fff6e5] shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px] rounded-xl" id="${workouts.id}">
+                    `<div class=" flex flex-col justify-evenly bg-[#fff6e5] shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px] rounded-xl" id="${workouts.id}">
                     <div class="flex flex-row justify-between">
                     <div class="flex flex-col justify-evenly bg-[#fff6e5] text-[16px] p-4">
                     <span><b>Workout:</b> ${workouts.data().exerciseType}</span>
@@ -53,7 +53,7 @@ function showRecordedWorkouts(currentUser) {
                     <span><b>Calories Burned:</b> ${workouts.data().calories}</span>
                     <span><b>Time:</b> ${(workouts.data().endDate - workouts.data().startDate) / 60} mins </span>
                     </div>
-                    <div class="flex flex-row gap-5 p-4 justify-center">
+                    <div class="flex flex-row justify-center gap-3 pb-2">
                     <button class="hidden underline" id="${workouts.id}Cancel">Cancel</button>
                     <button class="hidden underline" id="${workouts.id}Confirm">Confirm Delete</button>
                     </div>

@@ -7,78 +7,92 @@ async function giveUserBadge(exerciseType, currentUser) {
     var badge = null;
     var badge_name = null;
     if (exerciseType == "weightlifting") {
-        if (weightlifting_count >= 20) {
+        if (weightlifting_count === 20) {
             badge = "./images/weightliftingplatinum.svg";
             badge_name = "platinum weightlifting badge";
-        } else if (weightlifting_count >= 15) {
+        } else if (weightlifting_count === 15) {
             badge = "./images/weightliftinggold.svg";
             badge_name = "gold weightlifting badge";
-        } else if (weightlifting_count >= 10) {
+        } else if (weightlifting_count === 10) {
             badge = "./images/weightliftingsilver.svg";
             badge_name = "silver weightlifting badge";
-        } else if (weightlifting_count >= 5) {
+        } else if (weightlifting_count === 5) {
             badge = "./images/weightliftingbronze.svg";
             badge_name = "bronze weightlifting badge";
-        }
+        } else {
+            badge = null;
+            badge_name = null;
+        }    
     } else if (exerciseType == "yoga") {
-        if (yoga_count >= 20) {
+        if (yoga_count === 20) {
             badge = "./images/yogaplatinum.svg";
             badge_name = "platinum yoga badge";
-        } else if (yoga_count >= 15) {
+        } else if (yoga_count === 15) {
             badge = "./images/yogagold.svg";
             badge_name = "gold yoga badge";
-        } else if (yoga_count >= 10) {
+        } else if (yoga_count === 10) {
             badge = "./images/yogasilver.svg";
             badge_name = "silver yoga badge";
-        } else if (yoga_count >= 5) {
+        } else if (yoga_count === 5) {
             badge = "./images/yogabronze.svg";
             badge_name = "bronze yoga badge";
-        }
+        } else {
+            badge = null;
+            badge_name = null;
+        }    
     } else if (exerciseType == "running") {
-        if (running_count >= 20) {
+        if (running_count === 20) {
             badge = "./images/runningplatinum.svg";
             badge_name = "platinum running badge";
-        } else if (running_count >= 15) {
+        } else if (running_count === 15) {
             badge = "./images/runninggold.svg";
             badge_name = "gold running badge"
-        } else if (running_count >= 10) {
+        } else if (running_count === 10) {
             badge = "./images/runningsilver.svg";
             badge_name = "silver running badge"
-        } else if (running_count >= 5) {
+        } else if (running_count === 5) {
             badge = "./images/runningbronze.svg";
             badge_name = "bronze running badge"
-        }
+            console.log(running_count)
+        } else {
+            badge = null;
+            badge_name = null;
+            console.log("!!!!")
+        }    
     } else if (exerciseType == "walking") {
-        if (walking_count >= 20) {
+        if (walking_count === 20) {
             badge = "./images/walkingplatinum.svg";
             badge_name = "platinum walking badge";
-        } else if (walking_count >= 15) {
+        } else if (walking_count === 15) {
             badge = "./images/walkinggold.svg";
             badge_name = "gold walking badge";
-        } else if (walking_count >= 10) {
+        } else if (walking_count === 10) {
             badge = "./images/walkingsilver.svg";
             badge_name = "silver walking badge";
-        } else if (walking_count >= 5) {
+        } else if (walking_count === 5) {
             badge = "./images/walkingbronze.svg";
             badge_name = "bronze walking badge";
-        }
+        } else {
+            badge = null;
+            badge_name = null;
+        }    
     } else if (exerciseType == "cycling") {
-        if (cycling_count >= 20) {
+        if (cycling_count === 20) {
             badge = "./images/cyclingplatinum.svg";
             badge_name = "platinum cycling badge";
-        } else if (cycling_count >= 15) {
+        } else if (cycling_count === 15) {
             badge = "./images/cyclinggold.svg";
             badge_name = "gold cycling badge";
-        } else if (cycling_count >= 10) {
+        } else if (cycling_count === 10) {
             badge = "./images/cyclingsilver.svg";
             badge_name = "silver cycling badge";
-        } else if (cycling_count >= 5) {
+        } else if (cycling_count === 5) {
             badge = "./images/cyclingbronze.svg";
             badge_name = "bronze cycling badge";
+        } else {
+            badge = null;
+            badge_name = null;
         }
-    } else {
-        badge = null;
-        badge_number = null;
     }
 
     return [badge, badge_name];
@@ -233,16 +247,11 @@ function removeBadges(currentUser, exerciseType, exerciseCount) {
 }
 
 async function decreaseExerciseCount(exercise_type, currentUser) {
-
-
+    removeBadges(currentUser, updateWorkoutType, exerciseCount)
     currentUser.collection("exerciseCounter").doc("exercises").update({
         [exercise_type]: firebase.firestore.FieldValue.increment(-1)
     })
         .then(() => {
-            currentUser.collection("exerciseCounter").doc("exercises").get().then((doc) => {
-                exerciseCount = doc.data()[exercise_type]
-                removeBadges(currentUser, exercise_type, exerciseCount + 1)
-            });
             console.log("done");
         })
         .catch((error) => {
