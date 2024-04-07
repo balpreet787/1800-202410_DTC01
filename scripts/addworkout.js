@@ -253,7 +253,7 @@ async function decreaseExerciseCount(exercise_type, currentUser) {
         .then(() => {
             currentUser.collection("exerciseCounter").doc("exercises").get().then((doc) => {
                 exerciseCount = doc.data()[exercise_type]
-                removeBadges(currentUser, exercise_type, exerciseCount +)
+                removeBadges(currentUser, exercise_type, exerciseCount + 1)
             });
         })
         .catch((error) => {

@@ -257,7 +257,7 @@ async function setup() {
     insertTodaysWorkoutInfoFromFirestore(CurrentUser);
     insertYesterdaysWorkoutInfoFromFirestore(CurrentUser);
     jQuery("#save_workout_button").click(function () { addWorkout(CurrentUser) });
-    
+
     jQuery("#save_profile_info_button").click(function () { updateInfo(CurrentUser) });
     jQuery('#profile_info_button').click(function () { profileInfoHandler(CurrentUser) });
     jQuery('#homepagepic').click(function () { profileInfoHandler(CurrentUser) })

@@ -2,20 +2,18 @@ async function getLeaderboardData(currentUser) {
     let weekValue = $('#week').val();
     const [year, weekNumber] = weekValue.split('-W').map(Number);
     const janFirst = new Date(year, 0, 1);
-    const daysToThursday = (4 - janFirst.getDay() + 7) % 7; 
-    const firstThursday = new Date(janFirst.getTime() + daysToThursday * 86400000); 
-    const firstMonday = new Date(firstThursday.getTime() - 3 * 86400000); 
+    const daysToThursday = (4 - janFirst.getDay() + 7) % 7;
+    const firstThursday = new Date(janFirst.getTime() + daysToThursday * 86400000);
+    const firstMonday = new Date(firstThursday.getTime() - 3 * 86400000);
 
     const weekStart = new Date(firstMonday.getTime() + (weekNumber - 1) * 7 * 86400000);
-    weekStart.setHours(0, 0, 0, 0); 
+    weekStart.setHours(0, 0, 0, 0);
 
     const weekEnd = new Date(weekStart.getTime() + 6 * 86400000);
-    weekEnd.setHours(23, 59, 59, 999); 
+    weekEnd.setHours(23, 59, 59, 999);
 
     const firestoreStartDate = firebase.firestore.Timestamp.fromDate(weekStart);
     const firestoreEndDate = firebase.firestore.Timestamp.fromDate(weekEnd);
-    console.log(weekStart.toString()); 
-    console.log(weekEnd.toString());   
 
     let leaderboardID = undefined;
     let friendIDs = [];
