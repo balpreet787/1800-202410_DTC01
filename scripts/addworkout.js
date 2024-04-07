@@ -22,7 +22,7 @@ async function giveUserBadge(exerciseType, currentUser) {
         } else {
             badge = null;
             badge_name = null;
-        }    
+        }
     } else if (exerciseType == "yoga") {
         if (yoga_count === 20) {
             badge = "./images/yogaplatinum.svg";
@@ -39,7 +39,7 @@ async function giveUserBadge(exerciseType, currentUser) {
         } else {
             badge = null;
             badge_name = null;
-        }    
+        }
     } else if (exerciseType == "running") {
         if (running_count === 20) {
             badge = "./images/runningplatinum.svg";
@@ -58,7 +58,7 @@ async function giveUserBadge(exerciseType, currentUser) {
             badge = null;
             badge_name = null;
             console.log("!!!!")
-        }    
+        }
     } else if (exerciseType == "walking") {
         if (walking_count === 20) {
             badge = "./images/walkingplatinum.svg";
@@ -75,7 +75,7 @@ async function giveUserBadge(exerciseType, currentUser) {
         } else {
             badge = null;
             badge_name = null;
-        }    
+        }
     } else if (exerciseType == "cycling") {
         if (cycling_count === 20) {
             badge = "./images/cyclingplatinum.svg";
@@ -247,12 +247,14 @@ function removeBadges(currentUser, exerciseType, exerciseCount) {
 }
 
 async function decreaseExerciseCount(exercise_type, currentUser) {
-    removeBadges(currentUser, updateWorkoutType, exerciseCount)
     currentUser.collection("exerciseCounter").doc("exercises").update({
         [exercise_type]: firebase.firestore.FieldValue.increment(-1)
     })
         .then(() => {
-            console.log("done");
+            currentUser.collection("exerciseCounter").doc("exercises").get().then((doc) => {
+                exerciseCount = doc.data()[exercise_type]
+                removeBadges(currentUser, exercise_type, exerciseCount +)
+            });
         })
         .catch((error) => {
             console.error("Error updating document: ", error);
