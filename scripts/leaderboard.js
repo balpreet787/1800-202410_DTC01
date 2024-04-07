@@ -1,19 +1,33 @@
 async function getLeaderboardData(currentUser) {
+    $('#leaderboardInfo').empty();
     let weekValue = $('#week').val();
     const [year, weekNumber] = weekValue.split('-W').map(Number);
     const janFirst = new Date(year, 0, 1);
-    const daysToThursday = (4 - janFirst.getDay() + 7) % 7;
-    const firstThursday = new Date(janFirst.getTime() + daysToThursday * 86400000);
-    const firstMonday = new Date(firstThursday.getTime() - 3 * 86400000);
+    janFirst.setHours(0, 0, 0, 0); // Set hours to the start of the day
 
-    const weekStart = new Date(firstMonday.getTime() + (weekNumber - 1) * 7 * 86400000);
-    weekStart.setHours(0, 0, 0, 0);
+    // Calculate the number of days to add from January 1st to the first Sunday of the year
+    // If January 1st is a Sunday (getDay() returns 0), then daysToFirstSunday should be 0, otherwise calculate the difference to the next Sunday
+    const daysToFirstSunday = (janFirst.getDay() === 0) ? 0 : 7 - janFirst.getDay();
+    const firstSundayOfYear = new Date(janFirst);
+    firstSundayOfYear.setDate(janFirst.getDate() + daysToFirstSunday);
 
-    const weekEnd = new Date(weekStart.getTime() + 6 * 86400000);
-    weekEnd.setHours(23, 59, 59, 999);
+    // Calculate the start of the week for the given week number
+    // Subtract 7 days since we already have the first Sunday of the year accounted for in firstSundayOfYear
+    const weekStart = new Date(firstSundayOfYear);
+    weekStart.setDate(firstSundayOfYear.getDate() + (weekNumber - 1) * 7 - 7);
 
+    // Calculate the end of the week as 6 days later than the start
+    const weekEnd = new Date(weekStart);
+    weekEnd.setDate(weekStart.getDate() + 6);
+
+    // Create Firestore timestamps
     const firestoreStartDate = firebase.firestore.Timestamp.fromDate(weekStart);
     const firestoreEndDate = firebase.firestore.Timestamp.fromDate(weekEnd);
+
+    console.log(`Week Start: ${weekStart}`); // Sunday
+    console.log(`Week End: ${weekEnd}`);     // Saturday
+
+
 
     let leaderboardID = undefined;
     let friendIDs = [];
