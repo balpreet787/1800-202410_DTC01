@@ -233,11 +233,16 @@ function removeBadges(currentUser, exerciseType, exerciseCount) {
 }
 
 async function decreaseExerciseCount(exercise_type, currentUser) {
-    removeBadges(currentUser, updateWorkoutType, exerciseCount)
+
+
     currentUser.collection("exerciseCounter").doc("exercises").update({
         [exercise_type]: firebase.firestore.FieldValue.increment(-1)
     })
         .then(() => {
+            currentUser.collection("exerciseCounter").doc("exercises").get().then((doc) => {
+                exerciseCount = doc.data()[exercise_type]
+                removeBadges(currentUser, exercise_type, exerciseCount + 1)
+            });
             console.log("done");
         })
         .catch((error) => {
@@ -291,7 +296,7 @@ async function addWorkout(currentUser, history_id = "", updateWorkoutType = "") 
             }, { merge: true })
                 .then(() => {
                     console.log("Document successfully updated!");
-                    // location.reload();
+                    location.reload();
                 })
                 .catch((error) => {
                     console.error("Error updating document: ", error);
