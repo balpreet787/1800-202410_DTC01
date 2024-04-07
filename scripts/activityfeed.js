@@ -72,7 +72,7 @@ function getActivityFeedInfo(currentUser) {
                         addToActivityFeed = `<div class="flex flex-row mx-4 ">
                                         </div>
                                         <div class="flex flex-row bg-[#fff6e5] rounded-xl shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px] mt-2 mx-4 accomplishment-activity activity-feed-post${i} ${activityfeedinfo[i]["nickname"]}">
-                                            <img class="h-20 mx-5 self-center rounded-full w-20" src=${activityfeedinfo[i]["profilepic"]}" alt="">
+                                        <img class="h-20 mx-5 self-center rounded-full w-20" src="${activityfeedinfo[i]["profilepic"]}" alt="">
                                             <div class="p-2 w-full">
                                                 <div class="py-2 flex flex-row justify-between">
                                                     <div><h1 class="font-semibold inline text-lg"><span id="activity-username">${activityfeedinfo[i]["nickname"]}</span></h1><span class="text-xs self-center my-auto">&nbsp;&nbsp;&bull; ${activityDate}-${activityMonth}-${activityYear}</span></div>
