@@ -2,13 +2,15 @@ function insertNameAndPicFromFirestore(currentUser) {
     currentUser.get().then(userDoc => {
         // Get the user name
         let userName = userDoc.data().name;
+        console.log(userDoc.data().name)
         userName = userName.substring(0, userName.indexOf(' '));
         let profilePicUrl = userDoc.data().image;
         console.log(profilePicUrl)
         // Get the download URL
+        jQuery("#name-goes-here").text(userName);
         if (profilePicUrl && profilePicUrl.startsWith('https://')) {
             // Set the user name and profile picture
-            jQuery("#name-goes-here").text(userName);
+
             jQuery('#homepagepic').attr('src', profilePicUrl); // Set the src with the full URL
         } else {
             jQuery('#homepagepic').attr('src', './images/profile_pic.svg');
