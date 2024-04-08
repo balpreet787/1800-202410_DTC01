@@ -1,5 +1,13 @@
 function getActivityFeedInfo(currentUser) {
     var badgesEarned = null;
+    const monthNames = [
+        "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
+    // Example usage:
+    const monthNumber = new Date().getMonth(); // Get current month number, January is 0
+    const currentMonthName = monthNames[monthNumber];
+    console.log(currentMonthName); // Output will be the current month name
+
     var leaderboardID = undefined;
     var friendIDs = [];
     var activityfeedinfo = [];
@@ -38,7 +46,7 @@ function getActivityFeedInfo(currentUser) {
                 for (let i = 0; i < activityfeedinfo.length; i++) {
                     let startdate = activityfeedinfo[i]["startdate"].toDate();
                     activityDate = startdate.getDate();
-                    activityMonth = startdate.getMonth() + 1;
+                    activityMonth = monthNames[startdate.getMonth()];
                     activityYear = startdate.getFullYear()
 
                     let activityDetails = ""
