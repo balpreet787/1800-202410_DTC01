@@ -104,14 +104,14 @@ function getActivityFeedInfo(currentUser) {
 function userSearchInActivityFeed() {
     var userSearched = $("input[name='username-search']").val().toLowerCase();
     if (userSearched == "") {
-        $(`div.activity-feed-post${i}`).css("display", "flex")
+        $(`div.activity-feed-post`).css("display", "flex")
     } else {
-        for (let i = 0; i < 20; i++) {
+        for (let i = 0; i < $("#activity_feed").children().length; i++) {
             if ($(`div.activity-feed-post${i}`).hasClass(`${userSearched}`)) {
                 $(`div.activity-feed-post${i}`).css("display", "flex")
                 jQuery("#filter-search").css("display", "flex")
 
-            } else if (!$(`div.activity-feed-post${i}`).hasClass(`${userSearched}`)) {
+            } else {
                 $(`div.activity-feed-post${i}`).css("display", "none")
             }
         }
