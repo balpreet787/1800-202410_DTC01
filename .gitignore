@@ -5,3 +5,5 @@ node_modules/
 firebaseAPI_DTC01.js
 .firebase/hosting..cache
 .gitignore
+firebase-debug.log
+.firebase/hosting..cache
