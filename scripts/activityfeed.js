@@ -145,6 +145,7 @@ function filterActivityFeed() {
         jQuery('#activity_feed').css("display", "flex");
         jQuery('#activity_feed').css("flex-direction", "column");
         jQuery("#filter_activity").css("display", "flex")
+        jQuery("#filter_activity").css("display", "none")
     } else {
         jQuery(".reset_button").css("display", "none")
         jQuery(".reset_filtered_page").css("display", "none")

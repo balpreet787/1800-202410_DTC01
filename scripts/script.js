@@ -174,7 +174,7 @@ async function userAuthentication(profilepic, image) {
                         // Get the document data
                         const userData = userDoc.data();
                         if (userData.nickname === undefined || userData.nickname === null) {
-                            jQuery('#homepage, #leaderboard, #activity_feed, #datepicker, #settings').css("display", "none");
+                            jQuery('#homepage, #leaderboard, #activity_feed, #datepicker, #settings, #usernameAndPic').css("display", "none");
                             jQuery("#profile_info").css("display", "flex");
                         }
                         if (userData.image === undefined || userData.image === null) {
