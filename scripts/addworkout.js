@@ -143,6 +143,7 @@ async function countTheExercises(exercise_type, currentUser) {
     currentUser.collection("exerciseCounter").doc("exercises").get().then((exerciseCounter) => {
         if (exerciseCounter.exists) {
             if (exerciseCounter.data()[exercise_type] == undefined || exerciseCounter.data()[exercise_type] == null || exerciseCounter.data()[exercise_type] == 0) {
+                console.log("here")
                 currentUser.collection("exerciseCounter").doc("exercises").set({
                     [exercise_type]: 1,
                 }, { merge: true })

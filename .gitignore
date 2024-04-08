@@ -3,4 +3,5 @@
 node_modules/
 .vscode/
 firebaseAPI_DTC01.js
-hosting..cache
+.firebase/hosting..cache
+.gitignore
