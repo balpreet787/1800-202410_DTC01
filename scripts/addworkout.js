@@ -309,8 +309,15 @@ async function addWorkout(currentUser, history_id = "", updateWorkoutType = "") 
                 earned_name: badges_earned[1]
             }, { merge: true })
                 .then(() => {
+                    homepageHandler();
                     console.log("Document successfully updated!");
-                    location.reload();
+                    insertHomepageInfoFromFirestore(currentUser);
+                    insertTodaysWorkoutInfoFromFirestore(currentUser);
+                    insertYesterdaysWorkoutInfoFromFirestore(currentUser);
+                    showRecordedWorkouts(currentUser);
+                    getLeaderboardData(currentUser);
+
+                    getActivityFeedInfo(currentUser);
                 })
                 .catch((error) => {
                     console.error("Error updating document: ", error);
@@ -376,8 +383,15 @@ function removeWorkout(currentUser, historyId) {
                 });
                 removeBadges(currentUser, exercise, exerciseCount);
                 currentUser.collection("workouts").doc(historyId).delete().then(() => {
-                    location.reload();
+                    calendarHandler();
+                    console.log("Document successfully updated!");
+                    insertHomepageInfoFromFirestore(currentUser);
+                    insertTodaysWorkoutInfoFromFirestore(currentUser);
+                    insertYesterdaysWorkoutInfoFromFirestore(currentUser);
+                    showRecordedWorkouts(currentUser);
+                    getLeaderboardData(currentUser);
 
+                    getActivityFeedInfo(currentUser);
                 }).catch((error) => {
                     console.error("Error removing document: ", error);
                 });
