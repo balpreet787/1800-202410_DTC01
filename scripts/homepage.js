@@ -48,7 +48,9 @@ function insertHomepageInfoFromFirestore(currentUser) {
             var workoutDate = new Date(doc.data().startDate.toDate().toDateString())
             if (dates.includes(workoutDate.toDateString())) {
                 workoutTimeInCurrentweek += (doc.data().endDate - doc.data().startDate) / 60;
+                
             }
+            console.log(workoutTimeInCurrentweek)
         })
         currentUser.collection("workouts").where('startDate', '>=', lastWeeksStartDate).get().then((querySnapshot) => {
             querySnapshot.forEach((doc) => {
@@ -56,9 +58,10 @@ function insertHomepageInfoFromFirestore(currentUser) {
                 if (lastWeeksDates.includes(workoutDate.toDateString())) {
                     workoutTimeLastweek += (doc.data().endDate - doc.data().startDate) / 60;
                 }
+                
             })
             if (workoutTimeInCurrentweek > workoutTimeLastweek) {
-                $("#motivational-message").text(`You worked out ${workoutTimeInCurrentweek} more minutes than last week!`)
+                $("#motivational-message").text(`You worked out ${workoutTimeInCurrentweek - workoutTimeLastweek} more minutes than last week!`)
             } else {
                 $("#motivational-message").text(`${workoutTimeLastweek - workoutTimeInCurrentweek} more minutes to beat last week's workout time!`)
             }
