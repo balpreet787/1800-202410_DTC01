@@ -11,14 +11,7 @@ function uploadPic(postDocID) {
                         "image": url
                     }, { merge: true })
                         .then(function () {
-                            homepageHandler();
-                            insertNameAndPicFromFirestore(CurrentUser);
-                            insertHomepageInfoFromFirestore(CurrentUser);
-                            insertTodaysWorkoutInfoFromFirestore(CurrentUser);
-                            insertYesterdaysWorkoutInfoFromFirestore(CurrentUser);
-                            showRecordedWorkouts(CurrentUser);
-                            getLeaderboardData(CurrentUser);
-                            getActivityFeedInfo(CurrentUser);
+                            location.reload();
 
                         })
                 })
@@ -53,14 +46,7 @@ async function updateInfo(currentUser) {
                     uploadPic(currentUser.id);
                 }
                 else {
-                    homepageHandler();
-                    insertNameAndPicFromFirestore(CurrentUser);
-                    insertHomepageInfoFromFirestore(CurrentUser);
-                    insertTodaysWorkoutInfoFromFirestore(CurrentUser);
-                    insertYesterdaysWorkoutInfoFromFirestore(CurrentUser);
-                    showRecordedWorkouts(CurrentUser);
-                    getLeaderboardData(CurrentUser);
-                    getActivityFeedInfo(CurrentUser);
+                    location.reload();
                 }
             })
             .catch((error) => {
