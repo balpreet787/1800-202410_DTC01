@@ -1,4 +1,3 @@
-const e = require("express");
 
 async function giveUserBadge(exerciseType, currentUser) {
     var weightlifting_count = (await currentUser.collection("exerciseCounter").doc("exercises").get()).get("weightlifting");
