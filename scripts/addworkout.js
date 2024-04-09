@@ -1,3 +1,5 @@
+const e = require("express");
+
 async function giveUserBadge(exerciseType, currentUser) {
     var weightlifting_count = (await currentUser.collection("exerciseCounter").doc("exercises").get()).get("weightlifting");
     var yoga_count = (await currentUser.collection("exerciseCounter").doc("exercises").get()).get("yoga");
@@ -100,26 +102,27 @@ async function giveUserBadge(exerciseType, currentUser) {
 
 }
 
-function getCaloriesBurned(exerciseType, startDate, endDate, exercise_intensity, currentUser) {
+async function getCaloriesBurned(exerciseType, startDate, endDate, exercise_intensity, currentUser) {
     const startTime = new Date(startDate);
     const endTime = new Date(endDate);
-    const difference = (endTime - startTime) / (1000 * 60); // Difference in minutes
+    const difference = (endTime - startTime) / (1000 * 60);
 
     return new Promise((resolve, reject) => {
         currentUser.get().then(userDoc => {
             const userData = userDoc.data();
             const user_weight = userData.weight;
-            let calories; // Define calories here so it's accessible throughout
-            let met = 0; // Initialize met to avoid reference errors
+            let calories;
+            let met = 0;
 
             if (exerciseType === "Weightlifting" || exerciseType === "yoga") {
                 calories = exercise_intensity * user_weight * (difference / 60);
+                console.log(calories, exercise_intensity, user_weight, difference / 60)
             } else if (exerciseType === "running") {
                 calories = exercise_intensity * user_weight;
             } else if (exerciseType === "walking") {
                 calories = .354 * exercise_intensity * user_weight * (difference / 60);
             } else {
-                const speed = exercise_intensity / (difference / 60); // Speed in your desired unit per hour
+                const speed = exercise_intensity / (difference / 60);
                 if (speed <= 16.0) {
                     met = 4;
                 } else if (speed <= 19.0) {
@@ -129,11 +132,11 @@ function getCaloriesBurned(exerciseType, startDate, endDate, exercise_intensity,
                 }
                 calories = met * user_weight * (difference / 60);
             }
-            resolve(calories); // Resolve the promise with calories
+            resolve(calories);
 
         }).catch(error => {
             console.log("Error getting document:", error);
-            reject(error); // Reject the promise on error
+            reject(error);
         });
 
     });
@@ -195,6 +198,7 @@ function intensityHandler(exercise_type) {
         }
         else if (intensity == "Very-hard") {
             exercise_intensity = 7
+            console.log(exercise_intensity, exercise_type)
         }
     }
     else if (exercise_type == "yoga") {
@@ -284,14 +288,20 @@ async function addWorkout(currentUser, history_id = "", updateWorkoutType = "") 
             if (updateWorkoutType == "") {
                 unique_id = currentUser.collection("workouts").doc().id;
                 history_id = "history" + unique_id;
+                await countTheExercises(exercise_type, currentUser);
             }
-            else {
+            else if (updateWorkoutType != "" && updateWorkoutType != exercise_type) {
                 await decreaseExerciseCount(updateWorkoutType, currentUser);
-
+                await countTheExercises(exercise_type, currentUser);
             }
-            await countTheExercises(exercise_type, currentUser);
+            else if (updateWorkoutType == exercise_type) {
+                console.log("same")
+            }
+
             let exercise_intensity = intensityHandler(exercise_type);
+            console.log(exercise_intensity)
             let calories_burned = parseInt(await getCaloriesBurned(exercise_type, startDate, endDate, exercise_intensity, currentUser));
+            console.log(calories_burned)
             let badges_earned = await giveUserBadge(exercise_type, currentUser);
             let start_Date = firebase.firestore.Timestamp.fromDate(new Date(startDate));
             let end_Date = firebase.firestore.Timestamp.fromDate(new Date(endDate));
