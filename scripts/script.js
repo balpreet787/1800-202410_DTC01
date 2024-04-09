@@ -11,8 +11,8 @@ function uploadPic(postDocID) {
                         "image": url
                     }, { merge: true })
                         .then(function () {
-                            jQuery('#confirmProfileUpdate').css("display", "flex").delay(3000).hide(0);
                             location.reload();
+
                         })
                 })
         })
@@ -23,9 +23,8 @@ function uploadPic(postDocID) {
 
 
 async function updateInfo(currentUser) {
-    $('#homepage').toggle();
     $("#profile_info").css("display", "none");
-    $('#settings').toggle();
+    $('#settings').css("display", "none");
     var nickname = $("#nickname").val();
     var gender = $("#gender").val();
     var height = $("#height").val();

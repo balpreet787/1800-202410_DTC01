@@ -156,6 +156,7 @@ async function countTheExercises(exercise_type, currentUser) {
             }
             else {
                 let exerciseCount = parseInt(exerciseCounter.data()[exercise_type]);
+                console.log(exerciseCount)
                 currentUser.collection("exerciseCounter").doc("exercises").update({
                     [exercise_type]: 1 + exerciseCount,
                 });
@@ -248,23 +249,24 @@ function removeBadges(currentUser, exerciseType, exerciseCount) {
 }
 
 async function decreaseExerciseCount(exercise_type, currentUser) {
-    currentUser.collection("exerciseCounter").doc("exercises").update({
-        [exercise_type]: firebase.firestore.FieldValue.increment(-1)
-    })
-        .then(() => {
-            currentUser.collection("exerciseCounter").doc("exercises").get().then((doc) => {
-                exerciseCount = doc.data()[exercise_type]
-                removeBadges(currentUser, exercise_type, exerciseCount + 1)
-            });
-        })
-        .catch((error) => {
-            console.error("Error updating document: ", error);
-        });
 
+
+
+    const exerciseCounterSnapshot = await currentUser.collection("exerciseCounter").doc("exercises").get();
+
+    let exerciseCount = parseInt(exerciseCounterSnapshot.data()[exercise_type]);
+    console.log(exerciseCount);
+
+    removeBadges(currentUser, exercise_type, exerciseCount);
+
+    await currentUser.collection("exerciseCounter").doc("exercises").update({
+        [exercise_type]: exerciseCount - 1,
+    });
 }
 
-async function addWorkout(currentUser, history_id = "", updateWorkoutType = "") {
 
+async function addWorkout(currentUser, history_id = "", updateWorkoutType = "") {
+    console.log(updateWorkoutType)
     startDate = jQuery("#startDate").val();
     endDate = jQuery("#endDate").val();
     verifyStartDate = new Date(startDate);
@@ -279,7 +281,7 @@ async function addWorkout(currentUser, history_id = "", updateWorkoutType = "") 
         jQuery("#workoutWarning").css("display", "none");
 
         if (exercise_type != "" && startDate != "" && endDate != "" && jQuery(".intensity").val() != "") {
-            if (history_id == "") {
+            if (updateWorkoutType == "") {
                 unique_id = currentUser.collection("workouts").doc().id;
                 history_id = "history" + unique_id;
             }
@@ -307,8 +309,15 @@ async function addWorkout(currentUser, history_id = "", updateWorkoutType = "") 
                 earned_name: badges_earned[1]
             }, { merge: true })
                 .then(() => {
+                    homepageHandler();
                     console.log("Document successfully updated!");
-                    location.reload();
+                    insertHomepageInfoFromFirestore(currentUser);
+                    insertTodaysWorkoutInfoFromFirestore(currentUser);
+                    insertYesterdaysWorkoutInfoFromFirestore(currentUser);
+                    showRecordedWorkouts(currentUser);
+                    getLeaderboardData(currentUser);
+
+                    getActivityFeedInfo(currentUser);
                 })
                 .catch((error) => {
                     console.error("Error updating document: ", error);
@@ -374,8 +383,15 @@ function removeWorkout(currentUser, historyId) {
                 });
                 removeBadges(currentUser, exercise, exerciseCount);
                 currentUser.collection("workouts").doc(historyId).delete().then(() => {
-                    location.reload();
+                    calendarHandler();
+                    console.log("Document successfully updated!");
+                    insertHomepageInfoFromFirestore(currentUser);
+                    insertTodaysWorkoutInfoFromFirestore(currentUser);
+                    insertYesterdaysWorkoutInfoFromFirestore(currentUser);
+                    showRecordedWorkouts(currentUser);
+                    getLeaderboardData(currentUser);
 
+                    getActivityFeedInfo(currentUser);
                 }).catch((error) => {
                     console.error("Error removing document: ", error);
                 });
