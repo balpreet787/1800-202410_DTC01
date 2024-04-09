@@ -316,7 +316,6 @@ async function addWorkout(currentUser, history_id = "", updateWorkoutType = "") 
                     insertYesterdaysWorkoutInfoFromFirestore(currentUser);
                     showRecordedWorkouts(currentUser);
                     getLeaderboardData(currentUser);
-
                     getActivityFeedInfo(currentUser);
                 })
                 .catch((error) => {

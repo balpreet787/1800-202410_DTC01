@@ -1,4 +1,5 @@
 function getActivityFeedInfo(currentUser) {
+    jQuery("#activity_feed_info").empty();
     var badgesEarned = null;
     const monthNames = [
         "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
@@ -90,7 +91,7 @@ function getActivityFeedInfo(currentUser) {
                                             </div>
                                         </div>`
                     }
-                    jQuery("#activity_feed").append(addToActivityFeed);
+                    jQuery("#activity_feed_info").append(addToActivityFeed);
                 }
 
             }).catch(error => {
@@ -106,7 +107,7 @@ function userSearchInActivityFeed() {
     if (userSearched == "") {
         $(`div.activity-feed-post`).css("display", "flex")
     } else {
-        for (let i = 0; i < $("#activity_feed").children().length; i++) {
+        for (let i = 0; i < $("#activity_feed_info").children().length; i++) {
             if ($(`div.activity-feed-post${i}`).hasClass(`${userSearched}`)) {
                 $(`div.activity-feed-post${i}`).css("display", "flex")
                 jQuery("#filter-search").css("display", "flex")
