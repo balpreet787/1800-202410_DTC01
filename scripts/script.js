@@ -1,6 +1,11 @@
+/** Description: Manage user profile, authentication and functionality of the website */
 var ImageFile;
 var CurrentUser;
 
+/** 
+* Upload the image to the Cloud Storage
+* @param {firebase.firestore.DocumentReference} postDocID: The document ID of the user
+*/
 function uploadPic(postDocID) {
     var storageRef = storage.ref("images/" + postDocID + ".jpg");
     storageRef.put(ImageFile)
@@ -27,8 +32,12 @@ function uploadPic(postDocID) {
         })
 }
 
-
+/**  
+* Update the user information in the Firestore
+* @param {firebase.firestore.DocumentReference} currentUser: The document of the current user
+*/
 async function updateInfo(currentUser) {
+
     $("#profile_info").css("display", "none");
     $('#settings').css("display", "none");
     var nickname = $("#nickname").val();
@@ -69,7 +78,10 @@ async function updateInfo(currentUser) {
 
 }
 
-
+/** 
+* Insert the user information from Firestore to the profile page
+* @param {firebase.firestore.DocumentReference} currentUser: The document of the current user
+*/
 function populateUserInfo(currentUser) {
     currentUser.get()
         .then(userDoc => {
@@ -106,34 +118,50 @@ function populateUserInfo(currentUser) {
         })
 }
 
-
+/**
+ * Show the app information on index page
+ */
 function infoHandler() {
     jQuery('#info-box').slideToggle()
 }
 
 
+/**
+ * Show about us on settings section of the page
+ */
 function aboutUsHandler() {
     jQuery('#aboutUs-box').slideToggle()
 }
 
+/**
+ * redirect to login page from index page
+ */
 function redirectToLogin() {
     window.location.href = 'login.html';
 }
 
+/**
+ * redirect to index page after user logs out
+ */
 function redirectToSignup() {
     window.location.href = 'index.html';
 }
 
+/**
+ *  Logout the user
+ */
 function logout() {
     firebase.auth().signOut().then(() => {
         // Sign-out successful.
         console.log("logging out user");
     }).catch((error) => {
-        // An error happened.
+        console.log(error);
     });
 }
 
-
+/**
+ * Display the setting section of the page and do nothing if it is already displayed
+ */
 function settingsHandler() {
     if (jQuery('#settings').css("display") == "none") {
         jQuery("#homepage-icon").attr('src', './images/nav-icons/home-black.svg')
@@ -155,6 +183,9 @@ function settingsHandler() {
     }
 }
 
+/**
+ * Display the edit profile info section of the page
+ */
 function profileInfoHandler(currentUser) {
     populateUserInfo(currentUser);
     jQuery("#homepage-icon").attr('src', './images/nav-icons/home-black.svg')
@@ -173,13 +204,18 @@ function profileInfoHandler(currentUser) {
     jQuery('#settings').css("display", "none");
 }
 
+/**
+ * Authenticate the user and get the user Id to use for other documents
+ * @param {undefined} profilepic: The profile picture of the user
+ * @param {Blob} image: The image element
+ */
 async function userAuthentication(profilepic, image) {
     return new Promise((resolve, reject) => {
         firebase.auth().onAuthStateChanged((user) => {
             if (user) {
                 // User is signed in, you can get the user ID.
                 let currentUser = db.collection("users").doc(user.uid); // Go to the Firestore document of the user
-                console.log("User is signed in."), CurrentUser;
+
                 currentUser.get().then(userDoc => {
                     if (userDoc.exists) {
                         // Get the document data
@@ -212,6 +248,9 @@ async function userAuthentication(profilepic, image) {
     });
 }
 
+/**
+ * Manage all functions and event listeners
+ */
 async function setup() {
 
     leaderboardCurrentDate();
@@ -238,7 +277,7 @@ async function setup() {
     $('#signup').click(redirectToLogin);
     $("#view-feed-button").click(filterActivityFeed);
     var fileInput = $('#file-input');
-    let profilepic = undefined
+
     // Pointer #2: Select the image element
     var image = $('#pppreview');
 

@@ -1,5 +1,9 @@
-async function getLeaderboardData(currentUser) {
-    $('#leaderboardInfo').empty();
+/** Description: Manage the leaderboard section of the website */
+
+/** Function to get the start and end date of the week for the user secected week
+ * @returns {Array} - an array containing the start and end date of the week
+ */
+function get_leaderboard_date_range() {
     let weekValue = $('#week').val();
     const [year, weekNumber] = weekValue.split('-W').map(Number);
     const janFirst = new Date(year, 0, 1);
@@ -20,14 +24,54 @@ async function getLeaderboardData(currentUser) {
     const weekEnd = new Date(weekStart);
     weekEnd.setDate(weekStart.getDate() + 6);
 
+    return [weekStart, weekEnd];
+}
+
+/** Function to populate the leaderboard with the user data
+ * @param {Object} leaderboardinfo - an object containing the user data
+ * */
+function populate_leaderboard(leaderboardinfo) {
+    for (let nickname in leaderboardinfo) {
+        if (leaderboardinfo[nickname]["profilepic"] == undefined) {
+            leaderboardinfo[nickname]["profilepic"] = "./images/profile_pic.svg";
+        }
+        if (leaderboardinfo[nickname]["badges"] == null || leaderboardinfo[nickname]["badges"] == "") {
+            console.log(leaderboardinfo[nickname])
+            leaderboardinfo[nickname]["badges"] = `./images/empty.svg`;
+        }
+    }
+    i = 0;
+    let calories_in_order = (Object.keys(leaderboardinfo).map(nickname => leaderboardinfo[nickname]["calories"]));
+    calories_in_order.sort(function (a, b) { return a - b }).reverse();
+    for (index = 0; index < calories_in_order.length; index++) {
+        for (let nickname in leaderboardinfo) {
+            if (leaderboardinfo[nickname]["calories"] === calories_in_order[index]) {
+                text_to_inject = `<div class="grid grid-cols-4 place-items-center bg-[#fff6e5] m-4 rounded-xl shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px] p-3">
+                    <span class="grid grid-cols-2 text-center place-items-center"> <span class="font-bold">${i + 1}.</span><img class="w-8 h-8 rounded-full"
+                            src="${leaderboardinfo[nickname]["profilepic"]}" alt=""></span>
+                    <span>${nickname}</span>
+                    <span class="grid grid-cols-1 gap-2"><img class="w-6 h-6" src="${leaderboardinfo[nickname]["badges"]}" alt=""></span>
+                    <span class="place-items-right">${leaderboardinfo[nickname]["calories"]}</span>
+                </div>`
+                $('#leaderboardInfo').append(text_to_inject);
+                i++
+                delete leaderboardinfo[nickname];
+                break;
+            }
+        }
+    }
+}
+
+/** Function to get the user data for the leaderboard
+ * @param {firebase.firestore.DocumentReference} currentUser - the current user object
+ * */
+async function getLeaderboardData(currentUser) {
+    $('#leaderboardInfo').empty();
+
+    const dateRange = get_leaderboard_date_range();
     // Create Firestore timestamps
-    const firestoreStartDate = firebase.firestore.Timestamp.fromDate(weekStart);
-    const firestoreEndDate = firebase.firestore.Timestamp.fromDate(weekEnd);
-
-    console.log(`Week Start: ${weekStart}`); // Sunday
-    console.log(`Week End: ${weekEnd}`);     // Saturday
-
-
+    const firestoreStartDate = firebase.firestore.Timestamp.fromDate(dateRange[0]);
+    const firestoreEndDate = firebase.firestore.Timestamp.fromDate(dateRange[1]);
 
     let leaderboardID = undefined;
     let friendIDs = [];
@@ -60,36 +104,8 @@ async function getLeaderboardData(currentUser) {
                     });
                 });
                 Promise.all(leaderboardpromises).then(() => {
-                    for (let nickname in leaderboardinfo) {
-                        if (leaderboardinfo[nickname]["profilepic"] == undefined) {
-                            leaderboardinfo[nickname]["profilepic"] = "./images/profile_pic.svg";
-                        }
-                        if (leaderboardinfo[nickname]["badges"] == null || leaderboardinfo[nickname]["badges"] == "") {
-                            console.log(leaderboardinfo[nickname])
-                            leaderboardinfo[nickname]["badges"] = `./images/empty.svg`;
-                        }
-                    }
-                    i = 0;
-                    let calories_in_order = (Object.keys(leaderboardinfo).map(nickname => leaderboardinfo[nickname]["calories"]));
-                    calories_in_order.sort(function (a, b) { return a - b }).reverse();
-                    for (index = 0; index < calories_in_order.length; index++) {
-                        for (let nickname in leaderboardinfo) {
-                            if (leaderboardinfo[nickname]["calories"] === calories_in_order[index]) {
-                                text_to_inject = `<div class="grid grid-cols-4 place-items-center bg-[#fff6e5] m-4 rounded-xl shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px] p-3">
-                                    <span class="grid grid-cols-2 text-center place-items-center"> <span class="font-bold">${i + 1}.</span><img class="w-8 h-8 rounded-full"
-                                            src="${leaderboardinfo[nickname]["profilepic"]}" alt=""></span>
-                                    <span>${nickname}</span>
-                                    <span class="grid grid-cols-1 gap-2"><img class="w-6 h-6" src="${leaderboardinfo[nickname]["badges"]}" alt=""></span>
-                                    <span class="place-items-right">${leaderboardinfo[nickname]["calories"]}</span>
-                                </div>`
-                                $('#leaderboardInfo').append(text_to_inject);
-                                i++
-                                delete leaderboardinfo[nickname];
-                                break;
-                            }
-
-                        }
-                    }
+                    // populate the leaderboard section of html page with the user data
+                    populate_leaderboard(leaderboardinfo);
 
                 }).catch(error => {
                     console.error("Error processing all user data: ", error);
@@ -101,6 +117,7 @@ async function getLeaderboardData(currentUser) {
     })
 }
 
+/** Function to display the leaderboard section of the website */
 function leaderboardHandler() {
     if (jQuery('#leaderboard').css("display") == "none") {
 
@@ -123,6 +140,7 @@ function leaderboardHandler() {
     }
 }
 
+/** Function to input the current week in the week picker */
 function leaderboardCurrentDate() {
     const currentDate = new Date();
     const year = currentDate.getFullYear();

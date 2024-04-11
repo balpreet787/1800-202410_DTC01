@@ -1,3 +1,8 @@
+/** Description: Handle recorded workout details and options*/
+
+/** fuction to show the recorded workouts of the user on the selected date
+ * @param {firebase.firestore.DocumentReference} currentUser - the current user object
+ * */
 function showRecordedWorkouts(currentUser) {
     $("#recorded_workouts").empty();
     let inputDate = $('#selectedDate').val();
@@ -70,6 +75,8 @@ function showRecordedWorkouts(currentUser) {
         })
 }
 
+/** function to show the recorded workouts section of the user
+ * */
 function calendarHandler() {
     if (jQuery('#datepicker').css("display") == "none") {
         jQuery("#homepage-icon").attr('src', './images/nav-icons/home-black.svg')
@@ -92,12 +99,18 @@ function calendarHandler() {
     }
 }
 
+/** function to inout the current date in the date picker
+ * */
 function showWorkoutPageDate() {
     const currentDate = new Date();
     const localDate = currentDate.toLocaleDateString('en-CA'); // 'en-CA' uses the YYYY-MM-DD format
     $('#selectedDate').val(localDate);
 }
 
+/** function to show delete confirmation and proceed from there
+ * @param {firebase.firestore.DocumentReference} currentUser - the current user object
+ * @param {string} historyId - the id of the workout history user wants to delete
+ * */
 function deleteWorkoutHandler(currentUser, historyId) {
     jQuery(`#${historyId}Delete`).click(function () {
         jQuery(`#${historyId}Confirm`).css("display", "flex");

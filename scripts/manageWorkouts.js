@@ -1,23 +1,26 @@
+/* Description: This file contains the functions that are used to add, remove, edit a workout to the user's profile. */
 
+/**  give user badges if they have completed a certain number of exercises
+ * @param {string} exerciseType - the type of exercise the user has completed
+ * @param {firebase.firestore.DocumentReference} currentUser - the current user's document reference
+ * @returns {Promise<[string, string]>} - the badge and badge name that the user has earned
+*/
 async function giveUserBadge(exerciseType, currentUser) {
-    var weightlifting_count = (await currentUser.collection("exerciseCounter").doc("exercises").get()).get("weightlifting");
-    var yoga_count = (await currentUser.collection("exerciseCounter").doc("exercises").get()).get("yoga");
-    var running_count = (await currentUser.collection("exerciseCounter").doc("exercises").get()).get("running");
-    var walking_count = (await currentUser.collection("exerciseCounter").doc("exercises").get()).get("walking");
-    var cycling_count = (await currentUser.collection("exerciseCounter").doc("exercises").get()).get("cycling");
+    var count = (await currentUser.collection("exerciseCounter").doc("exercises").get()).get(exerciseType);
+
     var badge = null;
     var badge_name = null;
     if (exerciseType == "weightlifting") {
-        if (weightlifting_count === 20) {
+        if (count === 20) {
             badge = "./images/weightliftingplatinum.svg";
             badge_name = "platinum weightlifting badge";
-        } else if (weightlifting_count === 15) {
+        } else if (count === 15) {
             badge = "./images/weightliftinggold.svg";
             badge_name = "gold weightlifting badge";
-        } else if (weightlifting_count === 10) {
+        } else if (count === 10) {
             badge = "./images/weightliftingsilver.svg";
             badge_name = "silver weightlifting badge";
-        } else if (weightlifting_count === 5) {
+        } else if (count === 5) {
             badge = "./images/weightliftingbronze.svg";
             badge_name = "bronze weightlifting badge";
         } else {
@@ -25,16 +28,16 @@ async function giveUserBadge(exerciseType, currentUser) {
             badge_name = null;
         }
     } else if (exerciseType == "yoga") {
-        if (yoga_count === 20) {
+        if (count === 20) {
             badge = "./images/yogaplatinum.svg";
             badge_name = "platinum yoga badge";
-        } else if (yoga_count === 15) {
+        } else if (count === 15) {
             badge = "./images/yogagold.svg";
             badge_name = "gold yoga badge";
-        } else if (yoga_count === 10) {
+        } else if (count === 10) {
             badge = "./images/yogasilver.svg";
             badge_name = "silver yoga badge";
-        } else if (yoga_count === 5) {
+        } else if (count === 5) {
             badge = "./images/yogabronze.svg";
             badge_name = "bronze yoga badge";
         } else {
@@ -42,35 +45,35 @@ async function giveUserBadge(exerciseType, currentUser) {
             badge_name = null;
         }
     } else if (exerciseType == "running") {
-        if (running_count === 20) {
+        if (count === 20) {
             badge = "./images/runningplatinum.svg";
             badge_name = "platinum running badge";
-        } else if (running_count === 15) {
+        } else if (count === 15) {
             badge = "./images/runninggold.svg";
             badge_name = "gold running badge"
-        } else if (running_count === 10) {
+        } else if (count === 10) {
             badge = "./images/runningsilver.svg";
             badge_name = "silver running badge"
-        } else if (running_count === 5) {
+        } else if (count === 5) {
             badge = "./images/runningbronze.svg";
             badge_name = "bronze running badge"
-            console.log(running_count)
+            console.log(count)
         } else {
             badge = null;
             badge_name = null;
             console.log("!!!!")
         }
     } else if (exerciseType == "walking") {
-        if (walking_count === 20) {
+        if (count === 20) {
             badge = "./images/walkingplatinum.svg";
             badge_name = "platinum walking badge";
-        } else if (walking_count === 15) {
+        } else if (count === 15) {
             badge = "./images/walkinggold.svg";
             badge_name = "gold walking badge";
-        } else if (walking_count === 10) {
+        } else if (count === 10) {
             badge = "./images/walkingsilver.svg";
             badge_name = "silver walking badge";
-        } else if (walking_count === 5) {
+        } else if (count === 5) {
             badge = "./images/walkingbronze.svg";
             badge_name = "bronze walking badge";
         } else {
@@ -78,16 +81,16 @@ async function giveUserBadge(exerciseType, currentUser) {
             badge_name = null;
         }
     } else if (exerciseType == "cycling") {
-        if (cycling_count === 20) {
+        if (count === 20) {
             badge = "./images/cyclingplatinum.svg";
             badge_name = "platinum cycling badge";
-        } else if (cycling_count === 15) {
+        } else if (count === 15) {
             badge = "./images/cyclinggold.svg";
             badge_name = "gold cycling badge";
-        } else if (cycling_count === 10) {
+        } else if (count === 10) {
             badge = "./images/cyclingsilver.svg";
             badge_name = "silver cycling badge";
-        } else if (cycling_count === 5) {
+        } else if (count === 5) {
             badge = "./images/cyclingbronze.svg";
             badge_name = "bronze cycling badge";
         } else {
@@ -101,6 +104,14 @@ async function giveUserBadge(exerciseType, currentUser) {
 
 }
 
+/**  get the calories burned by the user for a specific exercise
+ * @param {string} exerciseType - the type of exercise the user has completed
+ * @param {string} startDate - the start date of the exercise
+ * @param {string} endDate - the end date of the exercise
+ * @param {number} exercise_intensity - the intensity of the exercise
+ * @param {firebase.firestore.DocumentReference} currentUser - the current user's document reference
+ * @returns {Promise<number>} - the number of calories burned by the user
+ * */
 async function getCaloriesBurned(exerciseType, startDate, endDate, exercise_intensity, currentUser) {
     const startTime = new Date(startDate);
     const endTime = new Date(endDate);
@@ -140,7 +151,10 @@ async function getCaloriesBurned(exerciseType, startDate, endDate, exercise_inte
 
     });
 }
-
+/**  count the number of exercises the user has completed and add new count appropriately to the firestore
+ * @param {string} exerciseType - the type of exercise the user has completed
+ * @param {firebase.firestore.DocumentReference} currentUser - the current user's document reference
+ * */
 async function countTheExercises(exercise_type, currentUser) {
     currentUser.collection("exerciseCounter").doc("exercises").get().then((exerciseCounter) => {
         if (exerciseCounter.exists) {
@@ -183,6 +197,10 @@ async function countTheExercises(exercise_type, currentUser) {
     });
 }
 
+/**  get the intensity of the exercise the user has completed
+ * @param {string} exercise_type - the type of exercise the user has completed
+ * @returns {number} - the intensity of the exercise
+ * */
 function intensityHandler(exercise_type) {
     if (exercise_type == "weightlifting") {
         intensity = jQuery("#intensity").val();
@@ -222,6 +240,11 @@ function intensityHandler(exercise_type) {
     return exercise_intensity;
 }
 
+/**  remove the badges the user has earned if the user has edited or deleted a workout
+ * @param {firebase.firestore.DocumentReference} currentUser - the current user's document reference
+ * @param {string} exerciseType - the type of exercise the user has completed
+ * @param {number} exerciseCount - the number of exercises the user has completed
+ * */
 function removeBadges(currentUser, exerciseType, exerciseCount) {
     if (exerciseCount == 5) {
         currentUser.collection("workouts").where("earned_name", "==", `bronze ${exerciseType} badge`).get().then((removedWorkout) => {
@@ -251,15 +274,17 @@ function removeBadges(currentUser, exerciseType, exerciseCount) {
     }
 }
 
+/**  decrease the number of exercises the user has completed if the user has edited or deleted a workout
+ * @param {string} exercise_type - the type of exercise the user has completed
+ * @param {firebase.firestore.DocumentReference} currentUser - the current user's document reference
+ * */
 async function decreaseExerciseCount(exercise_type, currentUser) {
-
-
-
     const exerciseCounterSnapshot = await currentUser.collection("exerciseCounter").doc("exercises").get();
 
     let exerciseCount = parseInt(exerciseCounterSnapshot.data()[exercise_type]);
     console.log(exerciseCount);
 
+    // call removeBadges function to remove the badges accordingly
     removeBadges(currentUser, exercise_type, exerciseCount);
 
     await currentUser.collection("exerciseCounter").doc("exercises").update({
@@ -268,6 +293,11 @@ async function decreaseExerciseCount(exercise_type, currentUser) {
 }
 
 
+/**  add a workout to the firebase
+ * @param {firebase.firestore.DocumentReference} currentUser - the current user's document reference
+ * @param {string} history_id - the id of the workout if the user called function to update the workout
+ * @param {string} updateWorkoutType - the type of workout the user called function to update the workout
+ * */
 async function addWorkout(currentUser, history_id = "", updateWorkoutType = "") {
     console.log(updateWorkoutType)
     startDate = jQuery("#startDate").val();
@@ -338,6 +368,8 @@ async function addWorkout(currentUser, history_id = "", updateWorkoutType = "") 
     }
 }
 
+/**  show add workout form when user clicks on the add workout button
+ * */
 function addWorkoutHandler() {
     if (jQuery('#add_workout').css("display") == "none") {
         $("#exercises").val("weightlifting");
@@ -366,6 +398,8 @@ function addWorkoutHandler() {
     }
 }
 
+/**  show the distance or intensity field based on the exercise type selected by the user
+ * */
 function additionalInformationHandler() {
     if (jQuery(this).val() == "cycling" || jQuery(this).val() == "running" || jQuery(this).val() == "walking") {
         jQuery('#distance-div').css("display", "flex");
@@ -378,7 +412,10 @@ function additionalInformationHandler() {
     }
 }
 
-
+/**  remove a workout from the firebase
+ * @param {firebase.firestore.DocumentReference} currentUser - the current user's document reference
+ * @param {string} historyId - the id of the workout the user wants to delete
+ * */
 function removeWorkout(currentUser, historyId) {
     currentUser.collection("workouts").doc(historyId).get().then((doc) => {
         if (doc.exists) {
@@ -412,12 +449,20 @@ function removeWorkout(currentUser, historyId) {
     });
 }
 
+/**  change the firebase date to local date
+ * @param {Date} date - the date the user has selected
+ * @returns {string} - the local date
+ * */
 function toLocalISOString(date) {
     const offset = date.getTimezoneOffset();
     const adjustedDate = new Date(date.getTime() - (offset * 60 * 1000));
     return adjustedDate.toISOString().slice(0, 16);
 }
 
+/**  update a workout in the firebase
+ * @param {firebase.firestore.DocumentReference} currentUser - the current user's document reference
+ * @param {string} historyID - the id of the workout user wants to update
+ * */
 function updateworkoutHandler(currentUser, historyID) {
     currentUser.collection("workouts").doc(historyID).get()
         .then(userDoc => {
