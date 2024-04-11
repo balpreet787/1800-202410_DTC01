@@ -301,7 +301,7 @@ async function addWorkout(currentUser, history_id = "", updateWorkoutType = "") 
     exercise_type = jQuery("#exercises").val();
 
     if ((verifyEndDate - verifyStartDate) > 0) {
-        jQuery("#add_workout, #workoutWarning").css("display", "none");
+        jQuery("#add-workout, #workout-warning").css("display", "none");
         jQuery('#confirm-add-workout').css("display", "flex").delay(3000).hide(0);
         jQuery('#homepage').toggle();
 
@@ -350,27 +350,27 @@ async function addWorkout(currentUser, history_id = "", updateWorkoutType = "") 
         }
     }
     else {
-        jQuery("#workoutWarning").css("display", "flex");
+        jQuery("#workout-warning").css("display", "flex");
     }
 }
 
 /**  show add workout form when user clicks on the add workout button
  * */
 function addWorkoutHandler() {
-    if (jQuery('#add_workout').css("display") == "none") {
+    if (jQuery('#add-workout').css("display") == "none") {
         $("#exercises").val("weightlifting");
         $("#startDate").val("");
         $("#endDate").val("");
         $("#intensity-div").css("display", "flex");
-        $("#distance-div, #update_workout_button, #username-and-pic, #filter-and-search, #homepage, #leaderboard, #activity-feed, #settings, #filter_activity, #profile_info, #datepicker").css("display", "none");
-        $("#save_workout_button").css("display", "block");
+        $("#distance-div, #update-workout-button, #username-and-pic, #filter-and-search, #homepage, #leaderboard, #activity-feed, #settings, #filter-activity, #profile_info, #datepicker").css("display", "none");
+        $("#save-workout-button").css("display", "block");
         jQuery("#homepage-icon").attr('src', './images/nav-icons/home-black.svg')
         jQuery("#calender-icon").attr('src', './images/nav-icons/calender-black.svg')
         jQuery("#leaderboard-icon").attr('src', './images/nav-icons/leaderboard-black.svg')
         jQuery("#activity-icon").attr('src', './images/nav-icons/activity-feed-black.svg')
         jQuery("#settings-icon").attr('src', './images/nav-icons/setting-black.svg')
         jQuery("#add-workout-icon").attr('src', './images/nav-icons/add-workout-white.svg')
-        jQuery('#add_workout').toggle()
+        jQuery('#add-workout').toggle()
     }
 }
 
@@ -443,8 +443,8 @@ function updateworkoutHandler(currentUser, historyID) {
         .then(userDoc => {
             addWorkoutHandler()
             console.log(historyID)
-            jQuery("#save_workout_button").css("display", "none");
-            jQuery("#update_workout_button").css("display", "block");
+            jQuery("#save-workout-button").css("display", "none");
+            jQuery("#update-workout-button").css("display", "block");
             //get the data fields of the user
             let workoutType = userDoc.data().exerciseType;
             let startDate = (userDoc.data().startDate).toDate();;
@@ -465,6 +465,6 @@ function updateworkoutHandler(currentUser, historyID) {
                 $("#intensity-div").css("display", "none");
                 $("#distance-div").css("display", "flex");
             }
-            jQuery("#update_workout_button").click(function () { addWorkout(CurrentUser, historyID, workoutType) });
+            jQuery("#update-workout-button").click(function () { addWorkout(CurrentUser, historyID, workoutType) });
         })
 }

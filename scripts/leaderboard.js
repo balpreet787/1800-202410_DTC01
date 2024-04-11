@@ -134,8 +134,8 @@ function leaderboardHandler() {
         jQuery('#activity-feed').css("display", "none");
         jQuery('#datepicker').css("display", "none");
         jQuery('#settings').css("display", "none");
-        jQuery('#add_workout').css("display", "none");
-        jQuery('#filter_activity').css("display", "none");
+        jQuery('#add-workout').css("display", "none");
+        jQuery('#filter-activity').css("display", "none");
         jQuery('#profile_info').css("display", "none");
     }
 }

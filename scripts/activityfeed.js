@@ -127,14 +127,14 @@ function filterActivityFeed() {
     console.log(selectedValue)
     if (selectedValue == "accomplishment") { // If the selected value is accomplishment, display accomplishment activity feed posts, hide everything else
         jQuery(".reset-button, #filter-accomplishment, .accomplishment-activity, #filter-and-search, #activity-feed, #filter-and-search").css("display", "flex")
-        jQuery(".reset-filtered-page, #filter-activity, .normal-activity, #filter_activity").css("display", "none")
+        jQuery(".reset-filtered-page, #filter-activity, .normal-activity, #filter-activity").css("display", "none")
         jQuery('#activity-feed').css("flex-direction", "column");
     } else if (selectedValue == "activity") { // If the selected value is activity, display normal activity feed posts, hide everything else
         jQuery(".reset-button, #filter-activity, .normal-activity, #activity-feed, #filter-activity, #filter-and-search").css("display", "flex")
-        jQuery(".reset-filtered-page, #filter-accomplishment, .accomplishment-activity, #filter_activity").css("display", "none")
+        jQuery(".reset-filtered-page, #filter-accomplishment, .accomplishment-activity, #filter-activity").css("display", "none")
         jQuery('#activity-feed').css("flex-direction", "column");
     } else { // If nothing is selected, display all activity feed posts, hide everything else
-        jQuery(".reset-button, .reset-filtered-page, #filter-accomplishment, .accomplishment-activity, #filter_activity").css("display", "none")
+        jQuery(".reset-button, .reset-filtered-page, #filter-accomplishment, .accomplishment-activity, #filter-activity").css("display", "none")
         jQuery('#filter-and-search, .normal-activity, #activity-feed').css('display', 'flex')
         jQuery('#activity-feed').css("flex-direction", "column");
         
@@ -157,15 +157,15 @@ function activityHandler() {
         jQuery("#activity-icon").attr('src', './images/nav-icons/activity-feed-white.svg')
         jQuery("#settings-icon").attr('src', './images/nav-icons/setting-black.svg')
         jQuery("#add-workout-icon").attr('src', './images/nav-icons/add-workout-black.svg')
-        jQuery('#username-and-pic, #homepage, #leaderboard, #datepicker, #settings, #add_workout, #filter_activity, #profile_info').css('display', 'none')
+        jQuery('#username-and-pic, #homepage, #leaderboard, #datepicker, #settings, #add-workout, #filter-activity, #profile_info').css('display', 'none')
         jQuery('#filter-and-search').css('display', 'flex')
         jQuery('#activity-feed').toggle();
     }
 }
 
 function filterHandler() {
-    if (jQuery('#filter_activity').css("display") == "none") {
-        jQuery('#filter_activity').toggle();
-        jQuery('#filter-and-search, #add_workout, #homepage, #leaderboard, #activity-feed, #settings, #profile_info').css('display', 'none')
+    if (jQuery('#filter-activity').css("display") == "none") {
+        jQuery('#filter-activity').toggle();
+        jQuery('#filter-and-search, #add-workout, #homepage, #leaderboard, #activity-feed, #settings, #profile_info').css('display', 'none')
     }
 }
