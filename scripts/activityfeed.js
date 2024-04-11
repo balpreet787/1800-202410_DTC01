@@ -110,7 +110,8 @@ function userSearchInActivityFeed() {
         for (let i = 0; i < $("#activity_feed_info").children().length; i++) { // Loop through the activity feed posts, hide the ones that don't match the user search input (all activity feed posts have username as classname to search)
             if ($(`div.activity-feed-post${i}`).hasClass(`${userSearched}`)) {
                 $(`div.activity-feed-post${i}`).css("display", "flex")
-                jQuery("#filter-search").css("display", "flex")
+                $("#filter-search").css("display", "flex")
+                $("#filter-activity, #filter-accomplishment").css("display", "none")
 
             } else {
                 $(`div.activity-feed-post${i}`).css("display", "none")
@@ -156,7 +157,7 @@ function activityHandler() {
         jQuery("#activity-icon").attr('src', './images/nav-icons/activity-feed-white.svg')
         jQuery("#settings-icon").attr('src', './images/nav-icons/setting-black.svg')
         jQuery("#add-workout-icon").attr('src', './images/nav-icons/add-workout-black.svg')
-        jQuery('#usernameAndPic, #homepage, #leaderboard, #datepicker, #settings, #add_workout, #filter_activity, #profile_info').css('display', 'none')
+        jQuery('#username-and-pic, #homepage, #leaderboard, #datepicker, #settings, #add_workout, #filter_activity, #profile_info').css('display', 'none')
         jQuery('#filter-and-search').css('display', 'flex')
         jQuery('#activity_feed').toggle();
     }
