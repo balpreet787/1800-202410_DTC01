@@ -12,6 +12,7 @@ function uploadPic(postDocID) {
                     }, { merge: true })
                         .then(function () {
                             homepageHandler();
+                            insertMotivationalMessage(currentUser);
                             insertHomepageInfoFromFirestore(currentUser);
                             insertTodaysWorkoutInfoFromFirestore(currentUser);
                             insertYesterdaysWorkoutInfoFromFirestore(currentUser);
@@ -53,6 +54,7 @@ async function updateInfo(currentUser) {
                 }
                 else {
                     homepageHandler();
+                    insertMotivationalMessage(currentUser);
                     insertHomepageInfoFromFirestore(currentUser);
                     insertTodaysWorkoutInfoFromFirestore(currentUser);
                     insertYesterdaysWorkoutInfoFromFirestore(currentUser);
@@ -263,6 +265,7 @@ async function setup() {
     });
     CurrentUser = await userAuthentication(profilepic, image);
     console.log(CurrentUser);
+    insertMotivationalMessage(CurrentUser);
     insertNameAndPicFromFirestore(CurrentUser);
     insertHomepageInfoFromFirestore(CurrentUser);
     insertTodaysWorkoutInfoFromFirestore(CurrentUser);
