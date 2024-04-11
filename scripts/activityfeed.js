@@ -67,13 +67,13 @@ function getActivityFeedInfo(currentUser) {
     var activityfeedinfo = [];
     currentUser.get().then(userDoc => {
         leaderboardID = userDoc.data().leaderboardID;
-        db.collection("users").where("leaderboardID", "==", leaderboardID).get().then(querySnapshot => {
+        db.collection("users").where("leaderboardID", "==", leaderboardID).get().then(querySnapshot => { // Get the user's friends
             querySnapshot.forEach(doc => {
-                friendIDs.push(doc.id);
+                friendIDs.push(doc.id); // Add the user's friends to the friendIDs array
             });
 
-            let activityfeedpromises = friendIDs.map(function (id) {
-                return db.collection("users").doc(id).get().then(userinfo => {
+            let activityfeedpromises = friendIDs.map(function (id) { // Map through the friendIDs array to get the user data
+                return db.collection("users").doc(id).get().then(userinfo => {  // Get user's nickname, username, profile picture
                     let nickname = userinfo.data().nickname;
                     let username = userinfo.data().name;
                     let profilepic = userinfo.data().image;
