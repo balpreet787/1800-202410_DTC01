@@ -49,7 +49,7 @@ function displayActivityFeedInfo(activityfeedinfo) {
 
             addToActivityFeed = `<div class="flex flex-row mx-4 ">
                                         </div>
-                                        <div class="flex flex-row bg-[#fff6e5] rounded-xl shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px] mt-2 mx-4 accomplishment-activity activity-feed-post${i} ${activityfeedinfo[i]["nickname"]}">
+                                        <div class="flex flex-row bg-[#fff6e5] rounded-xl shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px] mt-2 mx-4 accomplishment-activity activity-feed-post${i} ${activityfeedinfo[i]["nickname"].toLowerCase()}">
                                         <img class="h-20 mx-5 self-center rounded-full w-20" src="${activityfeedinfo[i]["profilepic"]}" alt="">
                                             <div class="p-2 w-full">
                                                 <div class="py-2 flex flex-row justify-between">
@@ -146,7 +146,7 @@ function filterActivityFeed() {
         jQuery(".reset-filtered-page, #filter-accomplishment, .accomplishment-activity, #filter-activity").css("display", "none")
         jQuery('#activity-feed').css("flex-direction", "column");
     } else { // If nothing is selected, display all activity feed posts, hide everything else
-        jQuery(".reset-button, .reset-filtered-page, #filter-accomplishment, .accomplishment-activity, #filter-activity").css("display", "none")
+        jQuery(".reset-button, .reset-filtered-page, #filter-accomplishment, .accomplishment-activity, #filter-activity-delete").css("display", "none")
         jQuery('#filter-and-search, .normal-activity, #activity-feed').css('display', 'flex')
         jQuery('#activity-feed').css("flex-direction", "column");
         
@@ -158,7 +158,7 @@ function filterActivityFeed() {
 function resetFilteredActivityFeed() {
     $("input[name='filter-activity-feed']").prop('checked', false); // Uncheck the radio buttons
     jQuery("input[name='username-search']").val("") // Clear the user search input
-    jQuery(".reset-button, .reset-filtered-page, #filter-activity, #filter-accomplishment").css("display", "none")  
+    jQuery(".reset-button, .reset-filtered-page, #filter-activity-delete, #filter-accomplishment").css("display", "none")  
     jQuery('#filter-and-search, .accomplishment-activity, .normal-activity, #activity-feed').css('display', 'flex')
     jQuery('#activity-feed').css("flex-direction", "column");
 }
@@ -171,7 +171,7 @@ function activityHandler() {
         jQuery("#activity-icon").attr('src', './images/nav-icons/activity-feed-white.svg')
         jQuery("#settings-icon").attr('src', './images/nav-icons/setting-black.svg')
         jQuery("#add-workout-icon").attr('src', './images/nav-icons/add-workout-black.svg')
-        jQuery('#username-and-pic, #homepage, #leaderboard, #datepicker, #settings, #add-workout, #filter-activity, #profile_info').css('display', 'none')
+        jQuery('#username-and-pic, #homepage, #leaderboard, #datepicker, #settings, #add-workout, #filter-activity, #profile-info').css('display', 'none')
         jQuery('#filter-and-search').css('display', 'flex')
         jQuery('#activity-feed').toggle();
     }
@@ -183,6 +183,6 @@ function filterHandler() {
     if (jQuery('#filter-activity').css("display") == "none") {
         jQuery('#filter-activity').toggle();
         // jQuery('#filter-activity').css("display", "flex")
-        jQuery('#filter-and-search, #add-workout, #homepage, #leaderboard, #activity-feed, #settings, #profile_info').css('display', 'none')
+        jQuery('#filter-and-search, #add-workout, #homepage, #leaderboard, #activity-feed, #settings, #profile-info').css('display', 'none')
     }
 }

@@ -285,14 +285,14 @@
     <!-- End of settings page -->
 
     <!-- Start of profile information page -->
-    <div class="hidden" id="profile_info">
+    <div class="hidden" id="profile-info">
         <div class="flex flex-col mt-5 m-4">
             <img class="h-20 mx-5 self-center mb-2" alt="" id="pppreview">
             <form class="flex flex-col">
                 <label class="self-center" for="file-input">Upload a profile picture:</label>
                 <input class="self-center ml-20 mb-2" type="file" id="file-input" accept="image/*">
             </form class="w-full">
-            <input class="outline outline-1 outline-[#ff9500] rounded-lg p-1.5 m-2" type="text" id="leaderboard_id"
+            <input class="outline outline-1 outline-[#ff9500] rounded-lg p-1.5 m-2" type="text" id="leaderboard-id"
                 placeholder="Friend ID (Optional)" required>
             <input class="outline outline-1 outline-[#ff9500] rounded-lg p-1.5 m-2" type="text" id="nickname"
                 placeholder="Nickname" required>
@@ -316,9 +316,9 @@
                 </div>
             </div>
             <div class="flex flex-row">
-                <button id="save_profile_info_button"
+                <button id="save-profile-info-button"
                     class="bg-[#ff9500] text-[#fff6e5] rounded-lg p-1 container mx-auto w-1/3">Save</button>
-                <button id="cancel_profile_info_button"
+                <button id="cancel-profile-info-button"
                     class="bg-[#ff9500] text-[#fff6e5] rounded-lg p-1 container mx-auto w-1/3">Cancel</button>
             </div>
         </div>
@@ -330,9 +330,9 @@
         <div class="flex flex-row justify-between mb-4">
             <label class="py-2 font-bold px-2" for="date">Workouts for:</label>
             <input class="outline outline-1 outline-[#ff9500] rounded-lg py-1 px-[30px]" name="date" type="date"
-                id="selectedDate" class="">
+                id="selected-date" class="">
         </div>
-        <div id="recorded_workouts" class="flex flex-col justify-right text-sm gap-2">
+        <div id="recorded-workouts" class="flex flex-col justify-right text-sm gap-2">
         </div>
     </div>
     <!-- Calender ends here -->
@@ -340,18 +340,18 @@
     <!-- Start of navigation footer -->
     <footer class="fixed w-full bottom-0 rounded-3xl">
         <div class="grid grid-cols-5 bg-[#ff9500] rounded-t-3xl pt-2">
-            <button id="homepage_button" href="" class=" flex justify-center py-3 pt-2 rounded-t-3xl"> <img
+            <button id="homepage-button" href="" class=" flex justify-center py-3 pt-2 rounded-t-3xl"> <img
                     src="./images/nav-icons/home-white.svg" id="homepage-icon" class="w-8 h-8" alt=""></button>
-            <button id="leaderboard_button" href="" class="flex justify-center py-3 pt-2 bg-[#ff9500]"><img
+            <button id="leaderboard-button" href="" class="flex justify-center py-3 pt-2 bg-[#ff9500]"><img
                     src="./images/nav-icons/leaderboard-black.svg" id="leaderboard-icon" class="w-8 h-8"
                     alt=""></button>
-            <button id="add_workout_button" href=""
+            <button id="add-workout-button" href=""
                 class="flex justify-center py-3 pt-2 bg-[#ff9500]  rounded-t-3xl"><img
                     src="./images/nav-icons/add-workout-black.svg" id="add-workout-icon" class="w-8 h-8"
                     alt=""></button>
-            <button id="activity_button" href="" class="flex justify-center py-3 pt-2 bg-[#ff9500]"><img
+            <button id="activity-button" href="" class="flex justify-center py-3 pt-2 bg-[#ff9500]"><img
                     src="./images/nav-icons/activity-feed-black.svg" id="activity-icon" class="w-8 h-8" alt=""></button>
-            <button id="calendar_button" href="" class="flex justify-center py-3 pt-2 bg-[#ff9500] rounded-t-3xl"><img
+            <button id="calendar-button" href="" class="flex justify-center py-3 pt-2 bg-[#ff9500] rounded-t-3xl"><img
                     src="./images/nav-icons/calender-black.svg" class="w-8 h-8" id="calender-icon" alt=""></button>
 
         </div>

@@ -375,7 +375,7 @@ function addWorkoutHandler() {
         $("#startDate").val("");
         $("#endDate").val("");
         $("#intensity-div").css("display", "flex");
-        $("#distance-div, #update-workout-button, #username-and-pic, #filter-and-search, #homepage, #leaderboard, #activity-feed, #settings, #filter-activity, #profile_info, #datepicker").css("display", "none");
+        $("#distance-div, #update-workout-button, #username-and-pic, #filter-and-search, #homepage, #leaderboard, #activity-feed, #settings, #filter-activity, #profile-info, #datepicker").css("display", "none");
         $("#save-workout-button").css("display", "block");
         jQuery("#homepage-icon").attr('src', './images/nav-icons/home-black.svg')
         jQuery("#calender-icon").attr('src', './images/nav-icons/calender-black.svg')

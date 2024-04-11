@@ -136,7 +136,7 @@ function leaderboardHandler() {
         jQuery('#settings').css("display", "none");
         jQuery('#add-workout').css("display", "none");
         jQuery('#filter-activity').css("display", "none");
-        jQuery('#profile_info').css("display", "none");
+        jQuery('#profile-info').css("display", "none");
     }
 }
 
