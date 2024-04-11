@@ -67,8 +67,7 @@ function insertMotivationalMessage(currentUser) {
                 $("#motivational-message").text(`${workoutTimeLastweek - workoutTimeInCurrentweek} more minutes to beat last week's workout time!`)
             }
         });
-    })
-}
+    }
 
 /** Function to display the user's weekly workout with calories and number of workouts
  * @param {firebase.firestore.DocumentReference} currentUser - the current user object
