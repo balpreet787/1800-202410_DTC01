@@ -1,3 +1,8 @@
+/** Description: This file manages the homepage section of the web app */
+
+/** Function to display the name and profile pic of the user
+ * @param {firebase.firestore.DocumentReference} currentUser - the current user object
+ */
 function insertNameAndPicFromFirestore(currentUser) {
     currentUser.get().then(userDoc => {
         // Get the user name
@@ -18,6 +23,9 @@ function insertNameAndPicFromFirestore(currentUser) {
     })
 }
 
+/** Function to display the motivational message according to the user's weekly workout time
+ * @param {firebase.firestore.DocumentReference} currentUser - the current user object
+ * */
 function insertMotivationalMessage(currentUser) {
     var todayDate = new Date(new Date().toDateString()); // get the current date, initialize dates for current week and last week
     var dates = [];
@@ -59,6 +67,9 @@ function insertMotivationalMessage(currentUser) {
         });
 }
 
+/** Function to display the user's weekly workout with calories and number of workouts
+ * @param {firebase.firestore.DocumentReference} currentUser - the current user object
+ * */
 function insertHomepageInfoFromFirestore(currentUser) {
     var todayDate = new Date(new Date().toDateString()); // get the current date, initialize dates for current week and last week
     var dates = [];
@@ -101,6 +112,9 @@ function insertHomepageInfoFromFirestore(currentUser) {
 
 }
 
+/** Function to display the user's today's workout with time, calories and number of workouts
+ * @param {firebase.firestore.DocumentReference} currentUser - the current user object
+ * */
 function insertTodaysWorkoutInfoFromFirestore(currentUser) {
     var selectedDate = new Date(); // get the current date from midnight to 11:59, 
     var selectedEndDay = new Date();
@@ -133,6 +147,9 @@ function insertTodaysWorkoutInfoFromFirestore(currentUser) {
     })
 }
 
+/** Function to display the user's yesterday's workout with time, calories and number of workouts
+ * @param {firebase.firestore.DocumentReference} currentUser - the current user object
+ * */
 function insertYesterdaysWorkoutInfoFromFirestore(currentUser) {
     var yesterdaysDate = new Date(); // get the date for yesterday's date from midnight to 11:59
     var yesterdaysEnd = new Date();
@@ -167,6 +184,8 @@ function insertYesterdaysWorkoutInfoFromFirestore(currentUser) {
     })
 }
 
+/** Function to display the homepage section and hide the other sections
+ * */
 function homepageHandler() {
     jQuery("#homepage-icon").attr('src', './images/nav-icons/home-white.svg')
     jQuery("#calender-icon").attr('src', './images/nav-icons/calender-black.svg')
