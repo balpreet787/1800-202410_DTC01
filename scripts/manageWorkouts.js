@@ -336,6 +336,7 @@ async function addWorkout(currentUser, history_id = "", updateWorkoutType = "") 
                 .then(() => {
                     homepageHandler();
                     console.log("Document successfully updated!");
+                    insertMotivationalMessage(currentUser);
                     insertHomepageInfoFromFirestore(currentUser);
                     insertTodaysWorkoutInfoFromFirestore(currentUser);
                     insertYesterdaysWorkoutInfoFromFirestore(currentUser);
@@ -406,6 +407,7 @@ function removeWorkout(currentUser, historyId) {
                 currentUser.collection("workouts").doc(historyId).delete().then(() => {
                     calendarHandler();
                     console.log("Document successfully updated!");
+                    insertMotivationalMessage(currentUser);
                     insertHomepageInfoFromFirestore(currentUser);
                     insertTodaysWorkoutInfoFromFirestore(currentUser);
                     insertYesterdaysWorkoutInfoFromFirestore(currentUser);
