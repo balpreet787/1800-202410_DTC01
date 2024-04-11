@@ -21,13 +21,13 @@ function uploadPic(postDocID) {
                         .then(function () {
                             // Update the image on the html pages
                             homepageHandler();
-                            insertMotivationalMessage(currentUser);
-                            insertHomepageInfoFromFirestore(currentUser);
-                            insertTodaysWorkoutInfoFromFirestore(currentUser);
-                            insertYesterdaysWorkoutInfoFromFirestore(currentUser);
-                            showRecordedWorkouts(currentUser);
-                            getLeaderboardData(currentUser);
-                            getActivityFeedInfo(currentUser);
+                            insertMotivationalMessage(CurrentUser);
+                            insertHomepageInfoFromFirestore(CurrentUser);
+                            insertTodaysWorkoutInfoFromFirestore(CurrentUser);
+                            insertYesterdaysWorkoutInfoFromFirestore(CurrentUser);
+                            showRecordedWorkouts(CurrentUser);
+                            getLeaderboardData(CurrentUser);
+                            getActivityFeedInfo(CurrentUser);
 
                         })
                 })
