@@ -278,27 +278,21 @@ function removeBadges(currentUser, exerciseType, exerciseCount) {
 async function decreaseExerciseCount(exercise_type, currentUser) {
     const exerciseCounterSnapshot = await currentUser.collection("exerciseCounter").doc("exercises").get();
     let exerciseCount = parseInt(exerciseCounterSnapshot.data()[exercise_type]);
-<<<<<<< HEAD:scripts/manageWorkouts.js
     console.log(exerciseCount);
 
     // call removeBadges function to remove the badges accordingly
-=======
->>>>>>> 8c72e729137686384e7aa002bb3dcc499e20493a:scripts/addworkout.js
     removeBadges(currentUser, exercise_type, exerciseCount);
     await currentUser.collection("exerciseCounter").doc("exercises").update({
         [exercise_type]: exerciseCount - 1,
     });
 }
 
-<<<<<<< HEAD:scripts/manageWorkouts.js
 
 /**  add a workout to the firebase
  * @param {firebase.firestore.DocumentReference} currentUser - the current user's document reference
  * @param {string} history_id - the id of the workout if the user called function to update the workout
  * @param {string} updateWorkoutType - the type of workout the user called function to update the workout
  * */
-=======
->>>>>>> 8c72e729137686384e7aa002bb3dcc499e20493a:scripts/addworkout.js
 async function addWorkout(currentUser, history_id = "", updateWorkoutType = "") {
     startDate = jQuery("#startDate").val();
     endDate = jQuery("#endDate").val();
