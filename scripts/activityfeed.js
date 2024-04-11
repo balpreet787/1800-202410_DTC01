@@ -54,13 +54,13 @@ function displayActivityFeedInfo(activityfeedinfo) {
                                             </div>
                                         </div>`
                     }
-                    jQuery("#activity_feed_info").append(addToActivityFeed);
+                    jQuery("#activity-feed-info").append(addToActivityFeed);
                 }
 
 }
 
 function getActivityFeedInfo(currentUser) {
-    jQuery("#activity_feed_info").empty(); // Clear the activity feed info div before adding new content
+    jQuery("#activity-feed-info").empty(); // Clear the activity feed info div before adding new content
     var badgesEarned = null;
     var leaderboardID = undefined;
     var friendIDs = [];
@@ -107,7 +107,7 @@ function userSearchInActivityFeed() {
     if (userSearched == "") {
         $(`div.activity-feed-post`).css("display", "flex") // If the user search input is empty, display all activity feed posts
     } else {
-        for (let i = 0; i < $("#activity_feed_info").children().length; i++) { // Loop through the activity feed posts, hide the ones that don't match the user search input (all activity feed posts have username as classname to search)
+        for (let i = 0; i < $("#activity-feed-info").children().length; i++) { // Loop through the activity feed posts, hide the ones that don't match the user search input (all activity feed posts have username as classname to search)
             if ($(`div.activity-feed-post${i}`).hasClass(`${userSearched}`)) {
                 $(`div.activity-feed-post${i}`).css("display", "flex")
                 $("#filter-search").css("display", "flex")
@@ -126,17 +126,17 @@ function filterActivityFeed() {
     var selectedValue = $("input[name='filter-activity-feed']:checked").val(); // Get the selected value from the radio buttons, accomplishment or activity
     console.log(selectedValue)
     if (selectedValue == "accomplishment") { // If the selected value is accomplishment, display accomplishment activity feed posts, hide everything else
-        jQuery(".reset_button, #filter-accomplishment, .accomplishment-activity, #filter-and-search, #activity_feed, #filter-and-search").css("display", "flex")
-        jQuery(".reset_filtered_page, #filter-activity, .normal-activity, #filter_activity").css("display", "none")
-        jQuery('#activity_feed').css("flex-direction", "column");
+        jQuery(".reset-button, #filter-accomplishment, .accomplishment-activity, #filter-and-search, #activity-feed, #filter-and-search").css("display", "flex")
+        jQuery(".reset-filtered-page, #filter-activity, .normal-activity, #filter_activity").css("display", "none")
+        jQuery('#activity-feed').css("flex-direction", "column");
     } else if (selectedValue == "activity") { // If the selected value is activity, display normal activity feed posts, hide everything else
-        jQuery(".reset_button, #filter-activity, .normal-activity, #activity_feed, #filter-activity, #filter-and-search").css("display", "flex")
-        jQuery(".reset_filtered_page, #filter-accomplishment, .accomplishment-activity, #filter_activity").css("display", "none")
-        jQuery('#activity_feed').css("flex-direction", "column");
+        jQuery(".reset-button, #filter-activity, .normal-activity, #activity-feed, #filter-activity, #filter-and-search").css("display", "flex")
+        jQuery(".reset-filtered-page, #filter-accomplishment, .accomplishment-activity, #filter_activity").css("display", "none")
+        jQuery('#activity-feed').css("flex-direction", "column");
     } else { // If nothing is selected, display all activity feed posts, hide everything else
-        jQuery(".reset_button, .reset_filtered_page, #filter-accomplishment, .accomplishment-activity, #filter_activity").css("display", "none")
-        jQuery('#filter-and-search, .normal-activity, #activity_feed').css('display', 'flex')
-        jQuery('#activity_feed').css("flex-direction", "column");
+        jQuery(".reset-button, .reset-filtered-page, #filter-accomplishment, .accomplishment-activity, #filter_activity").css("display", "none")
+        jQuery('#filter-and-search, .normal-activity, #activity-feed').css('display', 'flex')
+        jQuery('#activity-feed').css("flex-direction", "column");
         
     }
 }
@@ -144,13 +144,13 @@ function filterActivityFeed() {
 function resetFilteredActivityFeed() {
     $("input[name='filter-activity-feed']").prop('checked', false); // Uncheck the radio buttons
     jQuery("input[name='username-search']").val("") // Clear the user search input
-    jQuery(".reset_button, .reset_filtered_page, #filter-activity, #filter-accomplishment").css("display", "none")  
-    jQuery('#filter-and-search, .accomplishment-activity, .normal-activity, #activity_feed').css('display', 'flex')
-    jQuery('#activity_feed').css("flex-direction", "column");
+    jQuery(".reset-button, .reset-filtered-page, #filter-activity, #filter-accomplishment").css("display", "none")  
+    jQuery('#filter-and-search, .accomplishment-activity, .normal-activity, #activity-feed').css('display', 'flex')
+    jQuery('#activity-feed').css("flex-direction", "column");
 }
 
 function activityHandler() { 
-    if (jQuery('#activity_feed').css("display") == "none") {
+    if (jQuery('#activity-feed').css("display") == "none") {
         jQuery("#homepage-icon").attr('src', './images/nav-icons/home-black.svg')
         jQuery("#calender-icon").attr('src', './images/nav-icons/calender-black.svg')
         jQuery("#leaderboard-icon").attr('src', './images/nav-icons/leaderboard-black.svg')
@@ -159,13 +159,13 @@ function activityHandler() {
         jQuery("#add-workout-icon").attr('src', './images/nav-icons/add-workout-black.svg')
         jQuery('#username-and-pic, #homepage, #leaderboard, #datepicker, #settings, #add_workout, #filter_activity, #profile_info').css('display', 'none')
         jQuery('#filter-and-search').css('display', 'flex')
-        jQuery('#activity_feed').toggle();
+        jQuery('#activity-feed').toggle();
     }
 }
 
 function filterHandler() {
     if (jQuery('#filter_activity').css("display") == "none") {
         jQuery('#filter_activity').toggle();
-        jQuery('#filter-and-search, #add_workout, #homepage, #leaderboard, #activity_feed, #settings, #profile_info').css('display', 'none')
+        jQuery('#filter-and-search, #add_workout, #homepage, #leaderboard, #activity-feed, #settings, #profile_info').css('display', 'none')
     }
 }

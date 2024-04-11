@@ -194,6 +194,6 @@ function homepageHandler() {
     jQuery("#settings-icon").attr('src', './images/nav-icons/setting-black.svg')
     jQuery("#add-workout-icon").attr('src', './images/nav-icons/add-workout-black.svg')
     jQuery('#username-and-pic, #homepage').css('display', 'grid')
-    jQuery('#filter-and-search, #leaderboard, #activity_feed, #datepicker, #settings, #add_workout, #filter_activity, #profile_info').css('display', 'none')
+    jQuery('#filter-and-search, #leaderboard, #activity-feed, #datepicker, #settings, #add_workout, #filter_activity, #profile_info').css('display', 'none')
 }
 

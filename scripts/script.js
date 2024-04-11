@@ -173,7 +173,7 @@ function settingsHandler() {
         jQuery("#settings-icon").attr('src', './images/nav-icons/setting-white.svg')
         jQuery("#add-workout-icon").attr('src', './images/nav-icons/add-workout-black.svg')
         jQuery('#settings').toggle()
-        jQuery('#filter-and-search, #username-and-pic, #homepage, #leaderboard, #activity_feed, #datepicker, #add_workout, #filter_activity, #profile_info').css('display', 'none')
+        jQuery('#filter-and-search, #username-and-pic, #homepage, #leaderboard, #activity-feed, #datepicker, #add_workout, #filter_activity, #profile_info').css('display', 'none')
     }
 }
 
@@ -188,7 +188,7 @@ function profileInfoHandler(currentUser) {
     jQuery("#activity-icon").attr('src', './images/nav-icons/activity-feed-black.svg')
     jQuery("#settings-icon").attr('src', './images/nav-icons/setting-white.svg')
     jQuery("#add-workout-icon").attr('src', './images/nav-icons/add-workout-black.svg')
-    jQuery('#username-and-pic, #filter-and-search, #profile_info, #add_workout, #homepage, #leaderboard, #activity_feed, #settings').css('display', 'none')
+    jQuery('#username-and-pic, #filter-and-search, #profile_info, #add_workout, #homepage, #leaderboard, #activity-feed, #settings').css('display', 'none')
     jQuery('#profile_info').toggle()
 }
 
@@ -209,7 +209,7 @@ async function userAuthentication(image) {
                         // Get the document data
                         const userData = userDoc.data();
                         if (userData.nickname === undefined || userData.nickname === null) {
-                            jQuery('#homepage, #leaderboard, #activity_feed, #datepicker, #settings, #username-and-pic').css("display", "none");
+                            jQuery('#homepage, #leaderboard, #activity-feed, #datepicker, #settings, #username-and-pic').css("display", "none");
                             jQuery("#profile_info").css("display", "flex");
                         }
                         if (userData.image === undefined || userData.image === null) {
@@ -253,8 +253,8 @@ async function setup() {
     jQuery('#exercises').change(additionalInformationHandler);// fix this
     jQuery('#filter-button').click(filterHandler);
     jQuery('#username-search-button').click(userSearchInActivityFeed)
-    jQuery('.reset_button').click(resetFilteredActivityFeed);
-    jQuery('.reset_filtered_page').click(resetFilteredActivityFeed);
+    jQuery('.reset-button').click(resetFilteredActivityFeed);
+    jQuery('.reset-filtered-page').click(resetFilteredActivityFeed);
     jQuery('#cancel_button').click(activityHandler);
     jQuery('#cancel_profile_info_button').click(settingsHandler);
     jQuery('#cancel_workout_button').click(homepageHandler);
