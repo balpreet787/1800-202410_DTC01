@@ -6,10 +6,12 @@
  * @returns {Promise<[string, string]>} - the badge and badge name that the user has earned
 */
 async function giveUserBadge(exerciseType, currentUser) {
+    // get the count of the exercises the user has completed
     var count = (await currentUser.collection("exerciseCounter").doc("exercises").get()).get(exerciseType);
 
     var badge = null;
     var badge_name = null;
+    //check the type of exercise the user has completed and assign the badge accordingly
     if (exerciseType == "weightlifting") {
         if (count === 20) {
             badge = "./images/weightliftingplatinum.svg";
@@ -118,12 +120,13 @@ async function getCaloriesBurned(exerciseType, startDate, endDate, exercise_inte
     const difference = (endTime - startTime) / (1000 * 60);
 
     return new Promise((resolve, reject) => {
-        currentUser.get().then(userDoc => {
+        currentUser.get().then(userDoc => {// get the user's weight
             const userData = userDoc.data();
             const user_weight = userData.weight;
             let calories;
             let met = 0;
 
+            // calculate the calories burned based on the type of exercise
             if (exerciseType === "Weightlifting" || exerciseType === "yoga") {
                 calories = exercise_intensity * user_weight * (difference / 60);
                 console.log(calories, exercise_intensity, user_weight, difference / 60)
@@ -142,7 +145,7 @@ async function getCaloriesBurned(exerciseType, startDate, endDate, exercise_inte
                 }
                 calories = met * user_weight * (difference / 60);
             }
-            resolve(calories);
+            resolve(calories);// return the calories burned
         }).catch(error => {
             console.log("Error getting document:", error);
             reject(error);
@@ -154,10 +157,11 @@ async function getCaloriesBurned(exerciseType, startDate, endDate, exercise_inte
  * @param {firebase.firestore.DocumentReference} currentUser - the current user's document reference
  * */
 async function countTheExercises(exercise_type, currentUser) {
-    currentUser.collection("exerciseCounter").doc("exercises").get().then((exerciseCounter) => {
+    currentUser.collection("exerciseCounter").doc("exercises").get().then((exerciseCounter) => {// get the count of the exercises the user has completed
         if (exerciseCounter.exists) {
             if (exerciseCounter.data()[exercise_type] == undefined || exerciseCounter.data()[exercise_type] == null || exerciseCounter.data()[exercise_type] == 0) {
                 console.log("here")
+                // add the new exercise count to the firestore
                 currentUser.collection("exerciseCounter").doc("exercises").set({
                     [exercise_type]: 1,
                 }, { merge: true })
@@ -169,6 +173,7 @@ async function countTheExercises(exercise_type, currentUser) {
                     });;
             }
             else {
+                // update the exercise count in the firestore
                 let exerciseCount = parseInt(exerciseCounter.data()[exercise_type]);
                 currentUser.collection("exerciseCounter").doc("exercises").update({
                     [exercise_type]: 1 + exerciseCount,
@@ -177,6 +182,7 @@ async function countTheExercises(exercise_type, currentUser) {
 
         }
         else {
+            // add the new exercise count to the firestore if the user has not completed any exercises
             currentUser.collection("exerciseCounter").doc("exercises").set({
                 [exercise_type]: 1,
             }, { merge: true })
@@ -244,18 +250,21 @@ function intensityHandler(exercise_type) {
  * */
 function removeBadges(currentUser, exerciseType, exerciseCount) {
     if (exerciseCount == 5) {
+        // remove the badge if the user has completed 5 exercises and edited or deleted the workout in the firebase
         currentUser.collection("workouts").where("earned_name", "==", `bronze ${exerciseType} badge`).get().then((removedWorkout) => {
             removedWorkout.forEach(workout => {
                 currentUser.collection("workouts").doc(workout.id).update({ earned_name: null, earned: null })
             })
         })
     } else if (exerciseCount == 10) {
+        // remove the badge if the user has completed 10 exercises and edited or deleted the workout in the firebase
         currentUser.collection("workouts").where("earned_name", "==", `silver ${exerciseType} badge`).get().then((removedWorkout) => {
             removedWorkout.forEach(workout => {
                 currentUser.collection("workouts").doc(workout.id).update({ earned_name: `bronze ${exerciseType} badge`, earned: `./images/${exerciseType}bronze.svg` })
             })
         })
     } else if (exerciseCount == 15) {
+        // remove the badge if the user has completed 15 exercises and edited or deleted the workout in the firebase
         currentUser.collection("workouts").where("earned_name", "==", `gold ${exerciseType} badge`).get().then((removedWorkout) => {
             removedWorkout.forEach(workout => {
                 currentUser.collection("workouts").doc(workout.id).update({ earned_name: `silver ${exerciseType} badge`, earned: `./images/${exerciseType}silver.svg` })
@@ -263,6 +272,7 @@ function removeBadges(currentUser, exerciseType, exerciseCount) {
         })
 
     } else if (exerciseCount == 20) {
+        // remove the badge if the user has completed 20 exercises and edited or deleted the workout in the firebase
         currentUser.collection("workouts").where("earned_name", "==", `platinum ${exerciseType} badge`).get().then((removedWorkout) => {
             removedWorkout.forEach(workout => {
                 currentUser.collection("workouts").doc(workout.id).update({ earned_name: `gold ${exerciseType} badge`, earned: `./images/${exerciseType}gold.svg` })
@@ -309,7 +319,7 @@ async function addWorkout(currentUser, history_id = "", updateWorkoutType = "") 
             if (updateWorkoutType == "") {
                 unique_id = currentUser.collection("workouts").doc().id;
                 history_id = "history" + unique_id;
-                await countTheExercises(exercise_type, currentUser);
+                await countTheExercises(exercise_type, currentUser);// call countTheExercises function to count the number of exercises the user has completed
             }
             else if (updateWorkoutType != "" && updateWorkoutType != exercise_type) {
                 await decreaseExerciseCount(updateWorkoutType, currentUser);
@@ -318,13 +328,14 @@ async function addWorkout(currentUser, history_id = "", updateWorkoutType = "") 
             else if (updateWorkoutType == exercise_type) {
                 console.log("same")
             }
+            // store the information of the workout the user has completed
             let exercise_intensity = intensityHandler(exercise_type);
             let calories_burned = parseInt(await getCaloriesBurned(exercise_type, startDate, endDate, exercise_intensity, currentUser));
             let badges_earned = await giveUserBadge(exercise_type, currentUser);
             let start_Date = firebase.firestore.Timestamp.fromDate(new Date(startDate));
             let end_Date = firebase.firestore.Timestamp.fromDate(new Date(endDate));
 
-            currentUser.collection("workouts").doc(history_id).set({
+            currentUser.collection("workouts").doc(history_id).set({// add the workout to the firestore
                 exerciseType: exercise_type,
                 startDate: start_Date,
                 endDate: end_Date,
@@ -334,6 +345,7 @@ async function addWorkout(currentUser, history_id = "", updateWorkoutType = "") 
                 earned_name: badges_earned[1]
             }, { merge: true })
                 .then(() => {
+                    // call the functions to update the user's homepage, leaderboard, activity feed, and show the recorded workouts
                     homepageHandler();
                     console.log("Document successfully updated!");
                     insertMotivationalMessage(currentUser);
@@ -394,17 +406,17 @@ function additionalInformationHandler() {
  * @param {string} historyId - the id of the workout the user wants to delete
  * */
 function removeWorkout(currentUser, historyId) {
-    currentUser.collection("workouts").doc(historyId).get().then((doc) => {
+    currentUser.collection("workouts").doc(historyId).get().then((doc) => {// get the exercise type of the workout the user wants to delete
         if (doc.exists) {
             exercise = doc.data().exerciseType
-            currentUser.collection("exerciseCounter").doc("exercises").get().then((doc) => {
+            currentUser.collection("exerciseCounter").doc("exercises").get().then((doc) => {// get the count of the exercises the user has completed
                 exerciseCount = doc.data()[exercise]
-                currentUser.collection("exerciseCounter").doc("exercises").update({
-                    [exercise]: exerciseCount - 1,
+                currentUser.collection("exerciseCounter").doc("exercises").update({// update the exercise count in the firestore before deleting the workout
                     [exercise]: exerciseCount - 1,
                 });
                 removeBadges(currentUser, exercise, exerciseCount);
-                currentUser.collection("workouts").doc(historyId).delete().then(() => {
+                currentUser.collection("workouts").doc(historyId).delete().then(() => {// delete the workout from the firestore
+                    // call the functions to update the user's homepage, leaderboard, activity feed, and show the recorded workouts
                     calendarHandler();
                     console.log("Document successfully updated!");
                     insertMotivationalMessage(currentUser);
@@ -441,7 +453,7 @@ function toLocalISOString(date) {
  * @param {string} historyID - the id of the workout user wants to update
  * */
 function updateworkoutHandler(currentUser, historyID) {
-    currentUser.collection("workouts").doc(historyID).get()
+    currentUser.collection("workouts").doc(historyID).get()// get the workout the user wants to update
         .then(userDoc => {
             addWorkoutHandler()
             console.log(historyID)
