@@ -59,9 +59,9 @@ function displayActivityFeedInfo(activityfeedinfo) {
                                                 <p class="text-xs pb-4 pr-1 ml-auto"  id="accomplishment-phrase">${activityfeedinfo[i]["username"]} ${activityDetails} and earned a ${activityfeedinfo[i]["badgeName"]}!</br><b>Calories Burned:</b> ${activityfeedinfo[i]["calories"]} </br> ${activityIntensity}</p>
                                             </div>
                                         </div>`
-                    }
-                    jQuery("#activity-feed-info").append(addToActivityFeed);
-                }
+        }
+        jQuery("#activity-feed-info").append(addToActivityFeed);
+    }
 
 }
 
@@ -149,7 +149,7 @@ function filterActivityFeed() {
         jQuery(".reset-button, .reset-filtered-page, #filter-accomplishment, .accomplishment-activity, #filter-activity-delete").css("display", "none")
         jQuery('#filter-and-search, .normal-activity, #activity-feed').css('display', 'flex')
         jQuery('#activity-feed').css("flex-direction", "column");
-        
+
     }
 }
 
@@ -163,7 +163,7 @@ function resetFilteredActivityFeed() {
     jQuery('#activity-feed').css("flex-direction", "column");
 }
 
-function activityHandler() { 
+function activityHandler() {
     if (jQuery('#activity-feed').css("display") == "none") {
         jQuery("#homepage-icon").attr('src', './images/nav-icons/home-black.svg')
         jQuery("#calender-icon").attr('src', './images/nav-icons/calender-black.svg')
@@ -181,6 +181,7 @@ function activityHandler() {
  * */
 function filterHandler() {
     if (jQuery('#filter-activity').css("display") == "none") {
+        console.log("filter handler")
         jQuery('#filter-activity').toggle();
         // jQuery('#filter-activity').css("display", "flex")
         jQuery('#filter-and-search, #add-workout, #homepage, #leaderboard, #activity-feed, #settings, #profile-info').css('display', 'none')

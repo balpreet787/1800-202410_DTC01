@@ -41,6 +41,7 @@ function populate_leaderboard(leaderboardinfo) {
         }
     }
     i = 0;
+    // Sort the user data in descending order of calories
     let calories_in_order = (Object.keys(leaderboardinfo).map(nickname => leaderboardinfo[nickname]["calories"]));
     calories_in_order.sort(function (a, b) { return a - b }).reverse();
     for (index = 0; index < calories_in_order.length; index++) {
@@ -76,8 +77,10 @@ async function getLeaderboardData(currentUser) {
     let leaderboardID = undefined;
     let friendIDs = [];
     let leaderboardinfo = {};
+    // Get the leaderboard ID of the current user
     currentUser.get().then(userDoc => {
         leaderboardID = userDoc.data().leaderboardID;
+        // Get the user IDs of the friends in the leaderboard
         db.collection('users').where('leaderboardID', '==', leaderboardID)
             .get()
             .then((querySnapshot) => {
@@ -86,11 +89,13 @@ async function getLeaderboardData(currentUser) {
                 });
 
                 let leaderboardpromises = friendIDs.map(function (id) {
+                    // Get the user data for each user in the leaderboard
                     return db.collection("users").doc(id).get().then(userinfo => {
                         let nickname = userinfo.data().nickname;
                         leaderboardinfo[nickname] = {
                             "calories": 0, "badges": "", "profilepic": userinfo.data().image
                         };
+                        // Get the workout data for each user in the leaderboard
                         return db.collection("users").doc(id).collection('workouts').where('startDate', '>=', firestoreStartDate).get().then(historydoc => {
                             historydoc.forEach(historydata => {
                                 if (historydata.data().startDate <= firestoreEndDate) {
