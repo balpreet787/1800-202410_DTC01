@@ -101,7 +101,7 @@ function getActivityFeedInfo(currentUser) {
                     });
                 });
             });
-            Promise.all(activityfeedpromises).then(() => {
+            Promise.all(activityfeedpromises).then(() => {// wait for all the promises to resolve before displaying the activity feed info
                 displayActivityFeedInfo(activityfeedinfo)
             }).catch(error => {
                 console.error("Error processing all user data: ", error);

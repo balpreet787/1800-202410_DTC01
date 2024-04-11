@@ -49,6 +49,7 @@ async function updateInfo(currentUser) {
     var dob = $("#dob").val();
 
     if (nickname != "" && height != "" && weight != "" && dob != "") {
+        jQuery('#confirm-profile-update').css("display", "flex").delay(3000).hide(0);
         currentUser.set({
             nickname: nickname,
             gender: gender,
