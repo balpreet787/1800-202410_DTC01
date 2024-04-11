@@ -132,7 +132,7 @@ function infoHandler() {
  * Show about us on settings section of the page
  */
 function aboutUsHandler() {
-    jQuery('#aboutUs-box').slideToggle()
+    jQuery('#about-us-box').slideToggle()
 }
 
 /**
@@ -173,7 +173,7 @@ function settingsHandler() {
         jQuery("#settings-icon").attr('src', './images/nav-icons/setting-white.svg')
         jQuery("#add-workout-icon").attr('src', './images/nav-icons/add-workout-black.svg')
         jQuery('#settings').toggle()
-        jQuery('#filter-and-search, #usernameAndPic, #homepage, #leaderboard, #activity_feed, #datepicker, #add_workout, #filter_activity, #profile_info').css('display', 'none')
+        jQuery('#filter-and-search, #username-and-pic, #homepage, #leaderboard, #activity-feed, #datepicker, #add-workout, #filter-activity, #profile_info').css('display', 'none')
     }
 }
 
@@ -188,7 +188,7 @@ function profileInfoHandler(currentUser) {
     jQuery("#activity-icon").attr('src', './images/nav-icons/activity-feed-black.svg')
     jQuery("#settings-icon").attr('src', './images/nav-icons/setting-white.svg')
     jQuery("#add-workout-icon").attr('src', './images/nav-icons/add-workout-black.svg')
-    jQuery('#usernameAndPic, #filter-and-search, #profile_info, #add_workout, #homepage, #leaderboard, #activity_feed, #settings').css('display', 'none')
+    jQuery('#username-and-pic, #filter-and-search, #profile_info, #add-workout, #homepage, #leaderboard, #activity-feed, #settings').css('display', 'none')
     jQuery('#profile_info').toggle()
 }
 
@@ -209,7 +209,7 @@ async function userAuthentication(image) {
                         // Get the document data
                         const userData = userDoc.data();
                         if (userData.nickname === undefined || userData.nickname === null) {
-                            jQuery('#homepage, #leaderboard, #activity_feed, #datepicker, #settings, #usernameAndPic').css("display", "none");
+                            jQuery('#homepage, #leaderboard, #activity-feed, #datepicker, #settings, #username-and-pic').css("display", "none");
                             jQuery("#profile_info").css("display", "flex");
                         }
                         if (userData.image === undefined || userData.image === null) {
@@ -243,23 +243,23 @@ async function setup() {
     leaderboardCurrentDate();
     showWorkoutPageDate();
     jQuery('#info').click(infoHandler);
-    jQuery('#aboutUs').click(aboutUsHandler);
+    jQuery('#about-us').click(aboutUsHandler);
     jQuery('#homepage-icon').click(homepageHandler);
     jQuery('#leaderboard_button').click(leaderboardHandler);
     jQuery('#activity_button').click(activityHandler);
     jQuery('#calendar_button').click(calendarHandler);
-    jQuery('#settings_button').click(settingsHandler);
+    jQuery('#settings-button').click(settingsHandler);
     jQuery('#add_workout_button').click(addWorkoutHandler);
     jQuery('#exercises').change(additionalInformationHandler);// fix this
-    jQuery('#filter_button').click(filterHandler);
+    jQuery('#filter-button').click(filterHandler);
     jQuery('#username-search-button').click(userSearchInActivityFeed)
-    jQuery('.reset_button').click(resetFilteredActivityFeed);
-    jQuery('.reset_filtered_page').click(resetFilteredActivityFeed);
-    jQuery('#cancel_button').click(activityHandler);
+    jQuery('.reset-button').click(resetFilteredActivityFeed);
+    jQuery('.reset-filtered-page').click(resetFilteredActivityFeed);
+    jQuery('#cancel-button').click(activityHandler);
     jQuery('#cancel_profile_info_button').click(settingsHandler);
-    jQuery('#cancel_workout_button').click(homepageHandler);
-    jQuery('#logout_button').click(redirectToSignup);
-    jQuery('#logout_button').click(logout);
+    jQuery('#cancel-workout-button').click(homepageHandler);
+    jQuery('#logout-button').click(redirectToSignup);
+    jQuery('#logout-button').click(logout);
     $('#login').click(redirectToLogin);
     $('#signup').click(redirectToLogin);
     $("#view-feed-button").click(filterActivityFeed);
@@ -293,9 +293,9 @@ async function setup() {
     insertHomepageInfoFromFirestore(CurrentUser);
     insertTodaysWorkoutInfoFromFirestore(CurrentUser);
     insertYesterdaysWorkoutInfoFromFirestore(CurrentUser);
-    jQuery("#save_workout_button").click(function () { addWorkout(CurrentUser) });
+    jQuery("#save-workout-button").click(function () { addWorkout(CurrentUser) });
     jQuery("#save_profile_info_button").click(function () { updateInfo(CurrentUser) });
-    jQuery('#profile_info_button').click(function () { profileInfoHandler(CurrentUser) });
+    jQuery('#profile-info-button').click(function () { profileInfoHandler(CurrentUser) });
     jQuery('#homepagepic').click(function () { profileInfoHandler(CurrentUser) })
     jQuery('#logo').click(homepageHandler);
     showRecordedWorkouts(CurrentUser);

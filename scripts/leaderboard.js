@@ -53,7 +53,7 @@ function populate_leaderboard(leaderboardinfo) {
                     <span class="grid grid-cols-1 gap-2"><img class="w-6 h-6" src="${leaderboardinfo[nickname]["badges"]}" alt=""></span>
                     <span class="place-items-right">${leaderboardinfo[nickname]["calories"]}</span>
                 </div>`
-                $('#leaderboardInfo').append(text_to_inject);
+                $('#leaderboard-info').append(text_to_inject);
                 i++
                 delete leaderboardinfo[nickname];
                 break;
@@ -66,7 +66,7 @@ function populate_leaderboard(leaderboardinfo) {
  * @param {firebase.firestore.DocumentReference} currentUser - the current user object
  * */
 async function getLeaderboardData(currentUser) {
-    $('#leaderboardInfo').empty();
+    $('#leaderboard-info').empty();
 
     const dateRange = get_leaderboard_date_range();
     // Create Firestore timestamps
@@ -127,15 +127,15 @@ function leaderboardHandler() {
         jQuery("#activity-icon").attr('src', './images/nav-icons/activity-feed-black.svg')
         jQuery("#add-workout-icon").attr('src', './images/nav-icons/add-workout-black.svg')
         jQuery("#settings-icon").attr('src', './images/nav-icons/setting-black.svg')
-        jQuery('#usernameAndPic').css('display', 'none')
+        jQuery('#username-and-pic').css('display', 'none')
         jQuery('#filter-and-search').css('display', 'none')
         jQuery('#leaderboard').toggle();
         jQuery('#homepage').css("display", "none");
-        jQuery('#activity_feed').css("display", "none");
+        jQuery('#activity-feed').css("display", "none");
         jQuery('#datepicker').css("display", "none");
         jQuery('#settings').css("display", "none");
-        jQuery('#add_workout').css("display", "none");
-        jQuery('#filter_activity').css("display", "none");
+        jQuery('#add-workout').css("display", "none");
+        jQuery('#filter-activity').css("display", "none");
         jQuery('#profile_info').css("display", "none");
     }
 }
