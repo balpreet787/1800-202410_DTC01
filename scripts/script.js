@@ -179,6 +179,7 @@ function settingsHandler() {
         jQuery("#settings-icon").attr('src', './images/nav-icons/setting-white.svg')
         jQuery("#add-workout-icon").attr('src', './images/nav-icons/add-workout-black.svg')
         jQuery('#settings').toggle()
+        jQuery('#homepage-label, #add-workout-label, #activity-label, #calendar-label').css('color', 'black')
         jQuery('#filter-and-search, #username-and-pic, #homepage, #leaderboard, #activity-feed, #datepicker, #add-workout, #filter-activity, #profile-info').css('display', 'none')
     }
 }

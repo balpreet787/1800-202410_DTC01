@@ -384,6 +384,8 @@ function addWorkoutHandler() {
         jQuery("#settings-icon").attr('src', './images/nav-icons/setting-black.svg')
         jQuery("#add-workout-icon").attr('src', './images/nav-icons/add-workout-white.svg')
         jQuery('#add-workout').toggle()
+        jQuery('#homepage-label, #leaderboard-label, #activity-label, #calendar-label').css('color', 'black')
+        jQuery('#add-workout-label').css('color', 'white')
     }
 }
 

@@ -88,6 +88,8 @@ function calendarHandler() {
         jQuery("#settings-icon").attr('src', './images/nav-icons/setting-black.svg')
         jQuery("#add-workout-icon").attr('src', './images/nav-icons/add-workout-black.svg')
         jQuery('#filter-and-search, #homepage, #leaderboard, #activity-feed, #settings, #add-workout, #filter-activity, #profile-info, #username-and-pic').css('display', 'none')
+        jQuery('#calendar-label').css('color', 'white')
+        jQuery('#homepage-label, #leaderboard-label, #add-workout-label, #activity-label').css('color', 'black')
         jQuery('#datepicker').css("display", "flex")
     }
 }

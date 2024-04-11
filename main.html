@@ -340,19 +340,34 @@
     <!-- Start of navigation footer -->
     <footer class="fixed w-full bottom-0 rounded-3xl">
         <div class="grid grid-cols-5 bg-[#ff9500] rounded-t-3xl pt-2">
-            <button id="homepage-button" href="" class=" flex justify-center py-3 pt-2 rounded-t-3xl"> <img
-                    src="./images/nav-icons/home-white.svg" id="homepage-icon" class="w-8 h-8" alt=""></button>
-            <button id="leaderboard-button" href="" class="flex justify-center py-3 pt-2 bg-[#ff9500]"><img
-                    src="./images/nav-icons/leaderboard-black.svg" id="leaderboard-icon" class="w-8 h-8"
-                    alt=""></button>
-            <button id="add-workout-button" href=""
-                class="flex justify-center py-3 pt-2 bg-[#ff9500]  rounded-t-3xl"><img
-                    src="./images/nav-icons/add-workout-black.svg" id="add-workout-icon" class="w-8 h-8"
-                    alt=""></button>
-            <button id="activity-button" href="" class="flex justify-center py-3 pt-2 bg-[#ff9500]"><img
-                    src="./images/nav-icons/activity-feed-black.svg" id="activity-icon" class="w-8 h-8" alt=""></button>
-            <button id="calendar-button" href="" class="flex justify-center py-3 pt-2 bg-[#ff9500] rounded-t-3xl"><img
-                    src="./images/nav-icons/calender-black.svg" class="w-8 h-8" id="calender-icon" alt=""></button>
+            <div class="flex flex-col mb-1">
+                <button id="homepage-button" href="" class=" flex justify-center py-1 pt-2 rounded-t-3xl"> <img
+                        src="./images/nav-icons/home-white.svg" id="homepage-icon" class="w-8 h-8" alt=""></button>
+                        <label id="homepage-label" for="homepage-button" class="text-xs text-center text-white">Home</label>
+            </div>
+            <div class="flex flex-col mb-1">
+                <button id="leaderboard-button" href="" class="flex justify-center py-[2px] pt-[10px] bg-[#ff9500]"><img
+                        src="./images/nav-icons/leaderboard-black.svg" id="leaderboard-icon" class="w-8 h-8"
+                        alt=""></button>
+                        <label id="leaderboard-label" for="leaderboard-button" class="text-xs text-center">Ranking</label>
+            </div>
+            <div class="flex flex-col mb-1">
+                <button id="add-workout-button" href=""
+                    class="flex justify-center py-1 pt-2 bg-[#ff9500]  rounded-t-3xl"><img
+                        src="./images/nav-icons/add-workout-black.svg" id="add-workout-icon" class="w-8 h-8"
+                        alt=""></button>
+                        <label id="add-workout-label" for="add-workout-button" class="text-xs text-center">Add</label>
+            </div>
+            <div class="flex flex-col mb-1">
+                <button id="activity-button" href="" class="flex justify-center py-1 pt-2 bg-[#ff9500]"><img
+                        src="./images/nav-icons/activity-feed-black.svg" id="activity-icon" class="w-8 h-8" alt=""></button>
+                        <label id="activity-label" for="activity-button" class="text-xs text-center">Activity</label>
+            </div>
+            <div class="flex flex-col mb-1">
+                <button id="calendar-button" href="" class="flex justify-center py-1 pt-2 bg-[#ff9500] rounded-t-3xl"><img
+                        src="./images/nav-icons/calender-black.svg" class="w-8 h-8" id="calender-icon" alt=""></button>
+                        <label id="calendar-label" for="calendar-button" class="text-xs text-center">History</label>
+            </div>
 
         </div>
     </footer>

@@ -172,6 +172,8 @@ function activityHandler() {
         jQuery("#settings-icon").attr('src', './images/nav-icons/setting-black.svg')
         jQuery("#add-workout-icon").attr('src', './images/nav-icons/add-workout-black.svg')
         jQuery('#username-and-pic, #homepage, #leaderboard, #datepicker, #settings, #add-workout, #filter-activity, #profile-info').css('display', 'none')
+        jQuery('#activity-label').css('color', 'white')
+        jQuery('#homepage-label, #leaderboard-label, #add-workout-label, #calendar-label').css('color', 'black')
         jQuery('#filter-and-search').css('display', 'flex')
         jQuery('#activity-feed').toggle();
     }
