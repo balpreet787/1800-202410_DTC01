@@ -194,10 +194,10 @@ function profileInfoHandler(currentUser) {
 
 /**
  * Authenticate the user and get the user Id to use for other documents
- * @param {undefined} profilepic: The profile picture of the user
  * @param {Blob} image: The image element
  */
-async function userAuthentication(profilepic, image) {
+async function userAuthentication(image) {
+    profilepic = undefined;
     return new Promise((resolve, reject) => {
         firebase.auth().onAuthStateChanged((user) => {
             if (user) {
@@ -287,7 +287,7 @@ async function setup() {
             image.attr('src', '');
         }
     });
-    CurrentUser = await userAuthentication(profilepic, image);
+    CurrentUser = await userAuthentication(image);
     insertMotivationalMessage(CurrentUser);
     insertNameAndPicFromFirestore(CurrentUser);
     insertHomepageInfoFromFirestore(CurrentUser);
