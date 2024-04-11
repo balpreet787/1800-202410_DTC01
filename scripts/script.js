@@ -145,15 +145,7 @@ function settingsHandler() {
         jQuery("#settings-icon").attr('src', './images/nav-icons/setting-white.svg')
         jQuery("#add-workout-icon").attr('src', './images/nav-icons/add-workout-black.svg')
         jQuery('#settings').toggle()
-        jQuery('#filter-and-search').css('display', 'none')
-        jQuery('#usernameAndPic').css('display', 'none')
-        jQuery('#homepage').css("display", "none");
-        jQuery('#leaderboard').css("display", "none");
-        jQuery('#activity_feed').css("display", "none");
-        jQuery('#datepicker').css("display", "none");
-        jQuery('#add_workout').css("display", "none");
-        jQuery('#filter_activity').css("display", "none");
-        jQuery('#profile_info').css("display", "none");
+        jQuery('#filter-and-search, #usernameAndPic, #homepage, #leaderboard, #activity_feed, #datepicker, #add_workout, #filter_activity, #profile_info').css('display', 'none')
     }
 }
 
@@ -165,14 +157,8 @@ function profileInfoHandler(currentUser) {
     jQuery("#activity-icon").attr('src', './images/nav-icons/activity-feed-black.svg')
     jQuery("#settings-icon").attr('src', './images/nav-icons/setting-white.svg')
     jQuery("#add-workout-icon").attr('src', './images/nav-icons/add-workout-black.svg')
-    jQuery('#usernameAndPic').css('display', 'none')
-    jQuery('#filter-and-search').css('display', 'none')
+    jQuery('#usernameAndPic, #filter-and-search, #profile_info, #add_workout, #homepage, #leaderboard, #activity_feed, #settings').css('display', 'none')
     jQuery('#profile_info').toggle()
-    jQuery('#add_workout').css("display", "none");
-    jQuery('#homepage').css("display", "none");
-    jQuery('#leaderboard').css("display", "none");
-    jQuery('#activity_feed').css("display", "none");
-    jQuery('#settings').css("display", "none");
 }
 
 async function userAuthentication(profilepic, image) {
@@ -215,7 +201,6 @@ async function userAuthentication(profilepic, image) {
 }
 
 async function setup() {
-
     leaderboardCurrentDate();
     showWorkoutPageDate();
     jQuery('#info').click(infoHandler);
@@ -264,7 +249,6 @@ async function setup() {
         }
     });
     CurrentUser = await userAuthentication(profilepic, image);
-    console.log(CurrentUser);
     insertMotivationalMessage(CurrentUser);
     insertNameAndPicFromFirestore(CurrentUser);
     insertHomepageInfoFromFirestore(CurrentUser);

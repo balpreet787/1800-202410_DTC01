@@ -1,51 +1,14 @@
-function getActivityFeedInfo(currentUser) {
-    jQuery("#activity_feed_info").empty();
-    var badgesEarned = null;
+function displayActivityFeedInfo(activityfeedinfo) {
     const monthNames = [
         "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-
-    // Example usage:
     const monthNumber = new Date().getMonth(); // Get current month number, January is 0
     const currentMonthName = monthNames[monthNumber];
     console.log(currentMonthName); // Output will be the current month name
 
-    var leaderboardID = undefined;
-    var friendIDs = [];
-    var activityfeedinfo = [];
-    currentUser.get().then(userDoc => {
-        leaderboardID = userDoc.data().leaderboardID;
-        db.collection("users").where("leaderboardID", "==", leaderboardID).get().then(querySnapshot => {
-            querySnapshot.forEach(doc => {
-                friendIDs.push(doc.id);
-            });
-
-            let activityfeedpromises = friendIDs.map(function (id) {
-                return db.collection("users").doc(id).get().then(userinfo => {
-                    let nickname = userinfo.data().nickname;
-                    let username = userinfo.data().name;
-                    let profilepic = userinfo.data().image;
-                    return db.collection("users").doc(id).collection('workouts').orderBy('startDate', 'desc').limit(20).get().then(querySnapshot => {
-                        querySnapshot.forEach(doc => {
-
-                            badgesEarned = doc.data().earned;
-                            badgeName = doc.data().earned_name;
-                            workoutTime = (doc.data().endDate - doc.data().startDate) / 60;
-                            exerciseType = doc.data().exerciseType;
-                            intensity = doc.data().intensity;
-                            calories = doc.data().calories;
-
-                            activityfeedinfo.push({
-                                "startdate": doc.data().startDate, "calories": doc.data().calories, "username": username, "exerciseType": doc.data().exerciseType, "profilepic": profilepic, "nickname": nickname, "workouttime": workoutTime, "badgesearned": badgesEarned, "badgeName": badgeName, "intensity": intensity
-                            })
-                        });
-                    });
-                });
-            });
-            Promise.all(activityfeedpromises).then(() => {
-                activityfeedinfo.sort((a, b) => b.startdate - a.startdate);
-                let badgesEarned = null
-                for (let i = 0; i < activityfeedinfo.length; i++) {
-                    let startdate = activityfeedinfo[i]["startdate"].toDate();
+    activityfeedinfo.sort((a, b) => b.startdate - a.startdate); // Sort the array of objects by date
+                let badgesEarned = null 
+                for (let i = 0; i < activityfeedinfo.length; i++) { 
+                    let startdate = activityfeedinfo[i]["startdate"].toDate(); 
                     activityDate = startdate.getDate();
                     activityMonth = monthNames[startdate.getMonth()];
                     activityYear = startdate.getFullYear()
@@ -55,16 +18,16 @@ function getActivityFeedInfo(currentUser) {
                     if (activityfeedinfo[i]["exerciseType"] == "yoga") {
                         activityfeedinfo[i]["exerciseType"] = "doing yoga";
                     }
-                    if (activityfeedinfo[i]["exerciseType"] == "weightlifting" || activityfeedinfo[i]["exerciseType"] == "doing yoga") {
+                    if (activityfeedinfo[i]["exerciseType"] == "weightlifting" || activityfeedinfo[i]["exerciseType"] == "doing yoga") { // If the exercise type is weightlifting or yoga, display intensity
                         activityDetails = ` spent ${activityfeedinfo[i]["workouttime"]} minutes <b>${activityfeedinfo[i]["exerciseType"]}</b>`
                         activityIntensity = `<b>Intensity: </b> ${activityfeedinfo[i]["intensity"]}`
                     }
-                    else {
+                    else { // If the exercise type is running or cycling, display distance
                         activityDetails = ` spent ${activityfeedinfo[i]["workouttime"]} minutes <b>${activityfeedinfo[i]["exerciseType"]}</b>`
                         activityIntensity = `<b>Distance: </b>${activityfeedinfo[i]["intensity"]} km`
 
                     }
-                    if (activityfeedinfo[i]["badgesearned"] == badgesEarned || activityfeedinfo[i]["badgesearned"] == null) {
+                    if (activityfeedinfo[i]["badgesearned"] == badgesEarned || activityfeedinfo[i]["badgesearned"] == null) { // If the user has not earned a badge, display normal activity 
                         activityfeedinfo[i]["badgesearned"] = "";
                         addToActivityFeed = `<div class="flex flex-row bg-[#fff6e5] rounded-xl shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px] mt-2 mx-4 normal-activity activity-feed-post${i} ${activityfeedinfo[i]["nickname"].toLowerCase()}">
                                             <img class="h-20 mx-5 self-center rounded-full w-20" src="${activityfeedinfo[i]["profilepic"]}" alt="">
@@ -75,7 +38,7 @@ function getActivityFeedInfo(currentUser) {
                                                 <p class="text-xs pb-4 pr-1" id="activity-feed-phrase">${activityfeedinfo[i]["username"]} ${activityDetails}!</br><b>Calories Burned:</b> ${activityfeedinfo[i]["calories"]}</br>${activityIntensity}</p>
                                             </div>
                                         </div>`
-                    } else {
+                    } else { // If the user has earned a badge, display accomplishment activity 
                         badgesEarned = activityfeedinfo[i]["badgesearned"]
 
                         addToActivityFeed = `<div class="flex flex-row mx-4 ">
@@ -94,6 +57,43 @@ function getActivityFeedInfo(currentUser) {
                     jQuery("#activity_feed_info").append(addToActivityFeed);
                 }
 
+}
+
+function getActivityFeedInfo(currentUser) {
+    jQuery("#activity_feed_info").empty(); // Clear the activity feed info div before adding new content
+    var badgesEarned = null;
+    var leaderboardID = undefined;
+    var friendIDs = [];
+    var activityfeedinfo = [];
+    currentUser.get().then(userDoc => {
+        leaderboardID = userDoc.data().leaderboardID;
+        db.collection("users").where("leaderboardID", "==", leaderboardID).get().then(querySnapshot => {
+            querySnapshot.forEach(doc => {
+                friendIDs.push(doc.id);
+            });
+
+            let activityfeedpromises = friendIDs.map(function (id) {
+                return db.collection("users").doc(id).get().then(userinfo => {
+                    let nickname = userinfo.data().nickname;
+                    let username = userinfo.data().name;
+                    let profilepic = userinfo.data().image;
+                    return db.collection("users").doc(id).collection('workouts').orderBy('startDate', 'desc').limit(20).get().then(querySnapshot => {
+                        querySnapshot.forEach(doc => {
+                            badgesEarned = doc.data().earned;
+                            badgeName = doc.data().earned_name;
+                            workoutTime = (doc.data().endDate - doc.data().startDate) / 60;
+                            exerciseType = doc.data().exerciseType;
+                            intensity = doc.data().intensity;
+                            calories = doc.data().calories;
+                            activityfeedinfo.push({
+                                "startdate": doc.data().startDate, "calories": doc.data().calories, "username": username, "exerciseType": doc.data().exerciseType, "profilepic": profilepic, "nickname": nickname, "workouttime": workoutTime, "badgesearned": badgesEarned, "badgeName": badgeName, "intensity": intensity
+                            })
+                        });
+                    });
+                });
+            });
+            Promise.all(activityfeedpromises).then(() => {
+                displayActivityFeedInfo(activityfeedinfo)
             }).catch(error => {
                 console.error("Error processing all user data: ", error);
             })
