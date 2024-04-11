@@ -1,5 +1,4 @@
-# Project Title
-CompetiFit
+# CompetiFit
 
 ## 1. Project Description
 Our team, DTC-01, is developing Competifit to help beginner fitness enthusiasts who lack motivation maintain a consistent exercise schedule by creating a web application that provides a sense of competition between users.
