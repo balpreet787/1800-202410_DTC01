@@ -7,15 +7,19 @@ var CurrentUser;
 * @param {firebase.firestore.DocumentReference} postDocID: The document ID of the user
 */
 function uploadPic(postDocID) {
+    // Create a storage reference from our storage service using the user's ID
     var storageRef = storage.ref("images/" + postDocID + ".jpg");
+    // Upload the file to the storage reference
     storageRef.put(ImageFile)
         .then(function () {
             storageRef.getDownloadURL()
                 .then(function (url) {
+                    // Update the user's document with the image URL
                     db.collection("users").doc(postDocID).set({
                         "image": url
                     }, { merge: true })
                         .then(function () {
+                            // Update the image on the html pages
                             homepageHandler();
                             insertMotivationalMessage(currentUser);
                             insertHomepageInfoFromFirestore(currentUser);
@@ -50,6 +54,7 @@ async function updateInfo(currentUser) {
 
     if (nickname != "" && height != "" && weight != "" && dob != "") {
         jQuery('#confirm-profile-update').css("display", "flex").delay(3000).hide(0);
+        // Update the user's document with the new information
         currentUser.set({
             nickname: nickname,
             gender: gender,
@@ -204,7 +209,7 @@ async function userAuthentication(image) {
             if (user) {
                 // User is signed in, you can get the user ID.
                 let currentUser = db.collection("users").doc(user.uid); // Go to the Firestore document of the user
-
+                // Get the document of the user
                 currentUser.get().then(userDoc => {
                     if (userDoc.exists) {
                         // Get the document data
@@ -288,6 +293,7 @@ async function setup() {
             image.attr('src', '');
         }
     });
+    // Authenticate the user and get the user ID
     CurrentUser = await userAuthentication(image);
     insertMotivationalMessage(CurrentUser);
     insertNameAndPicFromFirestore(CurrentUser);

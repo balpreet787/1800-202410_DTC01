@@ -47,6 +47,7 @@ function insertMotivationalMessage(currentUser) {
         lastWeeksDates.push(startLastWeekDate.toDateString());
     }
     currentUser.collection("workouts").where('startDate', '>=', startOfWeek).get().then((querySnapshot) => { // get the workout time for the current week
+        querySnapshot.forEach((doc) => {
             var workoutDate = new Date(doc.data().startDate.toDate().toDateString())
             if (dates.includes(workoutDate.toDateString())) {
                 workoutTimeInCurrentweek += (doc.data().endDate - doc.data().startDate) / 60;

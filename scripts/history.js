@@ -15,6 +15,7 @@ function showRecordedWorkouts(currentUser) {
     let firebaseStartdate = firebase.firestore.Timestamp.fromDate(selectedStartDate);
     let firebaseEnddate = firebase.firestore.Timestamp.fromDate(selectedEndDate);
 
+    // Get the recorded workouts of the user on the selected date from firebase
     currentUser.collection('workouts').where('startDate', '>=', firebaseStartdate).where('startDate', '<=', firebaseEnddate).get().then(recordedWorkout => {
         recordedWorkout.forEach(workouts => {
             if (workouts.data().exerciseType == 'weightlifting' || workouts.data().exerciseType == 'yoga') {
@@ -65,6 +66,7 @@ function showRecordedWorkouts(currentUser) {
                 </div>`
                 );
             }
+            // Add event listeners to the edit and delete buttons
             deleteWorkoutHandler(currentUser, workouts.id);
             jQuery(`#${workouts.id}Edit`).click(function () { updateworkoutHandler(currentUser, workouts.id) })
 
