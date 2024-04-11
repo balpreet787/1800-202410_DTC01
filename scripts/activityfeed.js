@@ -125,54 +125,27 @@ function filterActivityFeed() {
     var selectedValue = $("input[name='filter-activity-feed']:checked").val();
     console.log(selectedValue)
     if (selectedValue == "accomplishment") {
-        jQuery(".reset_button").css("display", "flex")
-        jQuery(".reset_filtered_page").css("display", "none")
-        jQuery("#filter-activity").css("display", "none")
-        jQuery("#filter-accomplishment").css("display", "flex")
-        jQuery(".accomplishment-activity").css("display", "flex");
-        jQuery('#filter-and-search').css('display', 'flex')
-        jQuery(".normal-activity").css("display", "none");
-        jQuery('#activity_feed').css("display", "flex");
+        jQuery(".reset_button, #filter-accomplishment, .accomplishment-activity, #filter-and-search, #activity_feed, #filter-and-search").css("display", "flex")
+        jQuery(".reset_filtered_page, #filter-activity, .normal-activity, #filter_activity").css("display", "none")
         jQuery('#activity_feed').css("flex-direction", "column");
-        jQuery("#filter_activity").css("display", "none")
     } else if (selectedValue == "activity") {
-        jQuery(".reset_button").css("display", "flex")
-        jQuery(".reset_filtered_page").css("display", "none")
-        jQuery("#filter-activity").css("display", "flex")
-        jQuery("#filter-accomplishment").css("display", "none")
-        jQuery(".accomplishment-activity").css("display", "none");
-        jQuery('#filter-and-search').css('display', 'flex')
-        jQuery(".normal-activity").css("display", "flex");
-        jQuery('#activity_feed').css("display", "flex");
+        jQuery(".reset_button, #filter-activity, .normal-activity, #activity_feed, #filter-activity, #filter-and-search").css("display", "flex")
+        jQuery(".reset_filtered_page, #filter-accomplishment, .accomplishment-activity, #filter_activity").css("display", "none")
         jQuery('#activity_feed').css("flex-direction", "column");
-        jQuery("#filter_activity").css("display", "flex")
-        jQuery("#filter_activity").css("display", "none")
     } else {
-        jQuery(".reset_button").css("display", "none")
-        jQuery(".reset_filtered_page").css("display", "none")
-        jQuery("#filter-accomplishment").css("display", "none")
-        jQuery(".accomplishment-activity").css("display", "none");
-        jQuery('#filter-and-search').css('display', 'flex')
-        jQuery(".normal-activity").css("display", "flex");
-        jQuery('#activity_feed').css("display", "flex");
+        jQuery(".reset_button, .reset_filtered_page, #filter-accomplishment, .accomplishment-activity, #filter_activity").css("display", "none")
+        jQuery('#filter-and-search, .normal-activity, #activity_feed').css('display', 'flex')
         jQuery('#activity_feed').css("flex-direction", "column");
-        jQuery("#filter_activity").css("display", "none")
+        
     }
 }
 
 function resetFilteredActivityFeed() {
     $("input[name='filter-activity-feed']").prop('checked', false);
     jQuery("input[name='username-search']").val("")
-    jQuery(".reset_button").css("display", "none")
-    jQuery(".reset_filtered_page").css("display", "none")
-    jQuery("#filter-activity").css("display", "none")
-    jQuery('#filter-and-search').css('display', 'flex')
-    jQuery("#filter-accomplishment").css("display", "none")
-    jQuery(".accomplishment-activity").css("display", "flex");
-    jQuery(".normal-activity").css("display", "flex");
-    jQuery('#activity_feed').css("display", "flex");
+    jQuery(".reset_button, .reset_filtered_page, #filter-activity, #filter-accomplishment").css("display", "none")
+    jQuery('#filter-and-search, .accomplishment-activity, .normal-activity, #activity_feed').css('display', 'flex')
     jQuery('#activity_feed').css("flex-direction", "column");
-    jQuery("#filter_activity").css("display", "none")
 }
 
 function activityHandler() {
@@ -183,28 +156,15 @@ function activityHandler() {
         jQuery("#activity-icon").attr('src', './images/nav-icons/activity-feed-white.svg')
         jQuery("#settings-icon").attr('src', './images/nav-icons/setting-black.svg')
         jQuery("#add-workout-icon").attr('src', './images/nav-icons/add-workout-black.svg')
-        jQuery('#usernameAndPic').css('display', 'none')
+        jQuery('#usernameAndPic, #homepage, #leaderboard, #datepicker, #settings, #add_workout, #filter_activity, #profile_info').css('display', 'none')
         jQuery('#filter-and-search').css('display', 'flex')
         jQuery('#activity_feed').toggle();
-        jQuery('#homepage').css("display", "none");
-        jQuery('#leaderboard').css("display", "none");
-        jQuery('#datepicker').css("display", "none");
-        jQuery('#settings').css("display", "none");
-        jQuery('#add_workout').css("display", "none");
-        jQuery('#filter_activity').css("display", "none");
-        jQuery('#profile_info').css("display", "none");
     }
 }
 
 function filterHandler() {
     if (jQuery('#filter_activity').css("display") == "none") {
         jQuery('#filter_activity').toggle();
-        jQuery('#filter-and-search').css('display', 'none')
-        jQuery('#add_workout').css("display", "none");
-        jQuery('#homepage').css("display", "none");
-        jQuery('#leaderboard').css("display", "none");
-        jQuery('#activity_feed').css("display", "none");
-        jQuery('#settings').css("display", "none");
-        jQuery('#profile_info').css("display", "none");
+        jQuery('#filter-and-search, #add_workout, #homepage, #leaderboard, #activity_feed, #settings, #profile_info').css('display', 'none')
     }
 }
