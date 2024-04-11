@@ -143,12 +143,10 @@ async function getCaloriesBurned(exerciseType, startDate, endDate, exercise_inte
                 calories = met * user_weight * (difference / 60);
             }
             resolve(calories);
-
         }).catch(error => {
             console.log("Error getting document:", error);
             reject(error);
         });
-
     });
 }
 /**  count the number of exercises the user has completed and add new count appropriately to the firestore
@@ -172,7 +170,6 @@ async function countTheExercises(exercise_type, currentUser) {
             }
             else {
                 let exerciseCount = parseInt(exerciseCounter.data()[exercise_type]);
-                console.log(exerciseCount)
                 currentUser.collection("exerciseCounter").doc("exercises").update({
                     [exercise_type]: 1 + exerciseCount,
                 });
@@ -280,38 +277,39 @@ function removeBadges(currentUser, exerciseType, exerciseCount) {
  * */
 async function decreaseExerciseCount(exercise_type, currentUser) {
     const exerciseCounterSnapshot = await currentUser.collection("exerciseCounter").doc("exercises").get();
-
     let exerciseCount = parseInt(exerciseCounterSnapshot.data()[exercise_type]);
+<<<<<<< HEAD:scripts/manageWorkouts.js
     console.log(exerciseCount);
 
     // call removeBadges function to remove the badges accordingly
+=======
+>>>>>>> 8c72e729137686384e7aa002bb3dcc499e20493a:scripts/addworkout.js
     removeBadges(currentUser, exercise_type, exerciseCount);
-
     await currentUser.collection("exerciseCounter").doc("exercises").update({
         [exercise_type]: exerciseCount - 1,
     });
 }
 
+<<<<<<< HEAD:scripts/manageWorkouts.js
 
 /**  add a workout to the firebase
  * @param {firebase.firestore.DocumentReference} currentUser - the current user's document reference
  * @param {string} history_id - the id of the workout if the user called function to update the workout
  * @param {string} updateWorkoutType - the type of workout the user called function to update the workout
  * */
+=======
+>>>>>>> 8c72e729137686384e7aa002bb3dcc499e20493a:scripts/addworkout.js
 async function addWorkout(currentUser, history_id = "", updateWorkoutType = "") {
-    console.log(updateWorkoutType)
     startDate = jQuery("#startDate").val();
     endDate = jQuery("#endDate").val();
     verifyStartDate = new Date(startDate);
     verifyEndDate = new Date(endDate);
-
     exercise_type = jQuery("#exercises").val();
-    console.log(verifyEndDate - verifyStartDate)
+
     if ((verifyEndDate - verifyStartDate) > 0) {
-        jQuery("#add_workout").css("display", "none");
+        jQuery("#add_workout, #workoutWarning").css("display", "none");
         jQuery('#confirmAddWorkout').css("display", "flex").delay(3000).hide(0);
         jQuery('#homepage').toggle();
-        jQuery("#workoutWarning").css("display", "none");
 
         if (exercise_type != "" && startDate != "" && endDate != "" && jQuery(".intensity").val() != "") {
             if (updateWorkoutType == "") {
@@ -326,18 +324,12 @@ async function addWorkout(currentUser, history_id = "", updateWorkoutType = "") 
             else if (updateWorkoutType == exercise_type) {
                 console.log("same")
             }
-
             let exercise_intensity = intensityHandler(exercise_type);
-            console.log(exercise_intensity)
             let calories_burned = parseInt(await getCaloriesBurned(exercise_type, startDate, endDate, exercise_intensity, currentUser));
-            console.log(calories_burned)
             let badges_earned = await giveUserBadge(exercise_type, currentUser);
             let start_Date = firebase.firestore.Timestamp.fromDate(new Date(startDate));
             let end_Date = firebase.firestore.Timestamp.fromDate(new Date(endDate));
 
-
-
-            console.log(history_id);
             currentUser.collection("workouts").doc(history_id).set({
                 exerciseType: exercise_type,
                 startDate: start_Date,
@@ -376,25 +368,15 @@ function addWorkoutHandler() {
         $("#startDate").val("");
         $("#endDate").val("");
         $("#intensity-div").css("display", "flex");
-        $("#distance-div").css("display", "none");
+        $("#distance-div, #update_workout_button, #usernameAndPic, #filter-and-search, #homepage, #leaderboard, #activity_feed, #settings, #filter_activity, #profile_info, #datepicker").css("display", "none");
         $("#save_workout_button").css("display", "block");
-        $("#update_workout_button").css("display", "none");
         jQuery("#homepage-icon").attr('src', './images/nav-icons/home-black.svg')
         jQuery("#calender-icon").attr('src', './images/nav-icons/calender-black.svg')
         jQuery("#leaderboard-icon").attr('src', './images/nav-icons/leaderboard-black.svg')
         jQuery("#activity-icon").attr('src', './images/nav-icons/activity-feed-black.svg')
         jQuery("#settings-icon").attr('src', './images/nav-icons/setting-black.svg')
         jQuery("#add-workout-icon").attr('src', './images/nav-icons/add-workout-white.svg')
-        jQuery('#usernameAndPic').css('display', 'none')
-        jQuery('#filter-and-search').css('display', 'none')
         jQuery('#add_workout').toggle()
-        jQuery('#homepage').css("display", "none");
-        jQuery('#leaderboard').css("display", "none");
-        jQuery('#activity_feed').css("display", "none");
-        jQuery('#settings').css("display", "none");
-        jQuery('#filter_activity').css("display", "none");
-        jQuery('#profile_info').css("display", "none");
-        jQuery('#datepicker').css("display", "none");
     }
 }
 
@@ -435,7 +417,6 @@ function removeWorkout(currentUser, historyId) {
                     insertYesterdaysWorkoutInfoFromFirestore(currentUser);
                     showRecordedWorkouts(currentUser);
                     getLeaderboardData(currentUser);
-
                     getActivityFeedInfo(currentUser);
                 }).catch((error) => {
                     console.error("Error removing document: ", error);
@@ -489,7 +470,6 @@ function updateworkoutHandler(currentUser, historyID) {
                 $("#distance").val(intensity);
                 $("#intensity-div").css("display", "none");
                 $("#distance-div").css("display", "flex");
-
             }
             jQuery("#update_workout_button").click(function () { addWorkout(CurrentUser, historyID, workoutType) });
         })

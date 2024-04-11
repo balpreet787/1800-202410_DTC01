@@ -18,21 +18,17 @@ function insertNameAndPicFromFirestore(currentUser) {
     })
 }
 
-function insertHomepageInfoFromFirestore(currentUser) {
+function insertMotivationalMessage(currentUser) {
     var todayDate = new Date(new Date().toDateString());
     var dates = [];
-    console.log(currentUser)
     var lastWeeksDates = [];
     var currentdate = todayDate.getDay();
     var startOfWeek = new Date(todayDate);
     var lastWeeksStartDate = new Date();
     startOfWeek.setDate(startOfWeek.getDate() - currentdate);
     lastWeeksStartDate.setDate(startOfWeek.getDate() - 7);
-    console.log(lastWeeksStartDate)
     var workoutTimeInCurrentweek = 0;
     var workoutTimeLastweek = 0;
-    var numberOfWorkouts = 0;
-    var caloriesInAWeek = 0;
 
     for (i = 0; i < 7; i++) {
         var startDate = new Date(startOfWeek);
@@ -42,7 +38,6 @@ function insertHomepageInfoFromFirestore(currentUser) {
         startLastWeekDate.setDate(startLastWeekDate.getDate() + i);
         lastWeeksDates.push(startLastWeekDate.toDateString());
     }
-
     currentUser.collection("workouts").where('startDate', '>=', startOfWeek).get().then((querySnapshot) => {
         querySnapshot.forEach((doc) => {
             var workoutDate = new Date(doc.data().startDate.toDate().toDateString())
@@ -55,26 +50,46 @@ function insertHomepageInfoFromFirestore(currentUser) {
                 var workoutDate = new Date(doc.data().startDate.toDate().toDateString())
                 if (lastWeeksDates.includes(workoutDate.toDateString())) {
                     workoutTimeLastweek += (doc.data().endDate - doc.data().startDate) / 60;
-                }
+                } 
             })
             if (workoutTimeInCurrentweek > workoutTimeLastweek) {
-                $("#motivational-message").text(`You worked out ${workoutTimeInCurrentweek} more minutes than last week!`)
+                $("#motivational-message").text(`You worked out ${workoutTimeInCurrentweek - workoutTimeLastweek} more minutes than last week!`)
             } else {
                 $("#motivational-message").text(`${workoutTimeLastweek - workoutTimeInCurrentweek} more minutes to beat last week's workout time!`)
             }
         });
     });
+}
+
+function insertHomepageInfoFromFirestore(currentUser) {
+    var todayDate = new Date(new Date().toDateString());
+    var dates = [];
+    var lastWeeksDates = [];
+    var currentdate = todayDate.getDay();
+    var startOfWeek = new Date(todayDate);
+    var lastWeeksStartDate = new Date();
+    startOfWeek.setDate(startOfWeek.getDate() - currentdate);
+    lastWeeksStartDate.setDate(startOfWeek.getDate() - 7);
+    var numberOfWorkouts = 0;
+    var caloriesInAWeek = 0;
+
+    for (i = 0; i < 7; i++) {
+        var startDate = new Date(startOfWeek);
+        startDate.setDate(startDate.getDate() + i);
+        dates.push(startDate.toDateString());
+        var startLastWeekDate = new Date(lastWeeksStartDate);
+        startLastWeekDate.setDate(startLastWeekDate.getDate() + i);
+        lastWeeksDates.push(startLastWeekDate.toDateString());
+    }
     currentUser.collection("workouts").where('startDate', '>=', startOfWeek).get().then((querySnapshot) => {
         querySnapshot.forEach((doc) => {
             var workoutDate = new Date(doc.data().startDate.toDate().toDateString());
             if (dates.includes(workoutDate.toDateString())) {
                 caloriesInAWeek += doc.data().calories;
-                console.log(caloriesInAWeek)
             }
             jQuery("#calories-go-here").text(parseInt(caloriesInAWeek));
         });
     });
-
     currentUser.collection("workouts").where('startDate', '>=', startOfWeek).get().then((querySnapshot) => {
         querySnapshot.forEach((doc) => {
             var workoutDate = new Date(doc.data().startDate.toDate().toDateString());
@@ -105,14 +120,12 @@ function insertTodaysWorkoutInfoFromFirestore(currentUser) {
             jQuery("#todays-time-goes-here").text(todaysTime);
         })
     })
-
     currentUser.collection('workouts').where('startDate', '>=', firebaseStartdate).where('startDate', '<=', firebaseEnddate).get().then(recordedWorkout => {
         recordedWorkout.forEach(workouts => {
             todaysCalories += workouts.data().calories
             jQuery("#todays-calories-go-here").text(parseInt(todaysCalories));
         })
     })
-
     currentUser.collection('workouts').where('startDate', '>=', firebaseStartdate).where('startDate', '<=', firebaseEnddate).get().then(recordedWorkout => {
         recordedWorkout.forEach(workouts => {
             todaysworkouts++;
@@ -140,14 +153,12 @@ function insertYesterdaysWorkoutInfoFromFirestore(currentUser) {
             jQuery("#yesterdays-time-goes-here").text(yesterdaysTime);
         })
     })
-
     currentUser.collection('workouts').where('startDate', '>=', firebaseStartdate).where('startDate', '<=', firebaseEnddate).get().then(recordedWorkout => {
         recordedWorkout.forEach(workouts => {
             yesterdaysCalories += workouts.data().calories
             jQuery("#yesterdays-calories-go-here").text(yesterdaysCalories);
         })
     })
-
     currentUser.collection('workouts').where('startDate', '>=', firebaseStartdate).where('startDate', '<=', firebaseEnddate).get().then(recordedWorkout => {
         recordedWorkout.forEach(workouts => {
             yesterdaysWorkouts++;
@@ -163,16 +174,7 @@ function homepageHandler() {
     jQuery("#activity-icon").attr('src', './images/nav-icons/activity-feed-black.svg')
     jQuery("#settings-icon").attr('src', './images/nav-icons/setting-black.svg')
     jQuery("#add-workout-icon").attr('src', './images/nav-icons/add-workout-black.svg')
-    jQuery('#usernameAndPic').css('display', 'grid')
-    jQuery('#filter-and-search').css('display', 'none')
-    jQuery('#homepage').css("display", "grid");
-    jQuery('#leaderboard').css("display", "none");
-    jQuery('#activity_feed').css("display", "none");
-    jQuery('#datepicker').css("display", "none");
-    jQuery('#settings').css("display", "none");
-    jQuery('#add_workout').css("display", "none");
-    jQuery('#filter_activity').css("display", "none");
-    jQuery('#profile_info').css("display", "none");
-
+    jQuery('#usernameAndPic, #homepage').css('display', 'grid')
+    jQuery('#filter-and-search, #leaderboard, #activity_feed, #datepicker, #settings, #add_workout, #filter_activity, #profile_info').css('display', 'none')
 }
 
