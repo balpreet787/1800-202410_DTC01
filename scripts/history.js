@@ -78,17 +78,8 @@ function calendarHandler() {
         jQuery("#activity-icon").attr('src', './images/nav-icons/activity-feed-black.svg')
         jQuery("#settings-icon").attr('src', './images/nav-icons/setting-black.svg')
         jQuery("#add-workout-icon").attr('src', './images/nav-icons/add-workout-black.svg')
-        jQuery('#filter-and-search').css('display', 'none')
-        jQuery('#usernameAndPic').css('display', 'none')
+        jQuery('#filter-and-search, #homepage, #leaderboard, #activity_feed, #settings, #add_workout, #filter_activity, #profile_info, #usernameAndPic').css('display', 'none')
         jQuery('#datepicker').css("display", "flex")
-        jQuery('#homepage').css("display", "none");
-        jQuery('#leaderboard').css("display", "none");
-        jQuery('#activity_feed').css("display", "none");
-        jQuery('#settings').css("display", "none");
-        jQuery('#add_workout').css("display", "none");
-        jQuery('#filter_activity').css("display", "none");
-        jQuery('#profile_info').css("display", "none");
-
     }
 }
 
