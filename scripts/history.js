@@ -1,6 +1,6 @@
 /** Description: Handle recorded workout details and options*/
 
-/** fuction to show the recorded workouts of the user on the selected date
+/** function to show the recorded workouts of the user on the selected date
  * @param {firebase.firestore.DocumentReference} currentUser - the current user object
  * */
 function showRecordedWorkouts(currentUser) {

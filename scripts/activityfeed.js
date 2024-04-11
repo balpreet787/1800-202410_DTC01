@@ -77,7 +77,7 @@ function getActivityFeedInfo(currentUser) {
                     let nickname = userinfo.data().nickname;
                     let username = userinfo.data().name;
                     let profilepic = userinfo.data().image;
-                    return db.collection("users").doc(id).collection('workouts').orderBy('startDate', 'desc').limit(20).get().then(querySnapshot => {
+                    return db.collection("users").doc(id).collection('workouts').orderBy('startDate', 'desc').limit(20).get().then(querySnapshot => { // Get the user's workouts, order by date, limit to 20
                         querySnapshot.forEach(doc => {
                             badgesEarned = doc.data().earned;
                             badgeName = doc.data().earned_name;
@@ -103,11 +103,11 @@ function getActivityFeedInfo(currentUser) {
 
 
 function userSearchInActivityFeed() {
-    var userSearched = $("input[name='username-search']").val().toLowerCase();
+    var userSearched = $("input[name='username-search']").val().toLowerCase(); // Get the user search input and convert to lowercase
     if (userSearched == "") {
-        $(`div.activity-feed-post`).css("display", "flex")
+        $(`div.activity-feed-post`).css("display", "flex") // If the user search input is empty, display all activity feed posts
     } else {
-        for (let i = 0; i < $("#activity_feed_info").children().length; i++) {
+        for (let i = 0; i < $("#activity_feed_info").children().length; i++) { // Loop through the activity feed posts, hide the ones that don't match the user search input (all activity feed posts have username as classname to search)
             if ($(`div.activity-feed-post${i}`).hasClass(`${userSearched}`)) {
                 $(`div.activity-feed-post${i}`).css("display", "flex")
                 jQuery("#filter-search").css("display", "flex")
@@ -122,17 +122,17 @@ function userSearchInActivityFeed() {
 
 
 function filterActivityFeed() {
-    var selectedValue = $("input[name='filter-activity-feed']:checked").val();
+    var selectedValue = $("input[name='filter-activity-feed']:checked").val(); // Get the selected value from the radio buttons, accomplishment or activity
     console.log(selectedValue)
-    if (selectedValue == "accomplishment") {
+    if (selectedValue == "accomplishment") { // If the selected value is accomplishment, display accomplishment activity feed posts, hide everything else
         jQuery(".reset_button, #filter-accomplishment, .accomplishment-activity, #filter-and-search, #activity_feed, #filter-and-search").css("display", "flex")
         jQuery(".reset_filtered_page, #filter-activity, .normal-activity, #filter_activity").css("display", "none")
         jQuery('#activity_feed').css("flex-direction", "column");
-    } else if (selectedValue == "activity") {
+    } else if (selectedValue == "activity") { // If the selected value is activity, display normal activity feed posts, hide everything else
         jQuery(".reset_button, #filter-activity, .normal-activity, #activity_feed, #filter-activity, #filter-and-search").css("display", "flex")
         jQuery(".reset_filtered_page, #filter-accomplishment, .accomplishment-activity, #filter_activity").css("display", "none")
         jQuery('#activity_feed').css("flex-direction", "column");
-    } else {
+    } else { // If nothing is selected, display all activity feed posts, hide everything else
         jQuery(".reset_button, .reset_filtered_page, #filter-accomplishment, .accomplishment-activity, #filter_activity").css("display", "none")
         jQuery('#filter-and-search, .normal-activity, #activity_feed').css('display', 'flex')
         jQuery('#activity_feed').css("flex-direction", "column");
@@ -141,14 +141,14 @@ function filterActivityFeed() {
 }
 
 function resetFilteredActivityFeed() {
-    $("input[name='filter-activity-feed']").prop('checked', false);
-    jQuery("input[name='username-search']").val("")
-    jQuery(".reset_button, .reset_filtered_page, #filter-activity, #filter-accomplishment").css("display", "none")
+    $("input[name='filter-activity-feed']").prop('checked', false); // Uncheck the radio buttons
+    jQuery("input[name='username-search']").val("") // Clear the user search input
+    jQuery(".reset_button, .reset_filtered_page, #filter-activity, #filter-accomplishment").css("display", "none")  
     jQuery('#filter-and-search, .accomplishment-activity, .normal-activity, #activity_feed').css('display', 'flex')
     jQuery('#activity_feed').css("flex-direction", "column");
 }
 
-function activityHandler() {
+function activityHandler() { 
     if (jQuery('#activity_feed').css("display") == "none") {
         jQuery("#homepage-icon").attr('src', './images/nav-icons/home-black.svg')
         jQuery("#calender-icon").attr('src', './images/nav-icons/calender-black.svg')

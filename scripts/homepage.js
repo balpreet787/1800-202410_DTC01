@@ -19,7 +19,7 @@ function insertNameAndPicFromFirestore(currentUser) {
 }
 
 function insertMotivationalMessage(currentUser) {
-    var todayDate = new Date(new Date().toDateString());
+    var todayDate = new Date(new Date().toDateString()); // get the current date, initialize dates for current week and last week
     var dates = [];
     var lastWeeksDates = [];
     var currentdate = todayDate.getDay();
@@ -30,7 +30,7 @@ function insertMotivationalMessage(currentUser) {
     var workoutTimeInCurrentweek = 0;
     var workoutTimeLastweek = 0;
 
-    for (i = 0; i < 7; i++) {
+    for (i = 0; i < 7; i++) { // get the dates for the current week and last week, add them to initialized arrays
         var startDate = new Date(startOfWeek);
         startDate.setDate(startDate.getDate() + i);
         dates.push(startDate.toDateString());
@@ -38,31 +38,29 @@ function insertMotivationalMessage(currentUser) {
         startLastWeekDate.setDate(startLastWeekDate.getDate() + i);
         lastWeeksDates.push(startLastWeekDate.toDateString());
     }
-    currentUser.collection("workouts").where('startDate', '>=', startOfWeek).get().then((querySnapshot) => {
-        querySnapshot.forEach((doc) => {
+    currentUser.collection("workouts").where('startDate', '>=', startOfWeek).get().then((querySnapshot) => { // get the workout time for the current week
             var workoutDate = new Date(doc.data().startDate.toDate().toDateString())
             if (dates.includes(workoutDate.toDateString())) {
                 workoutTimeInCurrentweek += (doc.data().endDate - doc.data().startDate) / 60;
             }
         })
-        currentUser.collection("workouts").where('startDate', '>=', lastWeeksStartDate).get().then((querySnapshot) => {
+        currentUser.collection("workouts").where('startDate', '>=', lastWeeksStartDate).get().then((querySnapshot) => { // get the workout time for the last week
             querySnapshot.forEach((doc) => {
                 var workoutDate = new Date(doc.data().startDate.toDate().toDateString())
                 if (lastWeeksDates.includes(workoutDate.toDateString())) {
                     workoutTimeLastweek += (doc.data().endDate - doc.data().startDate) / 60;
                 } 
             })
-            if (workoutTimeInCurrentweek > workoutTimeLastweek) {
+            if (workoutTimeInCurrentweek > workoutTimeLastweek) { // compare workout time this week and last week, display appropriate motivational message
                 $("#motivational-message").text(`You worked out ${workoutTimeInCurrentweek - workoutTimeLastweek} more minutes than last week!`)
             } else {
                 $("#motivational-message").text(`${workoutTimeLastweek - workoutTimeInCurrentweek} more minutes to beat last week's workout time!`)
             }
         });
-    });
 }
 
 function insertHomepageInfoFromFirestore(currentUser) {
-    var todayDate = new Date(new Date().toDateString());
+    var todayDate = new Date(new Date().toDateString()); // get the current date, initialize dates for current week and last week
     var dates = [];
     var lastWeeksDates = [];
     var currentdate = todayDate.getDay();
@@ -73,7 +71,7 @@ function insertHomepageInfoFromFirestore(currentUser) {
     var numberOfWorkouts = 0;
     var caloriesInAWeek = 0;
 
-    for (i = 0; i < 7; i++) {
+    for (i = 0; i < 7; i++) { // get the dates for the current week and last week, add them to initialized arrays
         var startDate = new Date(startOfWeek);
         startDate.setDate(startDate.getDate() + i);
         dates.push(startDate.toDateString());
@@ -81,7 +79,7 @@ function insertHomepageInfoFromFirestore(currentUser) {
         startLastWeekDate.setDate(startLastWeekDate.getDate() + i);
         lastWeeksDates.push(startLastWeekDate.toDateString());
     }
-    currentUser.collection("workouts").where('startDate', '>=', startOfWeek).get().then((querySnapshot) => {
+    currentUser.collection("workouts").where('startDate', '>=', startOfWeek).get().then((querySnapshot) => { // get the calories for the current week
         querySnapshot.forEach((doc) => {
             var workoutDate = new Date(doc.data().startDate.toDate().toDateString());
             if (dates.includes(workoutDate.toDateString())) {
@@ -90,7 +88,7 @@ function insertHomepageInfoFromFirestore(currentUser) {
             jQuery("#calories-go-here").text(parseInt(caloriesInAWeek));
         });
     });
-    currentUser.collection("workouts").where('startDate', '>=', startOfWeek).get().then((querySnapshot) => {
+    currentUser.collection("workouts").where('startDate', '>=', startOfWeek).get().then((querySnapshot) => { // get the number of workouts for the current week
         querySnapshot.forEach((doc) => {
             var workoutDate = new Date(doc.data().startDate.toDate().toDateString());
             if (dates.includes(workoutDate.toDateString())) {
@@ -104,7 +102,7 @@ function insertHomepageInfoFromFirestore(currentUser) {
 }
 
 function insertTodaysWorkoutInfoFromFirestore(currentUser) {
-    var selectedDate = new Date();
+    var selectedDate = new Date(); // get the current date from midnight to 11:59, 
     var selectedEndDay = new Date();
     selectedDate.setHours(0, 0, 0, 0);
     selectedEndDay.setHours(23, 59, 59, 999);
@@ -114,8 +112,9 @@ function insertTodaysWorkoutInfoFromFirestore(currentUser) {
     var todaysCalories = 0;
     var todaysworkouts = 0;
 
+    // get the workout time, calories and number of workouts for today by finding workouts that are within selectedDate and selectedEndDay
     currentUser.collection('workouts').where('startDate', '>=', firebaseStartdate).where('startDate', '<=', firebaseEnddate).get().then(recordedWorkout => {
-        recordedWorkout.forEach(workouts => {
+        recordedWorkout.forEach(workouts => { 
             todaysTime += (workouts.data().endDate - workouts.data().startDate) / 60;
             jQuery("#todays-time-goes-here").text(todaysTime);
         })
@@ -135,7 +134,7 @@ function insertTodaysWorkoutInfoFromFirestore(currentUser) {
 }
 
 function insertYesterdaysWorkoutInfoFromFirestore(currentUser) {
-    var yesterdaysDate = new Date();
+    var yesterdaysDate = new Date(); // get the date for yesterday's date from midnight to 11:59
     var yesterdaysEnd = new Date();
     yesterdaysDate.setDate(yesterdaysDate.getDate() - 1);
     yesterdaysEnd.setDate(yesterdaysEnd.getDate() - 1)
@@ -147,6 +146,7 @@ function insertYesterdaysWorkoutInfoFromFirestore(currentUser) {
     var yesterdaysCalories = 0;
     var yesterdaysWorkouts = 0;
 
+     // get the workout time, calories and number of workouts for yesterday by finding workouts that are within yesterdaysDate and yesterdaysEnd
     currentUser.collection('workouts').where('startDate', '>=', firebaseStartdate).where('startDate', '<=', firebaseEnddate).get().then(recordedWorkout => {
         recordedWorkout.forEach(workouts => {
             yesterdaysTime += (workouts.data().endDate - workouts.data().startDate) / 60;
