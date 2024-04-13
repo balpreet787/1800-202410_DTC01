@@ -134,16 +134,9 @@ function leaderboardHandler() {
         jQuery("#settings-icon").attr('src', './images/nav-icons/setting-black.svg')
         jQuery('#homepage-label, #add-workout-label, #activity-label, #calendar-label').css('color', 'black')
         jQuery('#leaderboard-label').css('color', 'white')
-        jQuery('#username-and-pic').css('display', 'none')
-        jQuery('#filter-and-search').css('display', 'none')
+        jQuery('#username-and-pic, #filter-and-search, #homepage, #activity-feed, #datepicker, #settings, #add-workout, #filter-activity, #profile-info').css('display', 'none')
         jQuery('#leaderboard').toggle();
-        jQuery('#homepage').css("display", "none");
-        jQuery('#activity-feed').css("display", "none");
-        jQuery('#datepicker').css("display", "none");
-        jQuery('#settings').css("display", "none");
-        jQuery('#add-workout').css("display", "none");
-        jQuery('#filter-activity').css("display", "none");
-        jQuery('#profile-info').css("display", "none");
+        
     }
 }
 
