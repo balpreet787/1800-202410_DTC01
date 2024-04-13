@@ -168,7 +168,7 @@
         <div class="hidden mb-16 mt-[68px]" id="activity-feed">
             <p id="filter-accomplishment" class="px-6 py-1 underline hidden">Accomplishments<button
                     class="reset-button px-2">x</button></p>
-            <p id="filter-activity" class="px-6 py-1 underline hidden">Activity<button
+            <p id="filter-activity-delete" class="px-6 py-1 underline hidden">Activity<button
                     class="reset-button px-2">x</button>
             </p>
             <button id="filter-search" class="px-6 py-1 underline hidden reset-filtered-page">Reset</button>
@@ -212,7 +212,7 @@
             <div class="flex flex-row gap-4 justify-between text-center pt-2" id="intensity-div">
                 <label class="py-2 font-extrabold" for="intensity">Intensity:</label>
                 <select
-                class="py-2 px-[70px] rounded-lg outline outline-1 outline-[#ff9500] bg-white shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]"
+                class="intensity py-2 px-[70px] rounded-lg outline outline-1 outline-[#ff9500] bg-white shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px]"
                     name="Intensity" id="intensity">
                     <option class="py-1 rounded-lg text-center" value="Light">Light</option>
                     <option class="py-1 rounded-lg text-center" value="Moderate">Moderate</option>
@@ -266,7 +266,6 @@
 
     <!-- Start of settings page -->
     <div class="hidden" id="settings">
-
         <div class=" border-b border-black">
             <button id="profile-info-button" class="text-xl font-semibold p-2">User Settings</button>
         </div>
@@ -286,14 +285,14 @@
     <!-- End of settings page -->
 
     <!-- Start of profile information page -->
-    <div class="hidden" id="profile_info">
+    <div class="hidden" id="profile-info">
         <div class="flex flex-col mt-5 m-4">
             <img class="h-20 mx-5 self-center mb-2" alt="" id="pppreview">
             <form class="flex flex-col">
                 <label class="self-center" for="file-input">Upload a profile picture:</label>
                 <input class="self-center ml-20 mb-2" type="file" id="file-input" accept="image/*">
             </form class="w-full">
-            <input class="outline outline-1 outline-[#ff9500] rounded-lg p-1.5 m-2" type="text" id="leaderboard_id"
+            <input class="outline outline-1 outline-[#ff9500] rounded-lg p-1.5 m-2" type="text" id="leaderboard-id"
                 placeholder="Friend ID (Optional)" required>
             <input class="outline outline-1 outline-[#ff9500] rounded-lg p-1.5 m-2" type="text" id="nickname"
                 placeholder="Nickname" required>
@@ -317,9 +316,9 @@
                 </div>
             </div>
             <div class="flex flex-row">
-                <button id="save_profile_info_button"
+                <button id="save-profile-info-button"
                     class="bg-[#ff9500] text-[#fff6e5] rounded-lg p-1 container mx-auto w-1/3">Save</button>
-                <button id="cancel_profile_info_button"
+                <button id="cancel-profile-info-button"
                     class="bg-[#ff9500] text-[#fff6e5] rounded-lg p-1 container mx-auto w-1/3">Cancel</button>
             </div>
         </div>
@@ -331,9 +330,9 @@
         <div class="flex flex-row justify-between mb-4">
             <label class="py-2 font-bold px-2" for="date">Workouts for:</label>
             <input class="outline outline-1 outline-[#ff9500] rounded-lg py-1 px-[30px]" name="date" type="date"
-                id="selectedDate" class="">
+                id="selected-date" class="">
         </div>
-        <div id="recorded_workouts" class="flex flex-col justify-right text-sm gap-2">
+        <div id="recorded-workouts" class="flex flex-col justify-right text-sm gap-2">
         </div>
     </div>
     <!-- Calender ends here -->
@@ -341,19 +340,34 @@
     <!-- Start of navigation footer -->
     <footer class="fixed w-full bottom-0 rounded-3xl">
         <div class="grid grid-cols-5 bg-[#ff9500] rounded-t-3xl pt-2">
-            <button id="homepage_button" href="" class=" flex justify-center py-3 pt-2 rounded-t-3xl"> <img
-                    src="./images/nav-icons/home-white.svg" id="homepage-icon" class="w-8 h-8" alt=""></button>
-            <button id="leaderboard_button" href="" class="flex justify-center py-3 pt-2 bg-[#ff9500]"><img
-                    src="./images/nav-icons/leaderboard-black.svg" id="leaderboard-icon" class="w-8 h-8"
-                    alt=""></button>
-            <button id="add_workout_button" href=""
-                class="flex justify-center py-3 pt-2 bg-[#ff9500]  rounded-t-3xl"><img
-                    src="./images/nav-icons/add-workout-black.svg" id="add-workout-icon" class="w-8 h-8"
-                    alt=""></button>
-            <button id="activity_button" href="" class="flex justify-center py-3 pt-2 bg-[#ff9500]"><img
-                    src="./images/nav-icons/activity-feed-black.svg" id="activity-icon" class="w-8 h-8" alt=""></button>
-            <button id="calendar_button" href="" class="flex justify-center py-3 pt-2 bg-[#ff9500] rounded-t-3xl"><img
-                    src="./images/nav-icons/calender-black.svg" class="w-8 h-8" id="calender-icon" alt=""></button>
+            <div class="flex flex-col mb-1">
+                <button id="homepage-button" href="" class=" flex justify-center py-1 pt-2 rounded-t-3xl"> <img
+                        src="./images/nav-icons/home-white.svg" id="homepage-icon" class="w-8 h-8" alt=""></button>
+                        <label id="homepage-label" for="homepage-button" class="text-xs text-center text-white">Home</label>
+            </div>
+            <div class="flex flex-col mb-1">
+                <button id="leaderboard-button" href="" class="flex justify-center py-[2px] pt-[10px] bg-[#ff9500]"><img
+                        src="./images/nav-icons/leaderboard-black.svg" id="leaderboard-icon" class="w-8 h-8"
+                        alt=""></button>
+                        <label id="leaderboard-label" for="leaderboard-button" class="text-xs text-center">Ranking</label>
+            </div>
+            <div class="flex flex-col mb-1">
+                <button id="add-workout-button" href=""
+                    class="flex justify-center py-1 pt-2 bg-[#ff9500]  rounded-t-3xl"><img
+                        src="./images/nav-icons/add-workout-black.svg" id="add-workout-icon" class="w-8 h-8"
+                        alt=""></button>
+                        <label id="add-workout-label" for="add-workout-button" class="text-xs text-center">Add</label>
+            </div>
+            <div class="flex flex-col mb-1">
+                <button id="activity-button" href="" class="flex justify-center py-1 pt-2 bg-[#ff9500]"><img
+                        src="./images/nav-icons/activity-feed-black.svg" id="activity-icon" class="w-8 h-8" alt=""></button>
+                        <label id="activity-label" for="activity-button" class="text-xs text-center">Activity</label>
+            </div>
+            <div class="flex flex-col mb-1">
+                <button id="calendar-button" href="" class="flex justify-center py-1 pt-2 bg-[#ff9500] rounded-t-3xl"><img
+                        src="./images/nav-icons/calender-black.svg" class="w-8 h-8" id="calender-icon" alt=""></button>
+                        <label id="calendar-label" for="calendar-button" class="text-xs text-center">History</label>
+            </div>
 
         </div>
     </footer>

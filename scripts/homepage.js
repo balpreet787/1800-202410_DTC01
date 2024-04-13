@@ -47,7 +47,7 @@ function insertMotivationalMessage(currentUser) {
         lastWeeksDates.push(startLastWeekDate.toDateString());
     }
     currentUser.collection("workouts").where('startDate', '>=', startOfWeek).get().then((querySnapshot) => { // get the workout time for the current week
-        querySnapshot.forEach((doc) => {
+        querySnapshot.forEach((doc) => { 
             var workoutDate = new Date(doc.data().startDate.toDate().toDateString())
             if (dates.includes(workoutDate.toDateString())) {
                 workoutTimeInCurrentweek += (doc.data().endDate - doc.data().startDate) / 60;
@@ -67,7 +67,7 @@ function insertMotivationalMessage(currentUser) {
                 $("#motivational-message").text(`${workoutTimeLastweek - workoutTimeInCurrentweek} more minutes to beat last week's workout time!`)
             }
         });
-}
+    }
 
 /** Function to display the user's weekly workout with calories and number of workouts
  * @param {firebase.firestore.DocumentReference} currentUser - the current user object
@@ -196,6 +196,8 @@ function homepageHandler() {
     jQuery("#settings-icon").attr('src', './images/nav-icons/setting-black.svg')
     jQuery("#add-workout-icon").attr('src', './images/nav-icons/add-workout-black.svg')
     jQuery('#username-and-pic, #homepage').css('display', 'grid')
-    jQuery('#filter-and-search, #leaderboard, #activity-feed, #datepicker, #settings, #add-workout, #filter-activity, #profile_info').css('display', 'none')
+    jQuery('#filter-and-search, #leaderboard, #activity-feed, #datepicker, #settings, #add-workout, #filter-activity, #profile-info').css('display', 'none')
+    jQuery('#homepage-label').css('color', 'white')
+    jQuery('#calendar-label, #leaderboard-label, #add-workout-label, #activity-label').css('color', 'black')
 }
 

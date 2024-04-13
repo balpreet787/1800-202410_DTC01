@@ -4,8 +4,8 @@
  * @param {firebase.firestore.DocumentReference} currentUser - the current user object
  * */
 function showRecordedWorkouts(currentUser) {
-    $("#recorded_workouts").empty();
-    let inputDate = $('#selectedDate').val();
+    $("#recorded-workouts").empty();
+    let inputDate = $('#selected-date').val();
 
     // Create local Date objects at the beginning and end of the selected day
     let selectedStartDate = new Date(inputDate + "T00:00:00");
@@ -19,7 +19,7 @@ function showRecordedWorkouts(currentUser) {
     currentUser.collection('workouts').where('startDate', '>=', firebaseStartdate).where('startDate', '<=', firebaseEnddate).get().then(recordedWorkout => {
         recordedWorkout.forEach(workouts => {
             if (workouts.data().exerciseType == 'weightlifting' || workouts.data().exerciseType == 'yoga') {
-                $("#recorded_workouts").append(
+                $("#recorded-workouts").append(
                     `<div class="flex flex-col justify-evenly bg-[#fff6e5] shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px] rounded-xl" id="${workouts.id}">
                             <div class="flex flex-row justify-between">
                             <div class="flex flex-col justify-evenly bg-[#fff6e5] text-[16px] p-4">
@@ -43,7 +43,7 @@ function showRecordedWorkouts(currentUser) {
                 );
             }
             else {
-                $("#recorded_workouts").append(
+                $("#recorded-workouts").append(
                     `<div class=" flex flex-col justify-evenly bg-[#fff6e5] shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px] rounded-xl" id="${workouts.id}">
                     <div class="flex flex-row justify-between">
                     <div class="flex flex-col justify-evenly bg-[#fff6e5] text-[16px] p-4">
@@ -87,7 +87,9 @@ function calendarHandler() {
         jQuery("#activity-icon").attr('src', './images/nav-icons/activity-feed-black.svg')
         jQuery("#settings-icon").attr('src', './images/nav-icons/setting-black.svg')
         jQuery("#add-workout-icon").attr('src', './images/nav-icons/add-workout-black.svg')
-        jQuery('#filter-and-search, #homepage, #leaderboard, #activity-feed, #settings, #add-workout, #filter-activity, #profile_info, #username-and-pic').css('display', 'none')
+        jQuery('#filter-and-search, #homepage, #leaderboard, #activity-feed, #settings, #add-workout, #filter-activity, #profile-info, #username-and-pic').css('display', 'none')
+        jQuery('#calendar-label').css('color', 'white')
+        jQuery('#homepage-label, #leaderboard-label, #add-workout-label, #activity-label').css('color', 'black')
         jQuery('#datepicker').css("display", "flex")
     }
 }
@@ -97,7 +99,7 @@ function calendarHandler() {
 function showWorkoutPageDate() {
     const currentDate = new Date();
     const localDate = currentDate.toLocaleDateString('en-CA'); // 'en-CA' uses the YYYY-MM-DD format
-    $('#selectedDate').val(localDate);
+    $('#selected-date').val(localDate);
 }
 
 /** function to show delete confirmation and proceed from there

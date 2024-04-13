@@ -348,6 +348,7 @@ async function addWorkout(currentUser, history_id = "", updateWorkoutType = "") 
                     // call the functions to update the user's homepage, leaderboard, activity feed, and show the recorded workouts
                     homepageHandler();
                     console.log("Document successfully updated!");
+                    insertMotivationalMessage(currentUser);
                     insertHomepageInfoFromFirestore(currentUser);
                     insertTodaysWorkoutInfoFromFirestore(currentUser);
                     insertYesterdaysWorkoutInfoFromFirestore(currentUser);
@@ -374,7 +375,7 @@ function addWorkoutHandler() {
         $("#startDate").val("");
         $("#endDate").val("");
         $("#intensity-div").css("display", "flex");
-        $("#distance-div, #update-workout-button, #username-and-pic, #filter-and-search, #homepage, #leaderboard, #activity-feed, #settings, #filter-activity, #profile_info, #datepicker").css("display", "none");
+        $("#distance-div, #update-workout-button, #username-and-pic, #filter-and-search, #homepage, #leaderboard, #activity-feed, #settings, #filter-activity, #profile-info, #datepicker").css("display", "none");
         $("#save-workout-button").css("display", "block");
         jQuery("#homepage-icon").attr('src', './images/nav-icons/home-black.svg')
         jQuery("#calender-icon").attr('src', './images/nav-icons/calender-black.svg')
@@ -383,6 +384,8 @@ function addWorkoutHandler() {
         jQuery("#settings-icon").attr('src', './images/nav-icons/setting-black.svg')
         jQuery("#add-workout-icon").attr('src', './images/nav-icons/add-workout-white.svg')
         jQuery('#add-workout').toggle()
+        jQuery('#homepage-label, #leaderboard-label, #activity-label, #calendar-label').css('color', 'black')
+        jQuery('#add-workout-label').css('color', 'white')
     }
 }
 
@@ -418,6 +421,7 @@ function removeWorkout(currentUser, historyId) {
                     // call the functions to update the user's homepage, leaderboard, activity feed, and show the recorded workouts
                     calendarHandler();
                     console.log("Document successfully updated!");
+                    insertMotivationalMessage(currentUser);
                     insertHomepageInfoFromFirestore(currentUser);
                     insertTodaysWorkoutInfoFromFirestore(currentUser);
                     insertYesterdaysWorkoutInfoFromFirestore(currentUser);

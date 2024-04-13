@@ -132,6 +132,8 @@ function leaderboardHandler() {
         jQuery("#activity-icon").attr('src', './images/nav-icons/activity-feed-black.svg')
         jQuery("#add-workout-icon").attr('src', './images/nav-icons/add-workout-black.svg')
         jQuery("#settings-icon").attr('src', './images/nav-icons/setting-black.svg')
+        jQuery('#homepage-label, #add-workout-label, #activity-label, #calendar-label').css('color', 'black')
+        jQuery('#leaderboard-label').css('color', 'white')
         jQuery('#username-and-pic').css('display', 'none')
         jQuery('#filter-and-search').css('display', 'none')
         jQuery('#leaderboard').toggle();
@@ -141,7 +143,7 @@ function leaderboardHandler() {
         jQuery('#settings').css("display", "none");
         jQuery('#add-workout').css("display", "none");
         jQuery('#filter-activity').css("display", "none");
-        jQuery('#profile_info').css("display", "none");
+        jQuery('#profile-info').css("display", "none");
     }
 }
 
