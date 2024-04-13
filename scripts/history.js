@@ -17,7 +17,7 @@ function showRecordedWorkouts(currentUser) {
 
     // Get the recorded workouts of the user on the selected date from firebase
     currentUser.collection('workouts').where('startDate', '>=', firebaseStartdate).where('startDate', '<=', firebaseEnddate).get().then(recordedWorkout => {
-        recordedWorkout.forEach(workouts => {
+        recordedWorkout.forEach(workouts => { // Show recorded workouts on history page, intensity for weightlifting and yoga, distance for running and cycling
             if (workouts.data().exerciseType == 'weightlifting' || workouts.data().exerciseType == 'yoga') {
                 $("#recorded-workouts").append(
                     `<div class="flex flex-col justify-evenly bg-[#fff6e5] shadow-[rgba(50,_50,_105,_0.15)_0px_2px_5px_0px,_rgba(0,_0,_0,_0.05)_0px_1px_1px_0px] rounded-xl" id="${workouts.id}">

@@ -134,7 +134,7 @@ function userSearchInActivityFeed() {
 
 /** Function to filter the activity feed based on the user's selection of activity or accomplishment
  * */
-function filterActivityFeed() {
+function filterActivityFeed() { 
     var selectedValue = $("input[name='filter-activity-feed']:checked").val(); // Get the selected value from the radio buttons, accomplishment or activity
     console.log(selectedValue)
     if (selectedValue == "accomplishment") { // If the selected value is accomplishment, display accomplishment activity feed posts, hide everything else
