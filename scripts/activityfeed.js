@@ -163,6 +163,8 @@ function resetFilteredActivityFeed() {
     jQuery('#activity-feed').css("flex-direction", "column");
 }
 
+/** Function to display the activity feed page and hide the other sections
+ */
 function activityHandler() {
     if (jQuery('#activity-feed').css("display") == "none") {
         jQuery("#homepage-icon").attr('src', './images/nav-icons/home-black.svg')
