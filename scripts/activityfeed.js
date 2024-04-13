@@ -123,7 +123,7 @@ function userSearchInActivityFeed() {
             if ($(`div.activity-feed-post${i}`).hasClass(`${userSearched}`)) {
                 $(`div.activity-feed-post${i}`).css("display", "flex")
                 $("#filter-search").css("display", "flex")
-                $("#filter-activity, #filter-accomplishment").css("display", "none")
+                $("#filter-activity-delete, #filter-accomplishment").css("display", "none")
 
             } else {
                 $(`div.activity-feed-post${i}`).css("display", "none")
