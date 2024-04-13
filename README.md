@@ -17,6 +17,7 @@ List technologies (with version numbers), API's, icons, fonts, images, media or 
 * SVG Repo for icons, https://www.svgrepo.com/ 
 * Dall E for landing page photo, https://labs.openai.com/
 * Google Fonts, https://fonts.google.com/
+* Chatgpt for debugging, https://chat.openai.com/
 
 ## 4. Complete setup/installion/usage
 * The current version 1.0 of the application is hosted on https://dtc01-6d2e7.web.app
